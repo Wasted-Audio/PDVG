@@ -1,0 +1,86 @@
+/*
+ * Copyright (C) 2026 Wasted Audio
+ * SPDX-License-Identifier: ISC
+*/
+
+#pragma once
+
+#include <algorithm>
+#include <cstring>
+#include "nanovg.h"
+#include "Widget.hpp"
+
+START_NAMESPACE_DGL
+
+struct Corners {
+    static constexpr float windowCornerRadius = 12.0f;
+    static constexpr float largeCornerRadius = 8.0f;
+    static constexpr float defaultCornerRadius = 5.0f;
+    static constexpr float resizeHanleCornerRadius = 2.75f;
+    static constexpr float objectCornerRadius = 2.75f;
+};
+
+struct PDRectangle {
+    float x;
+    float y;
+    float w;
+    float h;
+};
+
+inline void drawRoundedRect(NVGcontext* ctx, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
+{
+    float shortestSide = std::min(w, h);
+
+    x -= 1.5f;
+    y -= 1.5f;
+    w += 3.0f;
+    h += 3.0f;
+
+    NVGpaint p;
+    memset(&p, 0, sizeof(p));
+    nvgTransformIdentity(p.xform);
+    p.xform[4] = x+w*0.5f;
+    p.xform[5] = y+h*0.5f;
+
+    p.extent[0] = (w * 0.5f) - 1.5f;
+    p.extent[1] = (h * 0.5f) - 1.5f;
+
+    // If the radius is less than half of the shortest side, it will no longer be rounded
+    // So force rounding here. Sorry not sorry.
+    p.radius = std::min(radius, shortestSide * 0.5f);
+    p.innerColor = icol;
+    p.outerColor = ocol;
+
+    nvgFillPaint(ctx, p);
+    nvgBeginPath(ctx);
+    nvgRoundedRect(ctx, x, y, w, h, radius);
+    nvgFill(ctx);
+    nvgStroke(ctx);
+}
+
+static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
+{
+    NVGcolor c;
+    c.r = a.r + (b.r - a.r) * val;
+    c.g = a.g + (b.g - a.g) * val;
+    c.b = a.b + (b.b - a.b) * val;
+    c.a = a.a + (b.a - a.a) * val;
+    return c;
+}
+
+
+static PDRectangle reduceRectangle(PDRectangle r, float amount)
+{
+    // (x - delta, y - delta, w + delta * 2, h + delta * 2)
+
+    PDRectangle nR;
+
+    nR.x =  r.x - amount;
+    nR.y = r.y - amount;
+    nR.w = r.w + amount * 2;
+    nR.h = r.h + amount * 2;
+
+    return nR;
+}
+
+END_NAMESPACE_DGL
