@@ -27,7 +27,7 @@ struct PDRectangle {
     float h = 0.0f;
 };
 
-inline void drawRoundedRect(NVGcontext* ctx, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
+inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
 {
     float shortestSide = std::min(w, h);
 
@@ -51,11 +51,11 @@ inline void drawRoundedRect(NVGcontext* ctx, float x, float y, float w, float h,
     p.innerColor = icol;
     p.outerColor = ocol;
 
-    nvgFillPaint(ctx, p);
-    nvgBeginPath(ctx);
-    nvgRoundedRect(ctx, x, y, w, h, radius);
-    nvgFill(ctx);
-    nvgStroke(ctx);
+    nvgFillPaint(nvg, p);
+    nvgBeginPath(nvg);
+    nvgRoundedRect(nvg, x, y, w, h, radius);
+    nvgFill(nvg);
+    nvgStroke(nvg);
 }
 
 static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
@@ -74,7 +74,7 @@ static PDRectangle reduceRectangle(PDRectangle r, float amount)
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
     PDRectangle nR;
-    nR.x =  r.x + amount;
+    nR.x = r.x + amount;
     nR.y = r.y + amount;
     nR.w = r.w - amount * 2;
     nR.h = r.h - amount * 2;

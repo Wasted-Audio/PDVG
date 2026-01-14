@@ -24,13 +24,8 @@ void Slider::onNanoDisplay()
     b.h = getHeight();
 
     float val = getValue() * 127.0f;
-    // printf("raw value: %f\n", val);
 
-    if (isInverted()) {
-        val = 127.0f - val;
-    }
-
-    // printf("corrected value: %f\n", val);
+    if (isInverted()) { val = 127.0f - val; }
 
     NVGcontext* nvg = getContext();
 
@@ -56,11 +51,8 @@ void Slider::onNanoDisplay()
         sB.h = thumbSize;
     }
 
-    // printf("rectX: %f, rectY: %f, rectW: %f, rectH: %f\n", rectX, rectY, rectW, rectH);
-
     nvgFillColor(nvg, sliderColor);
     drawRoundedRect(nvg, sB.x, sB.y, sB.w, sB.h, sliderColor, bgColor, cornerSize);
-
 }
 
 bool Slider::onMouse(const MouseEvent &ev)

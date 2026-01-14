@@ -24,7 +24,7 @@ void Toggle::onNanoDisplay()
 
     float val = isDown();
 
-    NVGcontext *nvg = getContext();
+    NVGcontext* nvg = getContext();
 
     auto const untoggledColor = interpolateColors(bgColor, toggledColor, 0.1f);
     auto const outlineColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
