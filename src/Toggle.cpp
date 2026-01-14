@@ -18,40 +18,31 @@ Toggle::Toggle(Widget *const parent, SwitchEventHandler::Callback *const cb)
 
 void Toggle::onNanoDisplay()
 {
-    float x = 0.0f;
-    float y = 0.0f;
-    float w = getWidth();
-    float h = getHeight();
-
-    PDRectangle bounds;
-    bounds.x = x;
-    bounds.y = y;
-    bounds.w = w;
-    bounds.h = h;
+    PDRectangle b;
+    b.w = getWidth();
+    b.h = getHeight();
 
     float val = isDown();
 
     NVGcontext *nvg = getContext();
 
-    auto const bgColor = nvgRGBA(0x19, 0x19, 0x19, 0xFF);
-    auto const toggledColor = nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF);
     auto const untoggledColor = interpolateColors(bgColor, toggledColor, 0.1f);
     auto const outlineColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 
-    drawRoundedRect(nvg, x, y, w, h, bgColor, outlineColor, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColor, Corners::objectCornerRadius);
 
-    auto const sizeReduction = std::min(1.0f, getWidth() / 20.0f);
-    float const margin = (getWidth() * 0.08f + 4.5f) * sizeReduction;
-    auto const crossBounds = reduceRectangle(bounds, margin);
+    auto const sizeReduction = std::min(1.0f, b.w / 20.0f);
+    float const margin = (b.w * 0.08f + 4.5f) * sizeReduction;
+    auto const crossB = reduceRectangle(b, margin);
 
-    auto const max = std::max(crossBounds.w, crossBounds.h);
+    auto const max = std::max(crossB.w, crossB.h);
     auto const strokeWidth = std::max(max * 0.15f, 2.0f) * sizeReduction;
 
     nvgBeginPath(nvg);
-    nvgMoveTo(nvg, crossBounds.x, crossBounds.y);
-    nvgLineTo(nvg, crossBounds.x + crossBounds.w, crossBounds.y + crossBounds.h);
-    nvgMoveTo(nvg, crossBounds.x + crossBounds.w, crossBounds.y);
-    nvgLineTo(nvg, crossBounds.x, crossBounds.y + crossBounds.h);
+    nvgMoveTo(nvg, crossB.x, crossB.y);
+    nvgLineTo(nvg, crossB.x + crossB.w, crossB.y + crossB.h);
+    nvgMoveTo(nvg, crossB.x + crossB.w, crossB.y);
+    nvgLineTo(nvg, crossB.x, crossB.y + crossB.h);
     nvgStrokeColor(nvg, val ? toggledColor : untoggledColor);
     nvgStrokeWidth(nvg, strokeWidth);
     nvgStroke(nvg);
@@ -60,6 +51,11 @@ void Toggle::onNanoDisplay()
 bool Toggle::onMouse(const MouseEvent &ev)
 {
     return SwitchEventHandler::mouseEvent(ev);
+}
+
+void Toggle::setColors(NVGcolor bgColor, NVGcolor toggledColor) {
+    this->bgColor = bgColor;
+    this->toggledColor = toggledColor;
 }
 
 END_NAMESPACE_DGL

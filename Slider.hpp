@@ -7,6 +7,7 @@
 
 #include "NanoVG.hpp"
 #include "ExtraEventHandlers.hpp"
+#include "nanovg.h"
 
 
 START_NAMESPACE_DGL
@@ -17,6 +18,7 @@ class Slider : public NanoSubWidget,
 public:
     explicit Slider(Widget* parent, PDSliderEventHandler::Callback* cb);
     void setHorizontal();
+    void setColors(NVGcolor cvColor, NVGcolor bgColor, NVGcolor sliderColor);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
@@ -26,6 +28,10 @@ protected:
 
 private:
     bool isHorizontal = false;
+    NVGcolor cvColor;
+    NVGcolor bgColor;
+    NVGcolor sliderColor;
+
     DISTRHO_LEAK_DETECTOR(Slider)
 };
 
