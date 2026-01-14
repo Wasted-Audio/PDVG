@@ -23,9 +23,11 @@ void Slider::onNanoDisplay()
     b.w = getWidth();
     b.h = getHeight();
 
-    float val = getValue() * 127.0f;
-
-    if (isInverted()) { val = 127.0f - val; }
+    float val;
+    if (isHorizontal)
+        val = isInverted() ? (b.w - getValue() * b.w) : (getValue() * b.w);
+    else
+        val = isInverted() ? (b.h - getValue() * b.h) : (getValue() * b.h);
 
     NVGcontext* nvg = getContext();
 
