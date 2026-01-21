@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 Filipe Coelho <falktx@falktx.com>, Rob van den Berg <rghvdberg at gmail dot com
+ * Copyright (C) 2026 Wasted Audio <developer@wasted.audio>
  * SPDX-License-Identifier: ISC
 */
 
@@ -16,7 +17,7 @@ static float clamp(float x, float upper, float lower)
 
 // --------------------------------------------------------------------------------------------------------------------
 
-class SwitchEventHandler
+class PDToggleEventHandler
 {
 public:
     class Callback
@@ -26,10 +27,10 @@ public:
         virtual void switchClicked(SubWidget *widget, bool down) = 0;
     };
 
-    explicit SwitchEventHandler(SubWidget *self);
-    explicit SwitchEventHandler(SubWidget *self, const SwitchEventHandler &other);
-    SwitchEventHandler &operator=(const SwitchEventHandler &other);
-    ~SwitchEventHandler();
+    explicit PDToggleEventHandler(SubWidget *self);
+    explicit PDToggleEventHandler(SubWidget *self, const PDToggleEventHandler &other);
+    PDToggleEventHandler &operator=(const PDToggleEventHandler &other);
+    ~PDToggleEventHandler();
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
@@ -42,7 +43,7 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
-    DISTRHO_LEAK_DETECTOR(SwitchEventHandler)
+    DISTRHO_LEAK_DETECTOR(PDToggleEventHandler)
 };
 
 class PDSliderEventHandler
@@ -152,6 +153,45 @@ private:
     PrivateData *const pData;
 
     DISTRHO_LEAK_DETECTOR(SpinnerEventHandler)
+};
+
+class PDRadioEventHandler
+{
+public:
+    class Callback
+    {
+    public:
+        virtual ~Callback() {}
+        virtual void radioValueChanged(SubWidget *widget, uint value) = 0;
+    };
+
+    explicit PDRadioEventHandler(SubWidget *self);
+    explicit PDRadioEventHandler(SubWidget *self, const PDRadioEventHandler &other);
+    PDRadioEventHandler &operator=(const PDRadioEventHandler &other);
+    ~PDRadioEventHandler();
+
+    uint getValue() const noexcept;
+
+    virtual bool setValue(uint value, bool sendCallback = false) noexcept;
+
+    void setStep(uint step) noexcept;
+    void setHorizontal() noexcept;
+    void setCallback(Callback *callback) noexcept;
+
+    uint getStep() const noexcept;
+    bool getHorizontal() const noexcept;
+    bool isHovered() const noexcept;
+    uint getHover() const noexcept;
+
+    bool mouseEvent(const Widget::MouseEvent &ev);
+    bool motionEvent(const Widget::MotionEvent &ev);
+
+protected:
+private:
+    struct PrivateData;
+    PrivateData *const pData;
+
+    DISTRHO_LEAK_DETECTOR(PDRadioEventHandler)
 };
 // --------------------------------------------------------------------------------------------------------------------
 

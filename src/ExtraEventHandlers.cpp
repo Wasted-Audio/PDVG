@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2021 Filipe Coelho <falktx@falktx.com>, Rob van den Berg <rghvdberg at gmail dot com
+ * Copyright (C) 2026 Wasted Audio <developer@wasted.audio>
  * SPDX-License-Identifier: ISC
 */
 
@@ -10,15 +11,15 @@ START_NAMESPACE_DGL
 
 // --------------------------------------------------------------------------------------------------------------------
 
-struct SwitchEventHandler::PrivateData
+struct PDToggleEventHandler::PrivateData
 {
-    SwitchEventHandler *const self;
+    PDToggleEventHandler *const self;
     SubWidget *const widget;
-    SwitchEventHandler::Callback *callback;
+    PDToggleEventHandler::Callback *callback;
 
     bool isDown;
 
-    PrivateData(SwitchEventHandler *const s, SubWidget *const w)
+    PrivateData(PDToggleEventHandler *const s, SubWidget *const w)
         : self(s),
           widget(w),
           isDown(false),
@@ -26,7 +27,7 @@ struct SwitchEventHandler::PrivateData
     {
     }
 
-    PrivateData(SwitchEventHandler *const s, SubWidget *const w, PrivateData *const other)
+    PrivateData(PDToggleEventHandler *const s, SubWidget *const w, PrivateData *const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -72,39 +73,39 @@ struct SwitchEventHandler::PrivateData
 
 // --------------------------------------------------------------------------------------------------------------------
 
-SwitchEventHandler::SwitchEventHandler(SubWidget *const self)
+PDToggleEventHandler::PDToggleEventHandler(SubWidget *const self)
     : pData(new PrivateData(this, self)) {}
 
-SwitchEventHandler::SwitchEventHandler(SubWidget *const self, const SwitchEventHandler &other)
+PDToggleEventHandler::PDToggleEventHandler(SubWidget *const self, const PDToggleEventHandler &other)
     : pData(new PrivateData(this, self, other.pData)) {}
 
-SwitchEventHandler &SwitchEventHandler::operator=(const SwitchEventHandler &other)
+PDToggleEventHandler &PDToggleEventHandler::operator=(const PDToggleEventHandler &other)
 {
     pData->assignFrom(other.pData);
     return *this;
 }
 
-SwitchEventHandler::~SwitchEventHandler()
+PDToggleEventHandler::~PDToggleEventHandler()
 {
     delete pData;
 }
 
-void SwitchEventHandler::setCallback(Callback *const callback) noexcept
+void PDToggleEventHandler::setCallback(Callback *const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool SwitchEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDToggleEventHandler::mouseEvent(const Widget::MouseEvent &ev)
 {
     return pData->mouseEvent(ev);
 }
 
-bool SwitchEventHandler::isDown() const noexcept
+bool PDToggleEventHandler::isDown() const noexcept
 {
     return pData->isDown;
 }
 
-void SwitchEventHandler::setDown(const bool down) noexcept
+void PDToggleEventHandler::setDown(const bool down) noexcept
 {
     return pData->setDown(down);
 }
@@ -716,6 +717,173 @@ bool SpinnerEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
     return pData->scrollEvent(ev);
     printf("scrollEvent \n");
 }
-// end slider
+// end spinner
+// --------------------------------------------------------------------------------------------------------------------
+
+// begin radio
+
+struct PDRadioEventHandler::PrivateData
+{
+    PDRadioEventHandler *const self;
+    SubWidget *const widget;
+    PDRadioEventHandler::Callback *callback;
+
+    uint step;
+    uint value;
+    bool horizontal;
+    bool hover;
+    uint hoverPos;
+
+    PrivateData(PDRadioEventHandler *const s, SubWidget *const w)
+        : self(s),
+          widget(w),
+          callback(nullptr),
+          step(1),
+          value(0),
+          horizontal(false),
+          hover(false),
+          hoverPos(0)
+    {
+    }
+
+    PrivateData(PDRadioEventHandler *const s, SubWidget *const w, PrivateData *const other)
+        : self(s),
+          widget(w),
+          callback(other->callback),
+          step(other->step),
+          value(other->value),
+          horizontal(other->horizontal),
+          hover(other->hover),
+          hoverPos(other->hoverPos)
+    {
+    }
+
+    void assignFrom(PrivateData *const other)
+    {
+        callback = other->callback;
+        step = other->step;
+        value = other->value;
+        horizontal = other->horizontal;
+        hover = other->hover;
+        hoverPos = other->hoverPos;
+    }
+
+    bool mouseEvent(const Widget::MouseEvent &ev)
+    {
+
+        if (ev.button != 1)
+            return false;
+
+        if (ev.press && widget->contains(ev.pos))
+        {
+            if (horizontal)
+                value = (float)ev.pos.getX()/(float)widget->getWidth() * (float)step;
+            else
+                value = (float)ev.pos.getY()/(float)widget->getHeight() * (float)step;
+            setValue(value, true);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    bool motionEvent(const Widget::MotionEvent &ev)
+    {
+        if (widget->contains(ev.pos))
+        {
+            hover = true;
+            if (horizontal)
+                hoverPos = (float)ev.pos.getX()/(float)widget->getWidth() * (float)step;
+            else
+                hoverPos = (float)ev.pos.getY()/(float)widget->getHeight() * (float)step;
+
+            widget->repaint();
+        } else {
+            hover = false;
+            hoverPos = -1;
+        }
+
+        return hover;
+    }
+
+    bool setValue(const uint value2, const bool sendCallback)
+    {
+        value = value2;
+        widget->repaint();
+
+        if (sendCallback && callback != nullptr)
+        {
+            try
+            {
+                callback->radioValueChanged(widget, value);
+            }
+            DISTRHO_SAFE_EXCEPTION("PDRadioEventHandler::setValue");
+        }
+
+        return true;
+    }
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+
+PDRadioEventHandler::PDRadioEventHandler(SubWidget *const self)
+    : pData(new PrivateData(this, self)) {}
+
+PDRadioEventHandler::PDRadioEventHandler(SubWidget *const self, const PDRadioEventHandler &other)
+    : pData(new PrivateData(this, self, other.pData)) {}
+
+PDRadioEventHandler &PDRadioEventHandler::operator=(const PDRadioEventHandler &other)
+{
+    pData->assignFrom(other.pData);
+    return *this;
+}
+
+PDRadioEventHandler::~PDRadioEventHandler()
+{
+    delete pData;
+}
+
+uint PDRadioEventHandler::getValue() const noexcept
+{
+    return pData->value;
+}
+
+bool PDRadioEventHandler::setValue(const uint value, const bool sendCallback) noexcept
+{
+    return pData->setValue(value, sendCallback);
+}
+
+void PDRadioEventHandler::setStep(const uint step) noexcept
+{
+    pData->step = step;
+}
+
+void PDRadioEventHandler::setHorizontal() noexcept
+{
+    pData->horizontal = true;
+}
+
+void PDRadioEventHandler::setCallback(Callback *const callback) noexcept
+{
+    pData->callback = callback;
+}
+
+bool PDRadioEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+{
+    return pData->mouseEvent(ev);
+}
+
+bool PDRadioEventHandler::motionEvent(const Widget::MotionEvent &ev)
+{
+    return pData->motionEvent(ev);
+}
+
+uint PDRadioEventHandler::getStep() const noexcept { return pData->step; }
+bool PDRadioEventHandler::getHorizontal() const noexcept { return pData->horizontal; }
+bool PDRadioEventHandler::isHovered() const noexcept { return pData->hover; }
+uint PDRadioEventHandler::getHover() const noexcept { return pData->hoverPos; }
+
+// end radio
 
 END_NAMESPACE_DGL

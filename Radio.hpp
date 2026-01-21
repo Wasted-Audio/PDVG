@@ -12,23 +12,24 @@
 
 START_NAMESPACE_DGL
 
-class Toggle : public NanoSubWidget,
-               public PDToggleEventHandler
+class Radio : public NanoSubWidget,
+               public PDRadioEventHandler
 {
 public:
-    explicit Toggle(Widget* parent, PDToggleEventHandler::Callback* cb);
+    explicit Radio(Widget* parent, PDRadioEventHandler::Callback* cb);
 
-    void setColors(NVGcolor bgColor, NVGcolor toggledColor);
+    void setColors(NVGcolor bgColor, NVGcolor radioColor);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
+    bool onMotion(const MotionEvent &ev) override;
     void onNanoDisplay() override;
 
 private:
     NVGcolor bgColor;
-    NVGcolor toggledColor;
+    NVGcolor radioColor;
 
-    DISTRHO_LEAK_DETECTOR(Toggle)
+    DISTRHO_LEAK_DETECTOR(Radio)
 };
 
 END_NAMESPACE_DGL

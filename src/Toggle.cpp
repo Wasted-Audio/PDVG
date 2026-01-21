@@ -9,11 +9,11 @@
 
 START_NAMESPACE_DGL
 
-Toggle::Toggle(Widget *const parent, SwitchEventHandler::Callback *const cb)
+Toggle::Toggle(Widget *const parent, PDToggleEventHandler::Callback *const cb)
     : NanoWidget(parent),
-      SwitchEventHandler(this)
+      PDToggleEventHandler(this)
 {
-    SwitchEventHandler::setCallback(cb);
+    PDToggleEventHandler::setCallback(cb);
 }
 
 void Toggle::onNanoDisplay()
@@ -50,7 +50,7 @@ void Toggle::onNanoDisplay()
 
 bool Toggle::onMouse(const MouseEvent &ev)
 {
-    return SwitchEventHandler::mouseEvent(ev);
+    return PDToggleEventHandler::mouseEvent(ev);
 }
 
 void Toggle::setColors(NVGcolor bgColor, NVGcolor toggledColor) {

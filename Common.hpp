@@ -82,4 +82,7 @@ static PDRectangle reduceRectangle(PDRectangle r, float amount)
     return nR;
 }
 
+template <typename Type>
+constexpr Type jmin (Type a, Type b) { return b < a ? b : a; }
+
 END_NAMESPACE_DGL
