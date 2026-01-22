@@ -82,7 +82,30 @@ static PDRectangle reduceRectangle(PDRectangle r, float amount)
     return nR;
 }
 
+/** Returns the smaller of two values. */
 template <typename Type>
 constexpr Type jmin (Type a, Type b) { return b < a ? b : a; }
+
+/** Returns the larger of three values. */
+template <typename Type>
+constexpr Type jmax (Type a, Type b, Type c) { return a < b ? (b < c ? c : b) : (a < c ? c : a); }
+
+static float getColorBrightness(NVGcolor c)
+{
+    float brightness = 0.0f;
+
+    auto r = (int) c.r;
+    auto g = (int) c.g;
+    auto b = (int) c.b;
+
+    auto hi = jmax(r, g, b);
+
+    if (hi > 0)
+    {
+        brightness = (float) hi / 255.0f;
+    }
+
+    return brightness;
+}
 
 END_NAMESPACE_DGL

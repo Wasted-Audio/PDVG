@@ -35,7 +35,7 @@ void Radio::onNanoDisplay()
 
     float const size = isVertical ? static_cast<float>(b.h) / numItems : static_cast<float>(b.w) / numItems;
     nvgStrokeColor(nvg, radioColor);
-    nvgStrokeWidth(nvg, 0.5f);
+    nvgStrokeWidth(nvg, 0.8f);
 
     nvgBeginPath(nvg);
     for (int i = 1; i < numItems; i++) {
@@ -49,8 +49,11 @@ void Radio::onNanoDisplay()
     }
     nvgStroke(nvg);
 
+    nvgStrokeColor(nvg, bgColor);
+
     if (isHovered()) {
-        auto const hoverColor = interpolateColors(bgColor, nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF), 0.05);
+        auto const brightness = getColorBrightness(bgColor) > 0.5f ? 0.03f : 0.05f;
+        auto const hoverColor = interpolateColors(bgColor, nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF), brightness);
 
         auto const hoverIdx = getHover();
         float const hoverX = isVertical ? 0 : hoverIdx * size;
@@ -61,8 +64,8 @@ void Radio::onNanoDisplay()
         hoverRect.w = size;
         hoverRect.h = size;
 
-        auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f, 5));
-        drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, hoverColor, Corners::objectCornerRadius / 2.0f);
+        auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f, 6));
+        drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, bgColor, Corners::objectCornerRadius / 2.0f);
     }
 
     auto const selected = getValue();
@@ -78,7 +81,7 @@ void Radio::onNanoDisplay()
     selection.w = sizeW;
     selection.h = sizeH;
 
-    auto const selectionBounds = reduceRectangle(selection, jmin<float>(size * 0.25f, 5));
+    auto const selectionBounds = reduceRectangle(selection, jmin<float>(size * 0.55f, 6));
 
     drawRoundedRect(nvg, selectionBounds.x, selectionBounds.y, selectionBounds.w, selectionBounds.h, radioColor, radioColor, Corners::objectCornerRadius / 2.0f);
 }
