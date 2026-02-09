@@ -7,17 +7,18 @@
 #include "Common.hpp"
 #include "Toggle.hpp"
 
-START_NAMESPACE_DGL
+START_NAMESPACE_DISTRHO
 
-Toggle::Toggle(Widget *const parent, PDToggleEventHandler::Callback *const cb)
+PDToggle::PDToggle(Widget *const parent, PDToggleEventHandler::Callback *const cb)
     : NanoWidget(parent),
       PDToggleEventHandler(this)
 {
     PDToggleEventHandler::setCallback(cb);
 }
 
-void Toggle::onNanoDisplay()
+void PDToggle::onNanoDisplay()
 {
+    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     PDRectangle b;
     b.w = getWidth();
     b.h = getHeight();
@@ -48,14 +49,14 @@ void Toggle::onNanoDisplay()
     nvgStroke(nvg);
 }
 
-bool Toggle::onMouse(const MouseEvent &ev)
+bool PDToggle::onMouse(const MouseEvent &ev)
 {
     return PDToggleEventHandler::mouseEvent(ev);
 }
 
-void Toggle::setColors(NVGcolor bgColor, NVGcolor toggledColor) {
+void PDToggle::setColors(NVGcolor bgColor, NVGcolor toggledColor) {
     this->bgColor = bgColor;
     this->toggledColor = toggledColor;
 }
 
-END_NAMESPACE_DGL
+END_NAMESPACE_DISTRHO

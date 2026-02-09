@@ -10,13 +10,14 @@
 #include "nanovg.h"
 
 
-START_NAMESPACE_DGL
+START_NAMESPACE_DISTRHO
 
-class Slider : public NanoSubWidget,
+class PDSlider : public NanoSubWidget,
                public PDSliderEventHandler
 {
 public:
-    explicit Slider(Widget* parent, PDSliderEventHandler::Callback* cb);
+    explicit PDSlider(Widget *parent, PDSliderEventHandler::Callback* cb);
+
     void setHorizontal();
     void setColors(NVGcolor cvColor, NVGcolor bgColor, NVGcolor sliderColor);
 
@@ -32,7 +33,7 @@ private:
     NVGcolor bgColor;
     NVGcolor sliderColor;
 
-    DISTRHO_LEAK_DETECTOR(Slider)
+    DISTRHO_LEAK_DETECTOR(PDSlider)
 };
 
-END_NAMESPACE_DGL
+END_NAMESPACE_DISTRHO

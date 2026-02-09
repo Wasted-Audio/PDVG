@@ -7,18 +7,19 @@
 #include "Common.hpp"
 #include "Radio.hpp"
 
-START_NAMESPACE_DGL
+START_NAMESPACE_DISTRHO
 
 
-Radio::Radio(Widget *const parent, PDRadioEventHandler::Callback *const cb)
+PDRadio::PDRadio(Widget *const parent, PDRadioEventHandler::Callback *const cb)
     : NanoWidget(parent),
       PDRadioEventHandler(this)
 {
     PDRadioEventHandler::setCallback(cb);
 }
 
-void Radio::onNanoDisplay()
+void PDRadio::onNanoDisplay()
 {
+    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     PDRectangle b;
     b.w = getWidth();
     b.h = getHeight();
@@ -35,16 +36,16 @@ void Radio::onNanoDisplay()
 
     float const size = isVertical ? static_cast<float>(b.h) / numItems : static_cast<float>(b.w) / numItems;
     nvgStrokeColor(nvg, radioColor);
-    nvgStrokeWidth(nvg, 0.8f);
+    nvgStrokeWidth(nvg, 1.0f * scaleFactor);
 
     nvgBeginPath(nvg);
     for (int i = 1; i < numItems; i++) {
         if (isVertical) {
-            nvgMoveTo(nvg, 1, i * size);
-            nvgLineTo(nvg, size - 0.5, i * size);
+            nvgMoveTo(nvg, 1 * scaleFactor, i * size);
+            nvgLineTo(nvg, size - 0.5 * scaleFactor, i * size);
         } else {
-            nvgMoveTo(nvg, i * size, 1);
-            nvgLineTo(nvg, i * size, size - 0.5);
+            nvgMoveTo(nvg, i * size, 1 * scaleFactor);
+            nvgLineTo(nvg, i * size, size - 0.5 * scaleFactor);
         }
     }
     nvgStroke(nvg);
@@ -64,7 +65,7 @@ void Radio::onNanoDisplay()
         hoverRect.w = size;
         hoverRect.h = size;
 
-        auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f, 6));
+        auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f * scaleFactor, 5 * scaleFactor));
         drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, bgColor, Corners::objectCornerRadius / 2.0f);
     }
 
@@ -81,24 +82,24 @@ void Radio::onNanoDisplay()
     selection.w = sizeW;
     selection.h = sizeH;
 
-    auto const selectionBounds = reduceRectangle(selection, jmin<float>(size * 0.55f, 6));
+    auto const selectionBounds = reduceRectangle(selection, jmin<float>(size * 0.25f * scaleFactor, 5 * scaleFactor));
 
     drawRoundedRect(nvg, selectionBounds.x, selectionBounds.y, selectionBounds.w, selectionBounds.h, radioColor, radioColor, Corners::objectCornerRadius / 2.0f);
 }
 
-bool Radio::onMouse(const MouseEvent &ev)
+bool PDRadio::onMouse(const MouseEvent &ev)
 {
     return PDRadioEventHandler::mouseEvent(ev);
 }
 
-bool Radio::onMotion(const MotionEvent &ev)
+bool PDRadio::onMotion(const MotionEvent &ev)
 {
     return PDRadioEventHandler::motionEvent(ev);
 }
 
-void Radio::setColors(NVGcolor bgColor, NVGcolor radioColor) {
+void PDRadio::setColors(NVGcolor bgColor, NVGcolor radioColor) {
     this->bgColor = bgColor;
     this->radioColor = radioColor;
 }
 
-END_NAMESPACE_DGL
+END_NAMESPACE_DISTRHO

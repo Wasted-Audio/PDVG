@@ -10,13 +10,13 @@
 #include "nanovg.h"
 
 
-START_NAMESPACE_DGL
+START_NAMESPACE_DISTRHO
 
-class Toggle : public NanoSubWidget,
+class PDToggle : public NanoSubWidget,
                public PDToggleEventHandler
 {
 public:
-    explicit Toggle(Widget* parent, PDToggleEventHandler::Callback* cb);
+    explicit PDToggle(Widget* parent, PDToggleEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor toggledColor);
 
@@ -28,7 +28,7 @@ private:
     NVGcolor bgColor;
     NVGcolor toggledColor;
 
-    DISTRHO_LEAK_DETECTOR(Toggle)
+    DISTRHO_LEAK_DETECTOR(PDToggle)
 };
 
-END_NAMESPACE_DGL
+END_NAMESPACE_DISTRHO

@@ -82,6 +82,11 @@ static PDRectangle reduceRectangle(PDRectangle r, float amount)
     return nR;
 }
 
+static float valToPropOfLen(float const value, float const length)
+{
+    return value / length;
+}
+
 /** Returns the smaller of two values. */
 template <typename Type>
 constexpr Type jmin (Type a, Type b) { return b < a ? b : a; }
@@ -89,6 +94,14 @@ constexpr Type jmin (Type a, Type b) { return b < a ? b : a; }
 /** Returns the larger of three values. */
 template <typename Type>
 constexpr Type jmax (Type a, Type b, Type c) { return a < b ? (b < c ? c : b) : (a < c ? c : a); }
+
+/** Remaps a value from a source range to a target range. */
+template <typename Type>
+Type jmap (Type sourceValue, Type sourceRangeMin, Type sourceRangeMax, Type targetRangeMin, Type targetRangeMax)
+{
+    return targetRangeMin + ((targetRangeMax - targetRangeMin) * (sourceValue - sourceRangeMin)) / (sourceRangeMax - sourceRangeMin);
+}
+
 
 static float getColorBrightness(NVGcolor c)
 {

@@ -10,13 +10,13 @@
 #include "nanovg.h"
 
 
-START_NAMESPACE_DGL
+START_NAMESPACE_DISTRHO
 
-class Radio : public NanoSubWidget,
+class PDRadio : public NanoSubWidget,
                public PDRadioEventHandler
 {
 public:
-    explicit Radio(Widget* parent, PDRadioEventHandler::Callback* cb);
+    explicit PDRadio(Widget* parent, PDRadioEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor radioColor);
 
@@ -29,7 +29,7 @@ private:
     NVGcolor bgColor;
     NVGcolor radioColor;
 
-    DISTRHO_LEAK_DETECTOR(Radio)
+    DISTRHO_LEAK_DETECTOR(PDRadio)
 };
 
-END_NAMESPACE_DGL
+END_NAMESPACE_DISTRHO
