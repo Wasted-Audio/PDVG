@@ -27,17 +27,17 @@ void PDToggle::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
-    auto const untoggledColor = interpolateColors(bgColor, toggledColor, 0.1f);
+    auto const untoggledColor = interpolateColors(toggledColor, bgColor, 0.8f);
     auto const outlineColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 
     drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColor, Corners::objectCornerRadius);
 
-    auto const sizeReduction = std::min(1.0f, b.w / 20.0f);
-    float const margin = (b.w * 0.08f + 4.5f) * sizeReduction;
+    auto const sizeReduction = std::min(1.0f, b.w / (20.0f * scaleFactor));
+    float const margin = (b.w * 0.08f + 4.5f * scaleFactor) * sizeReduction;
     auto const crossB = reduceRectangle(b, margin);
 
     auto const max = std::max(crossB.w, crossB.h);
-    auto const strokeWidth = std::max(max * 0.15f, 2.0f) * sizeReduction;
+    auto const strokeWidth = std::max(max * 0.15f, 2.0f * scaleFactor) * sizeReduction;
 
     nvgBeginPath(nvg);
     nvgMoveTo(nvg, crossB.x, crossB.y);
