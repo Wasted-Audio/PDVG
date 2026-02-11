@@ -17,7 +17,7 @@ struct Corners {
     static constexpr float largeCornerRadius = 8.0f;
     static constexpr float defaultCornerRadius = 5.0f;
     static constexpr float resizeHanleCornerRadius = 2.75f;
-    static constexpr float objectCornerRadius = 2.75f;
+    static inline float objectCornerRadius = 2.75f;
 };
 
 struct PDRectangle {
