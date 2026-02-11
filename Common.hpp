@@ -29,29 +29,8 @@ struct PDRectangle {
 
 inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
 {
-    float shortestSide = std::min(w, h);
-
-    x -= 1.5f;
-    y -= 1.5f;
-    w += 3.0f;
-    h += 3.0f;
-
-    NVGpaint p;
-    memset(&p, 0, sizeof(p));
-    nvgTransformIdentity(p.xform);
-    p.xform[4] = x+w*0.5f;
-    p.xform[5] = y+h*0.5f;
-
-    p.extent[0] = (w * 0.5f) - 1.5f;
-    p.extent[1] = (h * 0.5f) - 1.5f;
-
-    // If the radius is less than half of the shortest side, it will no longer be rounded
-    // So force rounding here. Sorry not sorry.
-    p.radius = std::min(radius, shortestSide * 0.5f);
-    p.innerColor = icol;
-    p.outerColor = ocol;
-
-    nvgFillPaint(nvg, p);
+    nvgFillColor(nvg, icol);
+    nvgStrokeColor(nvg, ocol);
     nvgBeginPath(nvg);
     nvgRoundedRect(nvg, x, y, w, h, radius);
     nvgFill(nvg);

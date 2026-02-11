@@ -33,11 +33,11 @@ void PDSlider::onNanoDisplay()
     NVGcontext* nvg = getContext();
 
     // box
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, cvColor, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, cvColor, Corners::objectCornerRadius * scaleFactor);
 
     // tick
     float thumbSize = 4.0f * scaleFactor;
-    auto const cornerSize = Corners::objectCornerRadius / 2.0f;
+    auto const cornerSize = (Corners::objectCornerRadius * scaleFactor) / 2.0f;
 
     PDRectangle sB;
     auto const bR = reduceRectangle(b, 1.0f);

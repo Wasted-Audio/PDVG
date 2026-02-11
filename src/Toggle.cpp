@@ -30,7 +30,7 @@ void PDToggle::onNanoDisplay()
     auto const untoggledColor = interpolateColors(toggledColor, bgColor, 0.8f);
     auto const outlineColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColor, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColor, Corners::objectCornerRadius * scaleFactor);
 
     auto const sizeReduction = std::min(1.0f, b.w / (20.0f * scaleFactor));
     float const margin = (b.w * 0.08f + 4.5f * scaleFactor) * sizeReduction;

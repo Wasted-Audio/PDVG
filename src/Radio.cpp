@@ -28,7 +28,7 @@ void PDRadio::onNanoDisplay()
 
     auto const outlineColour = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColour, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColour, Corners::objectCornerRadius * scaleFactor);
 
     auto isHorizontal = this->getHorizontal();
     bool isVertical = !isHorizontal;
@@ -66,7 +66,7 @@ void PDRadio::onNanoDisplay()
         hoverRect.h = size;
 
         auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f * scaleFactor, 5 * scaleFactor));
-        drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, bgColor, Corners::objectCornerRadius / 2.0f);
+        drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, bgColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
     }
 
     auto const selected = getValue();
@@ -84,7 +84,7 @@ void PDRadio::onNanoDisplay()
 
     auto const selectionBounds = reduceRectangle(selection, jmin<float>(size * 0.25f * scaleFactor, 5 * scaleFactor));
 
-    drawRoundedRect(nvg, selectionBounds.x, selectionBounds.y, selectionBounds.w, selectionBounds.h, radioColor, radioColor, Corners::objectCornerRadius / 2.0f);
+    drawRoundedRect(nvg, selectionBounds.x, selectionBounds.y, selectionBounds.w, selectionBounds.h, radioColor, radioColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
 }
 
 bool PDRadio::onMouse(const MouseEvent &ev)
