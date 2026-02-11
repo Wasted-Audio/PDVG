@@ -25,13 +25,12 @@ void PDCanvas::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, canvColor, bgColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
 }
 
-void PDCanvas::setColors(NVGcolor bgColor, NVGcolor canvColor)
+void PDCanvas::setColors(NVGcolor bgColor)
 {
     this->bgColor = bgColor;
-    this->canvColor = canvColor;
 }
 
 END_NAMESPACE_DISTRHO

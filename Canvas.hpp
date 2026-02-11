@@ -17,14 +17,13 @@ class PDCanvas : public NanoSubWidget
 public:
     explicit PDCanvas(Widget* parent);
 
-    void setColors(NVGcolor bgColor, NVGcolor canvColor);
+    void setColors(NVGcolor bgColor);
 
 protected:
     void onNanoDisplay() override;
 
 private:
     NVGcolor bgColor;
-    NVGcolor canvColor;
 
     DISTRHO_LEAK_DETECTOR(PDCanvas)
 };
