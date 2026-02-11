@@ -113,48 +113,6 @@ private:
     DISTRHO_LEAK_DETECTOR(PDSliderEventHandler)
 };
 
-class SpinnerEventHandler
-{
-public:
-    class Callback
-    {
-    public:
-        virtual ~Callback() {}
-        virtual void spinnerValueChanged(SubWidget *widget, float value) = 0;
-    };
-
-    explicit SpinnerEventHandler(SubWidget *self);
-    explicit SpinnerEventHandler(SubWidget *self, const SpinnerEventHandler &other);
-    SpinnerEventHandler &operator=(const SpinnerEventHandler &other);
-    ~SpinnerEventHandler();
-
-    float getValue() const noexcept;
-
-    virtual bool setValue(float value, bool sendCallback = false) noexcept;
-
-    void setIncrementArea(const double x, const double y, const double w, const double h) noexcept;
-    void setDecrementArea(const double x, const double y, const double w, const double h) noexcept;
-    void setRange(float min, float max) noexcept;
-    void setStep(float step) noexcept;
-    void setCallback(Callback *callback) noexcept;
-
-    Rectangle<double> getIncrementArea() noexcept;
-    Rectangle<double> getDecrementArea() noexcept;
-
-    bool mouseEvent(const Widget::MouseEvent &ev);
-    bool motionEvent(const Widget::MotionEvent &ev);
-    bool scrollEvent(const Widget::ScrollEvent &ev);
-
-protected:
-    // State getState() const noexcept;
-
-private:
-    struct PrivateData;
-    PrivateData *const pData;
-
-    DISTRHO_LEAK_DETECTOR(SpinnerEventHandler)
-};
-
 class PDRadioEventHandler
 {
 public:
