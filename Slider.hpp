@@ -8,6 +8,7 @@
 #include "NanoVG.hpp"
 #include "ExtraEventHandlers.hpp"
 #include "nanovg.h"
+#include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
@@ -20,6 +21,7 @@ public:
 
     void setHorizontal();
     void setColors(NVGcolor cvColor, NVGcolor bgColor, NVGcolor sliderColor);
+    void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
@@ -32,6 +34,7 @@ private:
     NVGcolor cvColor;
     NVGcolor bgColor;
     NVGcolor sliderColor;
+    ScopedPointer<PDLabel> label;
 
     DISTRHO_LEAK_DETECTOR(PDSlider)
 };

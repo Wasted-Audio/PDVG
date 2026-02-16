@@ -59,4 +59,13 @@ void PDToggle::setColors(NVGcolor bgColor, NVGcolor toggledColor) {
     this->toggledColor = toggledColor;
 }
 
+void PDToggle::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
+{
+    this->label = new PDLabel(this);
+    this->label->setText(text);
+    this->label->setColors(textColor);
+    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setSize(size * text.length(), size);
+}
+
 END_NAMESPACE_DISTRHO

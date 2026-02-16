@@ -8,6 +8,7 @@
 #include "NanoVG.hpp"
 #include "ExtraEventHandlers.hpp"
 #include "nanovg.h"
+#include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
@@ -19,6 +20,7 @@ public:
     explicit PDRadio(Widget* parent, PDRadioEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor radioColor);
+    void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
@@ -28,6 +30,7 @@ protected:
 private:
     NVGcolor bgColor;
     NVGcolor radioColor;
+    ScopedPointer<PDLabel> label;
 
     DISTRHO_LEAK_DETECTOR(PDRadio)
 };

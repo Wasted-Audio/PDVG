@@ -6,6 +6,7 @@
 #include "nanovg.h"
 #include "Common.hpp"
 #include "Canvas.hpp"
+#include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
@@ -31,6 +32,15 @@ void PDCanvas::onNanoDisplay()
 void PDCanvas::setColors(NVGcolor bgColor)
 {
     this->bgColor = bgColor;
+}
+
+void PDCanvas::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
+{
+    this->label = new PDLabel(this);
+    this->label->setText(text);
+    this->label->setColors(textColor);
+    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setSize(size * text.length(), size);
 }
 
 END_NAMESPACE_DISTRHO

@@ -5,28 +5,29 @@
 
 #pragma once
 
+#include <string>
 #include "NanoVG.hpp"
 #include "nanovg.h"
 #include "Widget.hpp"
-#include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
 
-class PDCanvas : public NanoSubWidget
+class PDLabel : public NanoSubWidget
 {
 public:
-    explicit PDCanvas(Widget* parent);
+    explicit PDLabel(Widget* parent);
 
-    void setColors(NVGcolor bgColor);
-    void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
+    void setText(std::string text);
+    void setColors(NVGcolor textColor);
 
 protected:
     void onNanoDisplay() override;
 
 private:
-    NVGcolor bgColor;
-    ScopedPointer<PDLabel> label;
+    std::string lText;
+    NVGcolor textColor;
+    NanoVG::FontId fFontId;
 
     DISTRHO_LEAK_DETECTOR(PDCanvas)
 };

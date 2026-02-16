@@ -65,26 +65,21 @@ void PDRadio::onNanoDisplay()
         hoverRect.w = size;
         hoverRect.h = size;
 
-        auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f * scaleFactor, 5 * scaleFactor));
+        auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f, 5) * scaleFactor);
         drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, bgColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
     }
 
     auto const selected = getValue();
 
-    float const selectionX = isVertical ? 0 : selected * size;
-    float const selectionY = isVertical ? selected * size : 0;
-    float const sizeW = size;
-    float const sizeH = isVertical ? b.w : b.h;
-
     PDRectangle selection;
-    selection.x = selectionX;
-    selection.y = selectionY;
-    selection.w = sizeW;
-    selection.h = sizeH;
+    selection.x = isVertical ? 0 : selected * size;
+    selection.y = isVertical ? selected * size : 0;
+    selection.w = size;
+    selection.h = isVertical ? b.w : b.h;
 
-    auto const selectionBounds = reduceRectangle(selection, jmin<float>(size * 0.25f * scaleFactor, 5 * scaleFactor));
+    auto const selectBounds = reduceRectangle(selection, jmin<float>(size * 0.25f, 5) * scaleFactor);
 
-    drawRoundedRect(nvg, selectionBounds.x, selectionBounds.y, selectionBounds.w, selectionBounds.h, radioColor, radioColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
+    drawRoundedRect(nvg, selectBounds.x, selectBounds.y, selectBounds.w, selectBounds.h, radioColor, radioColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
 }
 
 bool PDRadio::onMouse(const MouseEvent &ev)
@@ -100,6 +95,15 @@ bool PDRadio::onMotion(const MotionEvent &ev)
 void PDRadio::setColors(NVGcolor bgColor, NVGcolor radioColor) {
     this->bgColor = bgColor;
     this->radioColor = radioColor;
+}
+
+void PDRadio::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
+{
+    this->label = new PDLabel(this);
+    this->label->setText(text);
+    this->label->setColors(textColor);
+    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setSize(size * text.length(), size);
 }
 
 END_NAMESPACE_DISTRHO

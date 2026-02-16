@@ -33,7 +33,7 @@ void PDSlider::onNanoDisplay()
     NVGcontext* nvg = getContext();
 
     // box
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, cvColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
 
     // tick
     float thumbSize = 4.0f * scaleFactor;
@@ -56,8 +56,7 @@ void PDSlider::onNanoDisplay()
         sB.h = thumbSize;
     }
 
-    // nvgFillColor(nvg, sliderColor);
-    drawRoundedRect(nvg, sB.x, sB.y, sB.w, sB.h, sliderColor, bgColor, cornerSize);
+    drawRoundedRect(nvg, sB.x, sB.y, sB.w, sB.h, sliderColor, sliderColor, cornerSize);
 }
 
 bool PDSlider::onMouse(const MouseEvent &ev)
@@ -76,6 +75,15 @@ void PDSlider::setColors(NVGcolor cvColor, NVGcolor bgColor, NVGcolor sliderColo
     this->cvColor = cvColor;
     this->bgColor = bgColor;
     this->sliderColor = sliderColor;
+}
+
+void PDSlider::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
+{
+    this->label = new PDLabel(this);
+    this->label->setText(text);
+    this->label->setColors(textColor);
+    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setSize(size * text.length(), size);
 }
 
 END_NAMESPACE_DISTRHO

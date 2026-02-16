@@ -8,6 +8,7 @@
 #include "NanoVG.hpp"
 #include "ExtraEventHandlers.hpp"
 #include "nanovg.h"
+#include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
@@ -19,6 +20,7 @@ public:
     explicit PDToggle(Widget* parent, PDToggleEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor toggledColor);
+    void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
@@ -27,6 +29,7 @@ protected:
 private:
     NVGcolor bgColor;
     NVGcolor toggledColor;
+    ScopedPointer<PDLabel> label;
 
     DISTRHO_LEAK_DETECTOR(PDToggle)
 };

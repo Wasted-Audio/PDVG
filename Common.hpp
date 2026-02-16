@@ -10,7 +10,7 @@
 #include "nanovg.h"
 #include "Widget.hpp"
 
-START_NAMESPACE_DGL
+START_NAMESPACE_DISTRHO
 
 struct Corners {
     static constexpr float windowCornerRadius = 12.0f;
@@ -66,6 +66,9 @@ static float valToPropOfLen(float const value, float const length)
     return value / length;
 }
 
+
+/** Some utility functions taken from JUCE ISC code */
+
 /** Returns the smaller of two values. */
 template <typename Type>
 constexpr Type jmin (Type a, Type b) { return b < a ? b : a; }
@@ -100,4 +103,4 @@ static float getColorBrightness(NVGcolor c)
     return brightness;
 }
 
-END_NAMESPACE_DGL
+END_NAMESPACE_DISTRHO
