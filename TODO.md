@@ -1,33 +1,33 @@
 ## Objects:
 
 * ~~toggle~~
-    * ~~label~~
+  * ~~label~~
 * ~~hslide/vslide~~
-    * ~~label~~
+  * ~~label~~
 * ~~hradio/vradio~~
-    * ~~label~~
-    * log
-    * steady
+  * ~~label~~
+  * log
+  * steady
 * ~~canvas~~
-    * ~~label~~
+  * ~~label~~
 * ~~comment~~
-    * word wrap
+  * word wrap
 * knob
-    * label
-    * label_show
-    * ang_range
-    * ang_offset
-    * log_mode
-    * exp_fact
-    * discrete
-    * ticks
-    * steps
-    * circular
-    * jump
-    * square
-    * arc_start
-    * arc_show
+  * label
+  * label_show
+  * ang_range
+  * ang_offset
+  * log_mode
+  * exp_fact
+  * discrete
+  * ticks
+  * steps
+  * circular
+  * jump
+  * square
+  * arc_start
+  * arc_show
 * number
-    * log mode+height
+  * log mode+height
 * float
-    * label text+pos
+  * label text+pos
