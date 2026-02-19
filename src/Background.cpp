@@ -19,9 +19,7 @@ PDBackground::PDBackground(Widget* parent)
 void PDBackground::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b;
-    b.w = getWidth();
-    b.h = getHeight();
+    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 

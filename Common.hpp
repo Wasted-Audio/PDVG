@@ -21,10 +21,12 @@ struct Corners {
 };
 
 struct PDRectangle {
-    float x = 0.0f;
-    float y = 0.0f;
-    float w = 0.0f;
-    float h = 0.0f;
+    float x;
+    float y;
+    float w;
+    float h;
+
+    PDRectangle(float x, float y, float w, float h) : x(x), y(y), w(w), h(h) {}
 };
 
 inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
@@ -52,11 +54,12 @@ static PDRectangle reduceRectangle(PDRectangle r, float amount)
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
-    PDRectangle nR;
-    nR.x = r.x + amount;
-    nR.y = r.y + amount;
-    nR.w = r.w - amount * 2;
-    nR.h = r.h - amount * 2;
+    PDRectangle nR(
+        r.x + amount,
+        r.y + amount,
+        r.w - amount * 2,
+        r.h - amount * 2
+    );
 
     return nR;
 }

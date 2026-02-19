@@ -20,9 +20,7 @@ PDRadio::PDRadio(Widget *const parent, PDRadioEventHandler::Callback *const cb)
 void PDRadio::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b;
-    b.w = getWidth();
-    b.h = getHeight();
+    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
@@ -59,11 +57,12 @@ void PDRadio::onNanoDisplay()
         auto const hoverIdx = getHover();
         float const hoverX = isVertical ? 0 : hoverIdx * size;
         float const hoverY = isVertical ? hoverIdx * size : 0;
-        PDRectangle hoverRect;
-        hoverRect.x = hoverX;
-        hoverRect.y = hoverY;
-        hoverRect.w = size;
-        hoverRect.h = size;
+        PDRectangle hoverRect(
+            hoverX,
+            hoverY,
+            size,
+            size
+        );
 
         auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f, 5) * scaleFactor);
         drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, bgColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
@@ -71,11 +70,12 @@ void PDRadio::onNanoDisplay()
 
     auto const selected = getValue();
 
-    PDRectangle selection;
-    selection.x = isVertical ? 0 : selected * size;
-    selection.y = isVertical ? selected * size : 0;
-    selection.w = size;
-    selection.h = isVertical ? b.w : b.h;
+    PDRectangle selection(
+        isVertical ? 0 : selected * size,
+        isVertical ? selected * size : 0,
+        size,
+        isVertical ? b.w : b.h
+    );
 
     auto const selectBounds = reduceRectangle(selection, jmin<float>(size * 0.25f, 5) * scaleFactor);
 
