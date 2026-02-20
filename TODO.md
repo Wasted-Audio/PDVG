@@ -37,3 +37,4 @@
 ## UI Elements
 
 * ~~subpatches~~
+  * covering other objects (likely needs extending DPF nanovg for `nvgRoundedScissor`)

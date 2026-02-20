@@ -13,7 +13,6 @@ START_NAMESPACE_DISTRHO
 PDBackground::PDBackground(Widget* parent)
     : NanoWidget(parent)
 {
-
 }
 
 void PDBackground::onNanoDisplay()
@@ -39,7 +38,9 @@ void PDBackground::onNanoDisplay()
     }
 
     nvgFillColor(nvg, bgColor);
+    nvgStrokeColor(nvg, bgColor);
     nvgFill(nvg);
+    nvgStroke(nvg);
 }
 
 void PDBackground::setColors(NVGcolor bgColor)
