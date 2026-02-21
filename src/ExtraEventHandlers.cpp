@@ -60,7 +60,10 @@ struct PDToggleEventHandler::PrivateData
                 }
                 DISTRHO_SAFE_EXCEPTION("SwitchEventHandler::mouseEvent");
             }
+
+            return true;
         }
+
         return false;
     }
 
