@@ -17,23 +17,20 @@ PDSubpatch::PDSubpatch(NanoSubWidget* parent)
 
 void PDSubpatch::onNanoDisplay()
 {
-    intersectScissor(0, 0, getWidth(), getHeight());
-}
-
-void PDSubpatch::onNanoDisplayAfter()
-{
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+    intersectScissor(0, 0, getWidth(), getHeight());
 
+    // Border is currently not drawn on the correct level
     beginPath();
     roundedRect(0, 0, getWidth(), getHeight(), Corners::objectCornerRadius * scaleFactor);
-    strokeColor(bgColor);
+    strokeColor(borderColor);
     strokeWidth(2.0f);
     stroke();
 }
 
-void PDSubpatch::setColors(NVGcolor bgColor)
+void PDSubpatch::setColors(NVGcolor borderColor)
 {
-    this->bgColor = bgColor;
+    this->borderColor = borderColor;
 }
 
 END_NAMESPACE_DISTRHO

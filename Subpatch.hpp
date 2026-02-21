@@ -19,7 +19,7 @@ class PDSubpatch : public PDWidget
 public:
     explicit PDSubpatch(NanoSubWidget* parent);
 
-    void setColors(NVGcolor bgColor);
+    void setColors(NVGcolor borderColor);
     void setSubpatches(std::vector<PDRectangle> subpatches);
 
     void addManagedChild(PDWidget* child)
@@ -50,10 +50,9 @@ public:
 
 protected:
     void onNanoDisplay() override;
-    void onNanoDisplayAfter() override;
 
 private:
-    NVGcolor bgColor;
+    NVGcolor borderColor;
     std::vector<PDWidget*> managedChildren;
 
     DISTRHO_LEAK_DETECTOR(PDSubpatch)
