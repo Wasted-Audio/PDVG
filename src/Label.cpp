@@ -11,7 +11,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDLabel::PDLabel(Widget* parent) : NanoWidget(parent)
+PDLabel::PDLabel(NanoSubWidget* parent) : NanoWidget(parent)
 {
     using namespace InterRegular;
     NanoVG::FontId interId = createFontFromMemory("inter", (const uchar *)InterRegularData, InterRegularDataSize, 0);

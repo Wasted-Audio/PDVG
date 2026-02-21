@@ -16,7 +16,7 @@ START_NAMESPACE_DISTRHO
 class PDLabel : public NanoSubWidget
 {
 public:
-    explicit PDLabel(Widget* parent);
+    explicit PDLabel(NanoSubWidget* parent);
 
     void setText(std::string text);
     void setColors(NVGcolor textColor);

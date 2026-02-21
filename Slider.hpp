@@ -8,16 +8,17 @@
 #include "NanoVG.hpp"
 #include "ExtraEventHandlers.hpp"
 #include "nanovg.h"
+#include "PDWidget.hpp"
 #include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
 
-class PDSlider : public NanoSubWidget,
+class PDSlider : public PDWidget,
                public PDSliderEventHandler
 {
 public:
-    explicit PDSlider(Widget *parent, PDSliderEventHandler::Callback* cb);
+    explicit PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback* cb);
 
     void setHorizontal();
     void setColors(NVGcolor cvColor, NVGcolor bgColor, NVGcolor sliderColor);

@@ -8,16 +8,17 @@
 #include "NanoVG.hpp"
 #include "ExtraEventHandlers.hpp"
 #include "nanovg.h"
+#include "PDWidget.hpp"
 #include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
 
-class PDRadio : public NanoSubWidget,
+class PDRadio : public PDWidget,
                public PDRadioEventHandler
 {
 public:
-    explicit PDRadio(Widget* parent, PDRadioEventHandler::Callback* cb);
+    explicit PDRadio(NanoSubWidget* parent, PDRadioEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor radioColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);

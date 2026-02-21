@@ -10,8 +10,8 @@
 START_NAMESPACE_DISTRHO
 
 
-PDRadio::PDRadio(Widget *const parent, PDRadioEventHandler::Callback *const cb)
-    : NanoWidget(parent),
+PDRadio::PDRadio(NanoSubWidget *const parent, PDRadioEventHandler::Callback *const cb)
+    : PDWidget(parent),
       PDRadioEventHandler(this)
 {
     PDRadioEventHandler::setCallback(cb);
@@ -102,7 +102,7 @@ void PDRadio::setLabel(std::string text, NVGcolor textColor, int x, int y, int s
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);
-    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
 }
 

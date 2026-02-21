@@ -8,16 +8,17 @@
 #include "NanoVG.hpp"
 #include "ExtraEventHandlers.hpp"
 #include "nanovg.h"
+#include "PDWidget.hpp"
 #include "Label.hpp"
 
 
 START_NAMESPACE_DISTRHO
 
-class PDToggle : public NanoSubWidget,
+class PDToggle : public PDWidget,
                public PDToggleEventHandler
 {
 public:
-    explicit PDToggle(Widget* parent, PDToggleEventHandler::Callback* cb);
+    explicit PDToggle(NanoSubWidget* parent, PDToggleEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor toggledColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);

@@ -7,6 +7,8 @@
 #include "ExtraEventHandlers.hpp"
 #include "SubWidget.hpp"
 
+#include "PDWidget.hpp"
+
 START_NAMESPACE_DGL
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -44,7 +46,8 @@ struct PDToggleEventHandler::PrivateData
 
     bool mouseEvent(const Widget::MouseEvent &ev)
     {
-        if (ev.press && widget->contains(ev.pos))
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        if (ev.press && pdWidget->contains(ev.pos))
         {
             isDown = !isDown;
             widget->repaint();
@@ -57,10 +60,7 @@ struct PDToggleEventHandler::PrivateData
                 }
                 DISTRHO_SAFE_EXCEPTION("SwitchEventHandler::mouseEvent");
             }
-
-            return true;
         }
-
         return false;
     }
 
@@ -213,9 +213,17 @@ struct PDSliderEventHandler::PrivateData
         if (ev.button != 1)
             return false;
 
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        const Point<int> screen = pdWidget->getScreenPos();
+
+        // Convert ev.pos to local widget coordinates
+        const double x = ev.pos.getX() - screen.getX();
+        const double y = ev.pos.getY() - screen.getY();
+        const Point<double> localPos(x, y);
+
         if (ev.press)
         {
-            if (!sliderArea.contains(ev.pos))
+            if (!sliderArea.contains(localPos))
                 return false;
 
             if ((ev.mod & kModifierShift) != 0 && usingDefault)
@@ -226,9 +234,6 @@ struct PDSliderEventHandler::PrivateData
             }
 
             float vper;
-            const double x = ev.pos.getX();
-            const double y = ev.pos.getY();
-
             if (startPos.getY() == endPos.getY())
             {
                 // horizontal
@@ -289,9 +294,13 @@ struct PDSliderEventHandler::PrivateData
         if (!dragging)
             return false;
 
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        const Point<int> screen = pdWidget->getScreenPos();
+
+        // Convert to local coordinates
+        const double x = ev.pos.getX() - screen.getX();
+        const double y = ev.pos.getY() - screen.getY();
         const bool horizontal = startPos.getY() == endPos.getY();
-        const double x = ev.pos.getX();
-        const double y = ev.pos.getY();
 
         if ((horizontal && sliderArea.containsX(x)) || (sliderArea.containsY(y) && !horizontal))
         {
@@ -568,12 +577,18 @@ struct PDRadioEventHandler::PrivateData
         if (ev.button != 1)
             return false;
 
-        if (ev.press && widget->contains(ev.pos))
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        if (ev.press && pdWidget->contains(ev.pos))
         {
+            // Convert screen pos to local widget coords
+            const Point<int> screen = pdWidget->getScreenPos();
+            const double localX = ev.pos.getX() - screen.getX();
+            const double localY = ev.pos.getY() - screen.getY();
+
             if (horizontal)
-                value = (float)ev.pos.getX()/(float)widget->getWidth() * (float)step;
+                value = (float)localX/(float)pdWidget->getWidth() * (float)step;
             else
-                value = (float)ev.pos.getY()/(float)widget->getHeight() * (float)step;
+                value = (float)localY/(float)pdWidget->getHeight() * (float)step;
             setValue(value, true);
 
             return true;
@@ -584,13 +599,19 @@ struct PDRadioEventHandler::PrivateData
 
     bool motionEvent(const Widget::MotionEvent &ev)
     {
-        if (widget->contains(ev.pos))
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        if (pdWidget->contains(ev.pos))
         {
+            // Convert screen pos to local widget coords
+            const Point<int> screen = pdWidget->getScreenPos();
+            const double localX = ev.pos.getX() - screen.getX();
+            const double localY = ev.pos.getY() - screen.getY();
+
             hover = true;
             if (horizontal)
-                hoverPos = (float)ev.pos.getX()/(float)widget->getWidth() * (float)step;
+                hoverPos = (float)localX/(float)pdWidget->getWidth() * (float)step;
             else
-                hoverPos = (float)ev.pos.getY()/(float)widget->getHeight() * (float)step;
+                hoverPos = (float)localY/(float)pdWidget->getHeight() * (float)step;
 
             widget->repaint();
         } else {

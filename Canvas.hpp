@@ -16,7 +16,7 @@ START_NAMESPACE_DISTRHO
 class PDCanvas : public NanoSubWidget
 {
 public:
-    explicit PDCanvas(Widget* parent);
+    explicit PDCanvas(NanoSubWidget* parent);
 
     void setColors(NVGcolor bgColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);

@@ -9,8 +9,9 @@
 
 START_NAMESPACE_DISTRHO
 
-PDToggle::PDToggle(Widget *const parent, PDToggleEventHandler::Callback *const cb)
-    : NanoWidget(parent),
+
+PDToggle::PDToggle(NanoSubWidget *const parent, PDToggleEventHandler::Callback *const cb)
+    : PDWidget(parent),
       PDToggleEventHandler(this)
 {
     PDToggleEventHandler::setCallback(cb);
@@ -62,7 +63,7 @@ void PDToggle::setLabel(std::string text, NVGcolor textColor, int x, int y, int 
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);
-    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
 }
 

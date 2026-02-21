@@ -10,8 +10,8 @@
 START_NAMESPACE_DISTRHO
 
 
-PDSlider::PDSlider(Widget *parent, PDSliderEventHandler::Callback *const cb)
-    : NanoWidget(parent),
+PDSlider::PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback *const cb)
+    : PDWidget(parent),
       PDSliderEventHandler(this)
 {
     PDSliderEventHandler::setCallback(cb);
@@ -79,7 +79,7 @@ void PDSlider::setLabel(std::string text, NVGcolor textColor, int x, int y, int 
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);
-    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
 }
 

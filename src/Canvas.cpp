@@ -11,7 +11,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDCanvas::PDCanvas(Widget* parent)
+PDCanvas::PDCanvas(NanoSubWidget* parent)
     : NanoWidget(parent)
 {
 
@@ -37,7 +37,7 @@ void PDCanvas::setLabel(std::string text, NVGcolor textColor, int x, int y, int 
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);
-    this->label->setAbsolutePos(x + this->getAbsolutePos().getX(), (y - size / 2) + this->getAbsolutePos().getY());
+    this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
 }
 
