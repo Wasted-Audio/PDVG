@@ -8,8 +8,8 @@
 #include "NanoVG.hpp"
 #include "nanovg.h"
 #include "Widget.hpp"
-#include "Label.hpp"
 
+#include "Label.hpp"
 
 START_NAMESPACE_DISTRHO
 

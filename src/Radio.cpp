@@ -4,11 +4,11 @@
 */
 
 #include "nanovg.h"
+
 #include "Common.hpp"
 #include "Radio.hpp"
 
 START_NAMESPACE_DISTRHO
-
 
 PDRadio::PDRadio(NanoSubWidget *const parent, PDRadioEventHandler::Callback *const cb)
     : PDWidget(parent),

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2026 Wasted Audio
+ * SPDX-License-Identifier: ISC
+*/
+
 #pragma once
 
 #include "NanoVG.hpp"

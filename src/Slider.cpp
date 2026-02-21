@@ -4,11 +4,11 @@
 */
 
 #include "nanovg.h"
+
 #include "Common.hpp"
 #include "Slider.hpp"
 
 START_NAMESPACE_DISTRHO
-
 
 PDSlider::PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback *const cb)
     : PDWidget(parent),

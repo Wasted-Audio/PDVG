@@ -5,7 +5,6 @@
 
 #include "Mainpatch.hpp"
 
-
 START_NAMESPACE_DISTRHO
 
 PDMainpatch::PDMainpatch(Widget* parent)

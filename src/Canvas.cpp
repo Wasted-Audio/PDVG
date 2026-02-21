@@ -4,10 +4,10 @@
 */
 
 #include "nanovg.h"
-#include "Common.hpp"
-#include "Canvas.hpp"
-#include "Label.hpp"
 
+#include "Canvas.hpp"
+#include "Common.hpp"
+#include "Label.hpp"
 
 START_NAMESPACE_DISTRHO
 

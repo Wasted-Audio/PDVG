@@ -6,11 +6,11 @@
 #pragma once
 
 #include "NanoVG.hpp"
-#include "ExtraEventHandlers.hpp"
 #include "nanovg.h"
-#include "PDWidget.hpp"
-#include "Label.hpp"
 
+#include "ExtraEventHandlers.hpp"
+#include "Label.hpp"
+#include "PDWidget.hpp"
 
 START_NAMESPACE_DISTRHO
 

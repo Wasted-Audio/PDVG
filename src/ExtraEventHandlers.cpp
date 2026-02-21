@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: ISC
 */
 
-#include "ExtraEventHandlers.hpp"
 #include "SubWidget.hpp"
 
+#include "ExtraEventHandlers.hpp"
 #include "PDWidget.hpp"
 
 START_NAMESPACE_DGL

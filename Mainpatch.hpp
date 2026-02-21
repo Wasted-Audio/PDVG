@@ -10,7 +10,6 @@
 
 #include "PDWidget.hpp"
 
-
 START_NAMESPACE_DISTRHO
 
 class PDMainpatch : public NanoSubWidget

@@ -4,9 +4,9 @@
 */
 
 #include "nanovg.h"
+
 #include "Common.hpp"
 #include "Subpatch.hpp"
-
 
 START_NAMESPACE_DISTRHO
 

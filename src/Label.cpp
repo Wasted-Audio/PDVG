@@ -5,9 +5,9 @@
 
 #include "NanoVG.hpp"
 #include "nanovg.h"
+
 #include "Label.hpp"
 #include "Fonts/InterRegular.hpp"
-
 
 START_NAMESPACE_DISTRHO
 

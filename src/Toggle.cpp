@@ -4,11 +4,11 @@
 */
 
 #include "nanovg.h"
+
 #include "Common.hpp"
 #include "Toggle.hpp"
 
 START_NAMESPACE_DISTRHO
-
 
 PDToggle::PDToggle(NanoSubWidget *const parent, PDToggleEventHandler::Callback *const cb)
     : PDWidget(parent),

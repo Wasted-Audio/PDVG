@@ -10,7 +10,6 @@
 #include "nanovg.h"
 #include "Widget.hpp"
 
-
 START_NAMESPACE_DISTRHO
 
 class PDLabel : public NanoSubWidget

@@ -49,7 +49,6 @@ static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
     return c;
 }
 
-
 static PDRectangle reduceRectangle(PDRectangle r, float amount)
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
