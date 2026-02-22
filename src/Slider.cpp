@@ -21,11 +21,13 @@ void PDSlider::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
+    float norm = getNormalizedValue();
     float val;
+
     if (isHorizontal)
-        val = isInverted() ? (b.w - getValue() * b.w) : (getValue() * b.w);
+        val = isInverted() ? (b.w - norm * b.w) : (norm * b.w);
     else
-        val = isInverted() ? (b.h - getValue() * b.h) : (getValue() * b.h);
+        val = isInverted() ? (b.h - norm * b.h) : (norm * b.h);
 
     NVGcontext* nvg = getContext();
 

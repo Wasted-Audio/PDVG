@@ -248,12 +248,13 @@ struct PDSliderEventHandler::PrivateData
                 vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
             }
 
-            float value;
-
+            float linearValue;
             if (inverted)
-                value = maximum - vper * (maximum - minimum);
+                linearValue = maximum - vper * (maximum - minimum);
             else
-                value = minimum + vper * (maximum - minimum);
+                linearValue = minimum + vper * (maximum - minimum);
+
+            float value = usingLog ? logscale(linearValue) : linearValue;
 
             if (value < minimum)
             {
@@ -320,12 +321,13 @@ struct PDSliderEventHandler::PrivateData
                 vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
             }
 
-            float value;
-
+            float linearValue;
             if (inverted)
-                value = maximum - vper * (maximum - minimum);
+                linearValue = maximum - vper * (maximum - minimum);
             else
-                value = minimum + vper * (maximum - minimum);
+                linearValue = minimum + vper * (maximum - minimum);
+
+            float value = usingLog ? logscale(linearValue) : linearValue;
 
             if (value < minimum)
             {

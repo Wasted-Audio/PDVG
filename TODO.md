@@ -8,7 +8,7 @@
   * ~~label~~
 * ~~hradio/vradio~~
   * ~~label~~
-  * log
+  * ~~log~~
   * steady
 * ~~canvas~~
   * ~~label~~
