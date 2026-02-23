@@ -95,6 +95,7 @@ public:
     void setRange(float min, float max) noexcept;
     void setStep(float step) noexcept;
     void setUsingLogScale(bool yesNo) noexcept;
+    void setSteadyOnClick(bool yesNo) noexcept;
     void setStartPos(const int x, const int y) noexcept;
     void setEndPos(const int x, const int y) noexcept;
     void setCallback(Callback *callback) noexcept;

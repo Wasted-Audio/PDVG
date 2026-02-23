@@ -128,8 +128,10 @@ struct PDSliderEventHandler::PrivateData
     float value;
     float valueDef;
     float valueTmp;
+    float valueAtDragStart;
     bool usingDefault;
     bool usingLog;
+    bool steadyOnClick;
     bool dragging;
     bool inverted;
     bool valueIsSet;
@@ -149,8 +151,10 @@ struct PDSliderEventHandler::PrivateData
           value(0.5f),
           valueDef(value),
           valueTmp(value),
+          valueAtDragStart(0.0f),
           usingDefault(false),
           usingLog(false),
+          steadyOnClick(false),
           dragging(false),
           inverted(false),
           valueIsSet(false),
@@ -172,8 +176,10 @@ struct PDSliderEventHandler::PrivateData
           value(other->value),
           valueDef(other->valueDef),
           valueTmp(value),
+          valueAtDragStart(other->valueAtDragStart),
           usingDefault(other->usingDefault),
           usingLog(other->usingDefault),
+          steadyOnClick(other->steadyOnClick),
           startPos(other->startPos),
           endPos(other->endPos),
           dragging(false),
@@ -193,8 +199,10 @@ struct PDSliderEventHandler::PrivateData
         value = other->value;
         valueDef = other->valueDef;
         valueTmp = value;
+        valueAtDragStart = other->valueAtDragStart;
         usingDefault = other->usingDefault;
         usingLog = other->usingLog;
+        steadyOnClick = other->steadyOnClick;
     }
 
     inline float logscale(const float v) const
@@ -236,49 +244,51 @@ struct PDSliderEventHandler::PrivateData
                 return true;
             }
 
-            float vper;
-            if (startPos.getY() == endPos.getY())
-            {
-                // horizontal
-                vper = float(x - sliderArea.getX()) / float(sliderArea.getWidth());
-            }
-            else
-            {
-                // vertical
-                vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
-            }
-
-            float linearValue;
-            if (inverted)
-                linearValue = maximum - vper * (maximum - minimum);
-            else
-                linearValue = minimum + vper * (maximum - minimum);
-
-            float value = usingLog ? logscale(linearValue) : linearValue;
-
-            if (value < minimum)
-            {
-                valueTmp = value = minimum;
-            }
-            else if (value > maximum)
-            {
-                valueTmp = value = maximum;
-            }
-            else if (d_isNotZero(step))
-            {
-                valueTmp = value;
-                const float rest = std::fmod(value, step);
-                value = value - rest + (rest > step / 2.0f ? step : 0.0f);
-            }
-
             dragging = true;
-            startedX = x;
+            startedX = x;  // stored in local coords
             startedY = y;
 
             if (callback != nullptr)
                 callback->sliderDragStarted(widget);
 
-            setValue(value, true);
+            if (steadyOnClick)
+            {
+                // Don't jump — capture current value as the drag baseline
+                valueAtDragStart = value;
+            }
+            else
+            {
+                float vper;
+                if (startPos.getY() == endPos.getY())
+                    vper = float(x - sliderArea.getX()) / float(sliderArea.getWidth());
+                else
+                    vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
+
+                float linearValue;
+                if (inverted)
+                    linearValue = maximum - vper * (maximum - minimum);
+                else
+                    linearValue = minimum + vper * (maximum - minimum);
+
+                float newValue = usingLog ? logscale(linearValue) : linearValue;
+
+                if (newValue < minimum)
+                {
+                    valueTmp = newValue = minimum;
+                }
+                else if (newValue > maximum)
+                {
+                    valueTmp = newValue = maximum;
+                }
+                else if (d_isNotZero(step))
+                {
+                    valueTmp = newValue;
+                    const float rest = std::fmod(newValue, step);
+                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+                }
+
+                setValue(newValue, true);
+            }
 
             return true;
         }
@@ -301,64 +311,96 @@ struct PDSliderEventHandler::PrivateData
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
 
-        // Convert to local coordinates
+        // Convert to local coords — same space as startedX/startedY
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
         const bool horizontal = startPos.getY() == endPos.getY();
 
-        if ((horizontal && sliderArea.containsX(x)) || (sliderArea.containsY(y) && !horizontal))
+        if (steadyOnClick)
         {
-            float vper;
+            // Work in normalized [0,1] space so log scale is handled correctly
+            const float range = maximum - minimum;
 
-            if (horizontal)
-            {
-                // horizontal
-                vper = float(x - sliderArea.getX()) / float(sliderArea.getWidth());
-            }
+            // Normalized value at drag start
+            float normalizedBase;
+            if (usingLog)
+                normalizedBase = (invlogscale(valueAtDragStart) - minimum) / range;
             else
-            {
-                // vertical
-                vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
-            }
+                normalizedBase = (valueAtDragStart - minimum) / range;
 
-            float linearValue;
-            if (inverted)
-                linearValue = maximum - vper * (maximum - minimum);
+            // Normalized delta from click origin
+            const float normalizedDelta = horizontal
+                ? float(x - startedX) / float(sliderArea.getWidth())
+                : float(y - startedY) / float(sliderArea.getHeight());
+
+            float normalizedNew = inverted
+                ? normalizedBase - normalizedDelta
+                : normalizedBase + normalizedDelta;
+
+            normalizedNew = std::max(0.0f, std::min(1.0f, normalizedNew));
+
+            // Convert back to value space, applying log scale if needed
+            float newValue;
+            if (usingLog)
+                newValue = logscale(minimum + normalizedNew * range);
             else
-                linearValue = minimum + vper * (maximum - minimum);
+                newValue = minimum + normalizedNew * range;
 
-            float value = usingLog ? logscale(linearValue) : linearValue;
-
-            if (value < minimum)
+            if (d_isNotZero(step))
             {
-                valueTmp = value = minimum;
-            }
-            else if (value > maximum)
-            {
-                valueTmp = value = maximum;
-            }
-            else if (d_isNotZero(step))
-            {
-                valueTmp = value;
-                const float rest = std::fmod(value, step);
-                value = value - rest + (rest > step / 2.0f ? step : 0.0f);
+                valueTmp = newValue;
+                const float rest = std::fmod(newValue - minimum, step);
+                newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
             }
 
-            setValue(value, true);
-        }
-        else if (horizontal)
-        {
-            if (x < sliderArea.getX())
-                setValue(inverted ? maximum : minimum, true);
-            else
-                setValue(inverted ? minimum : maximum, true);
+            setValue(newValue, true);
         }
         else
         {
-            if (y < sliderArea.getY())
-                setValue(inverted ? maximum : minimum, true);
+            if ((horizontal && sliderArea.containsX(x)) || (!horizontal && sliderArea.containsY(y)))
+            {
+                float vper;
+
+                if (horizontal)
+                    vper = float(x - sliderArea.getX()) / float(sliderArea.getWidth());
+                else
+                    vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
+
+                float linearValue;
+                if (inverted)
+                    linearValue = maximum - vper * (maximum - minimum);
+                else
+                    linearValue = minimum + vper * (maximum - minimum);
+
+                float newValue = usingLog ? logscale(linearValue) : linearValue;
+
+                if (newValue < minimum)
+                {
+                    valueTmp = newValue = minimum;
+                }
+                else if (newValue > maximum)
+                {
+                    valueTmp = newValue = maximum;
+                }
+                else if (d_isNotZero(step))
+                {
+                    valueTmp = newValue;
+                    const float rest = std::fmod(newValue, step);
+                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+                }
+
+                setValue(newValue, true);
+            }
+            else if (horizontal)
+            {
+                setValue(x < sliderArea.getX() ? (inverted ? maximum : minimum)
+                                               : (inverted ? minimum : maximum), true);
+            }
             else
-                setValue(inverted ? minimum : maximum, true);
+            {
+                setValue(y < sliderArea.getY() ? (inverted ? maximum : minimum)
+                                               : (inverted ? minimum : maximum), true);
+            }
         }
 
         return true;
@@ -484,6 +526,11 @@ void PDSliderEventHandler::setStep(const float step) noexcept
 void PDSliderEventHandler::setUsingLogScale(const bool yesNo) noexcept
 {
     pData->usingLog = yesNo;
+}
+
+void PDSliderEventHandler::setSteadyOnClick(const bool yesNo) noexcept
+{
+    pData->steadyOnClick = yesNo;
 }
 
 void PDSliderEventHandler::setStartPos(const int x, const int y) noexcept

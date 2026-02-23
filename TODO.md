@@ -9,7 +9,7 @@
 * ~~hradio/vradio~~
   * ~~label~~
   * ~~log~~
-  * steady
+  * ~~steady on click~~
 * ~~canvas~~
   * ~~label~~
 * ~~comment~~
