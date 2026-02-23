@@ -152,6 +152,41 @@ private:
 
     DISTRHO_LEAK_DETECTOR(PDRadioEventHandler)
 };
+
+class PDNumberEventHandler
+{
+public:
+    class Callback
+    {
+    public:
+        virtual ~Callback() {}
+        virtual void numberValueChanged(SubWidget *widget, float value) = 0;
+    };
+
+    explicit PDNumberEventHandler(SubWidget *self);
+    explicit PDNumberEventHandler(SubWidget *self, const PDNumberEventHandler &other);
+    PDNumberEventHandler &operator=(const PDNumberEventHandler &other);
+    ~PDNumberEventHandler();
+
+    float getValue() const noexcept;
+
+    virtual bool setValue(float value, bool sendCallback = false) noexcept;
+
+    void setRange(float min, float max) noexcept;
+    void setCallback(Callback *callback) noexcept;
+
+    bool mouseEvent(const Widget::MouseEvent &ev);
+    bool motionEvent(const Widget::MotionEvent &ev);
+    bool scrollEvent(const Widget::ScrollEvent &ev);
+
+protected:
+private:
+    struct PrivateData;
+    PrivateData *const pData;
+
+    DISTRHO_LEAK_DETECTOR(PDNumberEventHandler)
+};
+
 // --------------------------------------------------------------------------------------------------------------------
 
 END_NAMESPACE_DGL

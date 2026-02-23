@@ -752,5 +752,153 @@ bool PDRadioEventHandler::isHovered() const noexcept { return pData->hover; }
 uint PDRadioEventHandler::getHover() const noexcept { return pData->hoverPos; }
 
 // end radio
+// --------------------------------------------------------------------------------------------------------------------
+
+// begin number
+
+struct PDNumberEventHandler::PrivateData
+{
+    PDNumberEventHandler *const self;
+    SubWidget *const widget;
+    PDNumberEventHandler::Callback *callback;
+
+    float minimum;
+    float maximum;
+    float value;
+    float valueDef;
+    float valueTmp;
+    float valueAtDragStart;
+    bool usingLog;
+    bool dragging;
+
+    PrivateData(PDNumberEventHandler *const s, SubWidget *const w)
+        : self(s),
+          widget(w),
+          callback(nullptr),
+          minimum(0.0f),
+          maximum(1.0f),
+          value(0.5f),
+          valueDef(value),
+          valueTmp(value),
+          valueAtDragStart(0.0f),
+          usingLog(false),
+          dragging(false)
+    {
+    }
+
+    PrivateData(PDNumberEventHandler *const s, SubWidget *const w, PrivateData *const other)
+        : self(s),
+          widget(w),
+          callback(other->callback),
+          minimum(other->minimum),
+          maximum(other->maximum),
+          value(other->value),
+          valueDef(other->valueDef),
+          valueTmp(other->valueTmp),
+          valueAtDragStart(other->valueAtDragStart),
+          usingLog(other->usingLog),
+          dragging(false)
+    {
+    }
+
+    void assignFrom(PrivateData *const other)
+    {
+        callback = other->callback;
+        minimum = other->minimum;
+        maximum = other->maximum;
+        value = other->value;
+        valueDef = other->valueDef;
+        valueTmp = other->valueTmp;
+        valueAtDragStart = other->valueAtDragStart;
+        usingLog = other->usingLog;
+    }
+
+    bool mouseEvent(const Widget::MouseEvent &ev)
+    {
+        if (ev.button != 1)
+            return false;
+    }
+    bool motionEvent(const Widget::MotionEvent &ev)
+    {
+        if (!dragging)
+            return false;
+    }
+    bool scrollEvent(const Widget::ScrollEvent &ev)
+    {
+        return false;
+    }
+
+    bool setValue(const float value2, const bool sendCallback)
+    {
+        value = value2;
+        widget->repaint();
+
+        if (sendCallback && callback != nullptr)
+        {
+            try
+            {
+                callback->numberValueChanged(widget, value);
+            }
+            DISTRHO_SAFE_EXCEPTION("PDNumberEventHandler::setValue");
+        }
+
+        return true;
+    }
+};
+
+PDNumberEventHandler::PDNumberEventHandler(SubWidget *const self)
+    : pData(new PrivateData(this, self)) {}
+
+PDNumberEventHandler::PDNumberEventHandler(SubWidget *const self, const PDNumberEventHandler &other)
+    : pData(new PrivateData(this, self, other.pData)) {}
+
+PDNumberEventHandler &PDNumberEventHandler::operator=(const PDNumberEventHandler &other)
+{
+    pData->assignFrom(other.pData);
+    return *this;
+}
+
+PDNumberEventHandler::~PDNumberEventHandler()
+{
+    delete pData;
+}
+
+float PDNumberEventHandler::getValue() const noexcept
+{
+    return pData->value;
+}
+
+bool PDNumberEventHandler::setValue(const float value, const bool sendCallback) noexcept
+{
+    return pData->setValue(value, sendCallback);
+}
+
+void PDNumberEventHandler::setRange(float min, float max) noexcept
+{
+    pData->minimum = min;
+    pData->maximum = max;
+}
+
+void PDNumberEventHandler::setCallback(Callback *const callback) noexcept
+{
+    pData->callback = callback;
+}
+
+bool PDNumberEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+{
+    return pData->mouseEvent(ev);
+}
+
+bool PDNumberEventHandler::motionEvent(const Widget::MotionEvent &ev)
+{
+    return pData->motionEvent(ev);
+}
+
+bool PDNumberEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
+{
+    return pData->scrollEvent(ev);
+}
+
+// end number
 
 END_NAMESPACE_DGL
