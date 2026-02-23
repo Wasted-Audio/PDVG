@@ -140,6 +140,7 @@ struct PDSliderEventHandler::PrivateData
     Point<int> startPos;
     Point<int> endPos;
     Rectangle<double> sliderArea;
+    uint lastClickTime;
 
     PrivateData(PDSliderEventHandler *const s, SubWidget *const w)
         : self(s),
@@ -178,7 +179,7 @@ struct PDSliderEventHandler::PrivateData
           valueTmp(value),
           valueAtDragStart(other->valueAtDragStart),
           usingDefault(other->usingDefault),
-          usingLog(other->usingDefault),
+          usingLog(other->usingLog),
           steadyOnClick(other->steadyOnClick),
           startPos(other->startPos),
           endPos(other->endPos),
@@ -237,12 +238,16 @@ struct PDSliderEventHandler::PrivateData
             if (!sliderArea.contains(localPos))
                 return false;
 
-            if ((ev.mod & kModifierShift) != 0 && usingDefault)
+            if (lastClickTime > 0 && ev.time > lastClickTime && ev.time - lastClickTime <= 300)
             {
+                lastClickTime = 0;
+
                 setValue(valueDef, true);
                 valueTmp = value;
                 return true;
             }
+
+            lastClickTime = ev.time;
 
             dragging = true;
             startedX = x;  // stored in local coords
