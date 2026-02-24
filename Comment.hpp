@@ -12,10 +12,10 @@
 
 START_NAMESPACE_DISTRHO
 
-class PDLabel : public NanoSubWidget
+class PDComment : public NanoSubWidget
 {
 public:
-    explicit PDLabel(NanoSubWidget* parent);
+    explicit PDComment(NanoSubWidget* parent);
 
     void setText(std::string text);
     void setColors(NVGcolor textColor);
@@ -28,7 +28,7 @@ private:
     NVGcolor textColor;
     NanoVG::FontId fFontId;
 
-    DISTRHO_LEAK_DETECTOR(PDLabel)
+    DISTRHO_LEAK_DETECTOR(PDComment)
 };
 
 END_NAMESPACE_DISTRHO
