@@ -20,7 +20,7 @@ public:
     explicit PDSubpatch(NanoSubWidget* parent);
 
     void setColors(NVGcolor borderColor);
-    void setSubpatches(std::vector<PDRectangle> subpatches);
+    void setSubpatches(std::vector<Rectangle<float>> subpatches);
 
     void addManagedChild(PDWidget* child)
     {

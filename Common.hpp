@@ -20,15 +20,6 @@ struct Corners {
     static inline float objectCornerRadius = 2.75f;
 };
 
-struct PDRectangle {
-    float x;
-    float y;
-    float w;
-    float h;
-
-    PDRectangle(float x, float y, float w, float h) : x(x), y(y), w(w), h(h) {}
-};
-
 inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
 {
     nvgFillColor(nvg, icol);
@@ -49,15 +40,15 @@ static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
     return c;
 }
 
-static PDRectangle reduceRectangle(PDRectangle r, float amount)
+static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
-    PDRectangle nR(
-        r.x + amount,
-        r.y + amount,
-        r.w - amount * 2,
-        r.h - amount * 2
+    Rectangle<float> nR(
+        r.getX() + amount,
+        r.getY() + amount,
+        r.getWidth() - amount * 2,
+        r.getHeight() - amount * 2
     );
 
     return nR;

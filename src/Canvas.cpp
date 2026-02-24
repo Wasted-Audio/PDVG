@@ -20,11 +20,11 @@ PDCanvas::PDCanvas(NanoSubWidget* parent)
 void PDCanvas::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
+    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
 }
 
 void PDCanvas::setColors(NVGcolor bgColor)

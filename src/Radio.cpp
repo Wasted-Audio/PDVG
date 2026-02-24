@@ -20,19 +20,19 @@ PDRadio::PDRadio(NanoSubWidget *const parent, PDRadioEventHandler::Callback *con
 void PDRadio::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
+    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
     auto const outlineColour = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColour, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, outlineColour, Corners::objectCornerRadius * scaleFactor);
 
     auto isHorizontal = this->getHorizontal();
     bool isVertical = !isHorizontal;
     auto const numItems = this->getStep();
 
-    float const size = isVertical ? static_cast<float>(b.h) / numItems : static_cast<float>(b.w) / numItems;
+    float const size = isVertical ? static_cast<float>(b.getHeight()) / numItems : static_cast<float>(b.getWidth()) / numItems;
     nvgStrokeColor(nvg, radioColor);
     nvgStrokeWidth(nvg, 1.0f * scaleFactor);
 
@@ -57,7 +57,7 @@ void PDRadio::onNanoDisplay()
         auto const hoverIdx = getHover();
         float const hoverX = isVertical ? 0 : hoverIdx * size;
         float const hoverY = isVertical ? hoverIdx * size : 0;
-        PDRectangle hoverRect(
+        const Rectangle<float> hoverRect(
             hoverX,
             hoverY,
             size,
@@ -65,21 +65,21 @@ void PDRadio::onNanoDisplay()
         );
 
         auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f, 5) * scaleFactor);
-        drawRoundedRect(nvg, hoverBounds.x, hoverBounds.y, hoverBounds.w, hoverBounds.h, hoverColor, bgColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
+        drawRoundedRect(nvg, hoverBounds.getX(), hoverBounds.getY(), hoverBounds.getWidth(), hoverBounds.getHeight(), hoverColor, bgColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
     }
 
     auto const selected = getValue();
 
-    PDRectangle selection(
+    const Rectangle<float> selection(
         isVertical ? 0 : selected * size,
         isVertical ? selected * size : 0,
         size,
-        isVertical ? b.w : b.h
+        isVertical ? b.getWidth() : b.getHeight()
     );
 
     auto const selectBounds = reduceRectangle(selection, jmin<float>(size * 0.25f, 5) * scaleFactor);
 
-    drawRoundedRect(nvg, selectBounds.x, selectBounds.y, selectBounds.w, selectBounds.h, radioColor, radioColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
+    drawRoundedRect(nvg, selectBounds.getX(), selectBounds.getY(), selectBounds.getWidth(), selectBounds.getHeight(), radioColor, radioColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
 }
 
 bool PDRadio::onMouse(const MouseEvent &ev)

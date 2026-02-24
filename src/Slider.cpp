@@ -20,42 +20,42 @@ PDSlider::PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback *const 
 void PDSlider::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
+    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
     float norm = getNormalizedValue();
     float val;
 
     if (isHorizontal)
-        val = isInverted() ? (b.w - norm * b.w) : (norm * b.w);
+        val = isInverted() ? (b.getWidth() - norm * b.getWidth()) : (norm * b.getWidth());
     else
-        val = isInverted() ? (b.h - norm * b.h) : (norm * b.h);
+        val = isInverted() ? (b.getHeight() - norm * b.getHeight()) : (norm * b.getHeight());
 
     NVGcontext* nvg = getContext();
 
     // box
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
 
     // tick
     float thumbSize = 4.0f * scaleFactor;
     auto const cornerSize = (Corners::objectCornerRadius * scaleFactor) / 2.0f;
 
-    PDRectangle sB(0.0f, 0.0f, 0.0f, 0.0f);
+    Rectangle<float> sB;
     auto const bR = reduceRectangle(b, 1.0f);
 
     if (isHorizontal) {
-        auto const pos = jmap(valToPropOfLen(val, b.w), 0.0f, 1.0f, bR.x, bR.w - thumbSize);
-        sB.x = pos;
-        sB.y = bR.y;
-        sB.w = thumbSize;
-        sB.h = bR.h;
+        auto const pos = jmap(valToPropOfLen(val, b.getWidth()), 0.0f, 1.0f, bR.getX(), bR.getWidth() - thumbSize);
+        sB.setX(pos);
+        sB.setY(bR.getY());
+        sB.setWidth(thumbSize);
+        sB.setHeight(bR.getHeight());
     } else {
-        auto const pos = jmap(1.0f - valToPropOfLen(val, b.h), 1.0f, 0.0f, bR.y, bR.h - thumbSize);
-        sB.x = bR.x;
-        sB.y = pos;
-        sB.w = bR.w;
-        sB.h = thumbSize;
+        auto const pos = jmap(1.0f - valToPropOfLen(val, b.getHeight()), 1.0f, 0.0f, bR.getY(), bR.getHeight() - thumbSize);
+        sB.setX(bR.getX());
+        sB.setY(pos);
+        sB.setWidth(bR.getWidth());
+        sB.setHeight(thumbSize);
     }
 
-    drawRoundedRect(nvg, sB.x, sB.y, sB.w, sB.h, sliderColor, sliderColor, cornerSize);
+    drawRoundedRect(nvg, sB.getX(), sB.getY(), sB.getWidth(), sB.getHeight(), sliderColor, sliderColor, cornerSize);
 }
 
 bool PDSlider::onMouse(const MouseEvent &ev)

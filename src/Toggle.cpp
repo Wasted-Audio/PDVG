@@ -20,7 +20,7 @@ PDToggle::PDToggle(NanoSubWidget *const parent, PDToggleEventHandler::Callback *
 void PDToggle::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
+    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     float val = isDown();
 
@@ -29,20 +29,20 @@ void PDToggle::onNanoDisplay()
     auto const untoggledColor = interpolateColors(toggledColor, bgColor, 0.8f);
     auto const outlineColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, outlineColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, outlineColor, Corners::objectCornerRadius * scaleFactor);
 
-    auto const sizeReduction = std::min(1.0f, b.w / (20.0f * scaleFactor));
-    float const margin = (b.w * 0.08f + 4.5f * scaleFactor) * sizeReduction;
+    auto const sizeReduction = std::min(1.0f, b.getWidth() / (20.0f * scaleFactor));
+    float const margin = (b.getWidth() * 0.08f + 4.5f * scaleFactor) * sizeReduction;
     auto const crossB = reduceRectangle(b, margin);
 
-    auto const max = std::max(crossB.w, crossB.h);
+    auto const max = std::max(crossB.getWidth(), crossB.getHeight());
     auto const strokeWidth = std::max(max * 0.15f, 2.0f * scaleFactor) * sizeReduction;
 
     nvgBeginPath(nvg);
-    nvgMoveTo(nvg, crossB.x, crossB.y);
-    nvgLineTo(nvg, crossB.x + crossB.w, crossB.y + crossB.h);
-    nvgMoveTo(nvg, crossB.x + crossB.w, crossB.y);
-    nvgLineTo(nvg, crossB.x, crossB.y + crossB.h);
+    nvgMoveTo(nvg, crossB.getX(), crossB.getY());
+    nvgLineTo(nvg, crossB.getX() + crossB.getWidth(), crossB.getY() + crossB.getHeight());
+    nvgMoveTo(nvg, crossB.getX() + crossB.getWidth(), crossB.getY());
+    nvgLineTo(nvg, crossB.getX(), crossB.getY() + crossB.getHeight());
     nvgStrokeColor(nvg, val ? toggledColor : untoggledColor);
     nvgStrokeWidth(nvg, strokeWidth);
     nvgStroke(nvg);

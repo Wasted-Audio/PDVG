@@ -20,20 +20,20 @@ PDNumber::PDNumber(NanoSubWidget *parent, PDNumberEventHandler::Callback *const 
 void PDNumber::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
+    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
     // WIP
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, fgColor, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, fgColor, Corners::objectCornerRadius);
 
     float indent = 9.0f * scaleFactor;
-    Rectangle<float> const iconBounds = {
-        (b.x + 4.0f * scaleFactor),
-        (b.y + 4.0f * scaleFactor),
+    const Rectangle<float> iconBounds(
+        (b.getX() + 4.0f * scaleFactor),
+        (b.getY() + 4.0f * scaleFactor),
         (indent - 4.0f * scaleFactor),
-        (b.h - 8.0f * scaleFactor)
-    };
+        (b.getHeight() - 8.0f * scaleFactor)
+    );
 
     auto const centreY = iconBounds.getY() + iconBounds.getHeight() / 2.0f;
     auto const leftX = iconBounds.getX();

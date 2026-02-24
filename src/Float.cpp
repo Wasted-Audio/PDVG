@@ -20,14 +20,14 @@ PDFloat::PDFloat(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb
 void PDFloat::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    PDRectangle b(0.0f, 0.0f, getWidth(), getHeight());
-    PDRectangle sb = reduceRectangle(b, 0.5f);
+    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const Rectangle<float> sb = reduceRectangle(b, 0.5f);
 
     NVGcontext* nvg = getContext();
 
     // WIP
-    drawRoundedRect(nvg, sb.x, sb.y, sb.w, sb.h, bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
-    drawRoundedRect(nvg, b.x, b.y, b.w, b.h, bgColor, fgColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, sb.getX(), sb.getY(), sb.getWidth(), sb.getHeight(), bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, fgColor, Corners::objectCornerRadius * scaleFactor);
     // WIP
 }
 
