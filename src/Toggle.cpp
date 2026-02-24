@@ -22,7 +22,7 @@ void PDToggle::onNanoDisplay()
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
-    float val = isDown();
+    bool val = isDown();
 
     NVGcontext* nvg = getContext();
 
