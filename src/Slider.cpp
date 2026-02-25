@@ -70,8 +70,8 @@ bool PDSlider::onMotion(const MotionEvent &ev)
 
 void PDSlider::setHorizontal() { isHorizontal = true; }
 
-void PDSlider::setColors(NVGcolor cvColor, NVGcolor bgColor, NVGcolor sliderColor) {
-    this->cvColor = cvColor;
+void PDSlider::setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor sliderColor) {
+    this->cnvColor = cnvColor;
     this->bgColor = bgColor;
     this->sliderColor = sliderColor;
 }

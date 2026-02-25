@@ -187,6 +187,68 @@ private:
     DISTRHO_LEAK_DETECTOR(PDNumberEventHandler)
 };
 
+class PDKnobEventHandler
+{
+public:
+    // NOTE hover not implemented yet
+    enum State
+    {
+        kKnobStateDefault = 0x0,
+        kKnobStateHover = 0x1,
+        kKnobStateDragging = 0x2,
+        kKnobStateDraggingHover = kKnobStateDragging | kKnobStateHover
+    };
+
+    class Callback
+    {
+    public:
+        virtual ~Callback() {}
+        virtual void knobDragStarted(SubWidget *widget) = 0;
+        virtual void knobDragFinished(SubWidget *widget) = 0;
+        virtual void knobValueChanged(SubWidget *widget, float value) = 0;
+    };
+
+    explicit PDKnobEventHandler(SubWidget *self);
+    explicit PDKnobEventHandler(SubWidget *self, const PDKnobEventHandler &other);
+    PDKnobEventHandler &operator=(const PDKnobEventHandler &other);
+    ~PDKnobEventHandler();
+
+    // returns raw value, is assumed to be scaled if using log
+    float getValue() const noexcept;
+
+    // NOTE: value is assumed to be scaled if using log
+    virtual bool setValue(float value, bool sendCallback = false) noexcept;
+
+    // returns 0-1 ranged value, already with log scale as needed
+    float getNormalizedValue() const noexcept;
+
+    // NOTE: value is assumed to be scaled if using log
+    void setDefault(float def) noexcept;
+    void setSliderArea(const double x, const double y, const double w, const double h) noexcept;
+    void setInverted(bool inverted) noexcept;
+    bool isInverted() noexcept;
+    void setRange(float min, float max) noexcept;
+    void setStep(float step) noexcept;
+    void setUsingLogScale(bool yesNo) noexcept;
+    void setJumpOnClick(bool yesNo) noexcept;
+    void setStartPos(const int x, const int y) noexcept;
+    void setEndPos(const int x, const int y) noexcept;
+    void setCallback(Callback *callback) noexcept;
+
+    bool mouseEvent(const Widget::MouseEvent &ev);
+    bool motionEvent(const Widget::MotionEvent &ev);
+    bool scrollEvent(const Widget::ScrollEvent &ev);
+
+protected:
+    // State getState() const noexcept;
+
+private:
+    struct PrivateData;
+    PrivateData *const pData;
+
+    DISTRHO_LEAK_DETECTOR(PDKnobEventHandler)
+};
+
 // --------------------------------------------------------------------------------------------------------------------
 
 END_NAMESPACE_DGL

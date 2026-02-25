@@ -250,15 +250,13 @@ struct PDSliderEventHandler::PrivateData
             lastClickTime = ev.time;
 
             dragging = true;
-            startedX = x;  // stored in local coords
-            startedY = y;
 
             if (callback != nullptr)
                 callback->sliderDragStarted(widget);
 
             if (steadyOnClick)
             {
-                // Don't jump — capture current value as the drag baseline
+                // Don't jump - capture current value as the drag baseline
                 valueAtDragStart = value;
             }
             else
@@ -905,5 +903,345 @@ bool PDNumberEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
 }
 
 // end number
+// --------------------------------------------------------------------------------------------------------------------
+
+// begin knob
+struct PDKnobEventHandler::PrivateData
+{
+    PDKnobEventHandler *const self;
+    SubWidget *const widget;
+    PDKnobEventHandler::Callback *callback;
+
+    float minimum;
+    float maximum;
+    float step;
+    float value;
+    float valueDef;
+    float valueTmp;
+    float valueAtDragStart;
+    bool usingDefault;
+    bool usingLog;
+    bool jumpOnClick;
+    bool dragging;
+    bool inverted;
+    bool valueIsSet;
+    double startedX;
+    double startedY;
+    Point<int> startPos;
+    Point<int> endPos;
+    Rectangle<double> knobArea;
+    uint lastClickTime;
+
+    PrivateData(PDKnobEventHandler *const s, SubWidget *const w)
+        : self(s),
+          widget(w),
+          callback(nullptr),
+          minimum(0.0f),
+          maximum(1.0f),
+          step(0.0f),
+          value(0.5f),
+          valueDef(value),
+          valueTmp(value),
+          valueAtDragStart(0.0f),
+          usingDefault(false),
+          usingLog(false),
+          jumpOnClick(false),
+          dragging(false),
+          inverted(false),
+          valueIsSet(false),
+          startedX(0.0),
+          startedY(0.0),
+          startPos(),
+          endPos(),
+          knobArea()
+    {
+    }
+
+    PrivateData(PDKnobEventHandler *const s, SubWidget *const w, PrivateData *const other)
+        : self(s),
+          widget(w),
+          callback(other->callback),
+          minimum(other->minimum),
+          maximum(other->maximum),
+          step(other->step),
+          value(other->value),
+          valueDef(other->valueDef),
+          valueTmp(value),
+          valueAtDragStart(other->valueAtDragStart),
+          usingDefault(other->usingDefault),
+          usingLog(other->usingLog),
+          jumpOnClick(other->jumpOnClick),
+          startPos(other->startPos),
+          endPos(other->endPos),
+          dragging(false),
+          inverted(other->inverted),
+          valueIsSet(false),
+          knobArea(other->knobArea)
+
+    {
+    }
+
+    void assignFrom(PrivateData *const other)
+    {
+        callback = other->callback;
+        minimum = other->minimum;
+        maximum = other->maximum;
+        step = other->step;
+        value = other->value;
+        valueDef = other->valueDef;
+        valueTmp = value;
+        valueAtDragStart = other->valueAtDragStart;
+        usingDefault = other->usingDefault;
+        usingLog = other->usingLog;
+        jumpOnClick = other->jumpOnClick;
+    }
+
+    inline float logscale(const float v) const
+    {
+        const float b = std::log(maximum / minimum) / (maximum - minimum);
+        const float a = maximum / std::exp(maximum * b);
+        return a * std::exp(b * v);
+    }
+
+    inline float invlogscale(const float v) const
+    {
+        const float b = std::log(maximum / minimum) / (maximum - minimum);
+        const float a = maximum / std::exp(maximum * b);
+        return std::log(v / a) / b;
+    }
+
+    bool mouseEvent(const Widget::MouseEvent &ev)
+    {
+        if (ev.button != 1)
+            return false;
+
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        const Point<int> screen = pdWidget->getScreenPos();
+
+        // Convert ev.pos to local widget coordinates
+        const double x = ev.pos.getX() - screen.getX();
+        const double y = ev.pos.getY() - screen.getY();
+        const Point<double> localPos(x, y);
+
+        if (ev.press)
+        {
+            if (!knobArea.contains(localPos))
+                return false;
+
+            if (lastClickTime > 0 && ev.time > lastClickTime && ev.time - lastClickTime <= 300)
+            {
+                lastClickTime = 0;
+
+                setValue(valueDef, true);
+                valueTmp = value;
+                return true;
+            }
+
+            lastClickTime = ev.time;
+
+            dragging = true;
+            startedX = x;
+            startedY = y;
+
+            if (callback != nullptr)
+                callback->knobDragStarted(widget);
+
+            if (!jumpOnClick)
+            {
+                // Don't jump - capture current value as the drag baseline
+                valueAtDragStart = value;
+            }
+            else
+            {
+
+            }
+        }
+
+        return false;
+    }
+
+    bool motionEvent(const Widget::MotionEvent &ev)
+    {
+        if (!dragging)
+            return false;
+
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        const Point<int> screen = pdWidget->getScreenPos();
+
+        // Convert to local coords — same space as startedX/startedY
+        const double x = ev.pos.getX() - screen.getX();
+        const double y = ev.pos.getY() - screen.getY();
+        const bool horizontal = startPos.getY() == endPos.getY();
+
+        return true;
+    }
+
+    bool scrollEvent(const Widget::ScrollEvent &ev)
+    {
+        printf("scroll event\n");
+        return false;
+    }
+
+    float getNormalizedValue() const noexcept
+    {
+        const float diff = maximum - minimum;
+        return ((usingLog ? invlogscale(value) : value) - minimum) / diff;
+    }
+
+    void setRange(const float min, const float max) noexcept
+    {
+        DISTRHO_SAFE_ASSERT_RETURN(max > min, );
+
+        if (value < min)
+        {
+            valueTmp = value = min;
+            widget->repaint();
+        }
+        else if (value > max)
+        {
+            valueTmp = value = max;
+            widget->repaint();
+        }
+
+        minimum = min;
+        maximum = max;
+    }
+
+    bool setValue(const float value2, const bool sendCallback)
+    {
+        if (d_isEqual(value, value2))
+            return false;
+
+        valueTmp = value = value2;
+        widget->repaint();
+
+        if (sendCallback && callback != nullptr)
+        {
+            try
+            {
+                callback->knobValueChanged(widget, value);
+            }
+            DISTRHO_SAFE_EXCEPTION("PDKnobEventHandler::setValue");
+        }
+
+        return true;
+    }
+
+    void setInverted(bool inv) noexcept
+    {
+        if (inverted == inv)
+            return;
+
+        inverted = inv;
+        widget->repaint();
+    }
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+
+PDKnobEventHandler::PDKnobEventHandler(SubWidget *const self)
+    : pData(new PrivateData(this, self)) {}
+
+PDKnobEventHandler::PDKnobEventHandler(SubWidget *const self, const PDKnobEventHandler &other)
+    : pData(new PrivateData(this, self, other.pData)) {}
+
+PDKnobEventHandler &PDKnobEventHandler::operator=(const PDKnobEventHandler &other)
+{
+    pData->assignFrom(other.pData);
+    return *this;
+}
+
+PDKnobEventHandler::~PDKnobEventHandler()
+{
+    delete pData;
+}
+
+float PDKnobEventHandler::getValue() const noexcept
+{
+    return pData->value;
+}
+
+bool PDKnobEventHandler::setValue(const float value, const bool sendCallback) noexcept
+{
+    return pData->setValue(value, sendCallback);
+}
+
+float PDKnobEventHandler::getNormalizedValue() const noexcept
+{
+    return pData->getNormalizedValue();
+}
+
+void PDKnobEventHandler::setDefault(const float def) noexcept
+{
+    pData->valueDef = def;
+    pData->usingDefault = true;
+}
+
+void PDKnobEventHandler::setSliderArea(const double x, const double y,
+                                       const double w, const double h) noexcept
+{
+    pData->knobArea = Rectangle<double>(x, y, w, h);
+}
+
+void PDKnobEventHandler::setRange(const float min, const float max) noexcept
+{
+    pData->setRange(min, max);
+}
+
+void PDKnobEventHandler::setStep(const float step) noexcept
+{
+    pData->step = step;
+}
+
+void PDKnobEventHandler::setUsingLogScale(const bool yesNo) noexcept
+{
+    pData->usingLog = yesNo;
+}
+
+void PDKnobEventHandler::setJumpOnClick(const bool yesNo) noexcept
+{
+    pData->jumpOnClick = yesNo;
+}
+
+void PDKnobEventHandler::setStartPos(const int x, const int y) noexcept
+{
+    pData->startPos = Point<int>(x, y);
+}
+
+void PDKnobEventHandler::setEndPos(const int x, const int y) noexcept
+{
+    pData->endPos = Point<int>(x, y);
+}
+
+void PDKnobEventHandler::setInverted(const bool inv) noexcept
+{
+    pData->setInverted(inv);
+}
+
+bool PDKnobEventHandler::isInverted() noexcept
+{
+    return pData->inverted;
+}
+
+void PDKnobEventHandler::setCallback(Callback *const callback) noexcept
+{
+    pData->callback = callback;
+}
+
+bool PDKnobEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+{
+    return pData->mouseEvent(ev);
+}
+
+bool PDKnobEventHandler::motionEvent(const Widget::MotionEvent &ev)
+{
+    return pData->motionEvent(ev);
+}
+
+bool PDKnobEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
+{
+    return pData->scrollEvent(ev);
+}
+// end knob
 
 END_NAMESPACE_DGL

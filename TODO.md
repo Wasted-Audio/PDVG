@@ -14,21 +14,21 @@
   * ~~label~~
 * ~~comment~~
   * word wrap
-* knob
+* knob - WIP
   * label
   * label_show
-  * ang_range
-  * ang_offset
-  * log_mode
+  * ~~ang_range~~
+  * ~~ang_offset~~
+  * ~~log_mode~~
   * exp_fact
   * discrete
-  * ticks
-  * steps
-  * circular
+  * ~~ticks~~
+  * ~~steps~~
+  * ~~circular~~
   * jump
-  * square
-  * arc_start
-  * arc_show
+  * ~~square~~
+  * ~~arc_start~~
+  * ~~arc_show~~
 * number
   * log mode+height
 * float

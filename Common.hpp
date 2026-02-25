@@ -66,9 +66,23 @@ static float valToPropOfLen(float const value, float const length)
 template <typename Type>
 constexpr Type jmin (Type a, Type b) { return b < a ? b : a; }
 
+/** Returns the larger of two values. */
+template <typename Type>
+constexpr Type jmax (Type a, Type b) { return a < b ? b : a; }
+
 /** Returns the larger of three values. */
 template <typename Type>
 constexpr Type jmax (Type a, Type b, Type c) { return a < b ? (b < c ? c : b) : (a < c ? c : a); }
+
+/** Remaps a normalised value (between 0 and 1) to a target range.
+    This effectively returns (targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin)).
+*/
+template <typename Type>
+constexpr Type jmap (Type value0To1, Type targetRangeMin, Type targetRangeMax)
+{
+    return targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin);
+}
+
 
 /** Remaps a value from a source range to a target range. */
 template <typename Type>
