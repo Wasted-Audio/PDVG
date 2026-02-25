@@ -5,7 +5,10 @@
 
 #pragma once
 
+#include <sstream>
 #include <string>
+#include <vector>
+
 #include "NanoVG.hpp"
 #include "nanovg.h"
 #include "Widget.hpp"
@@ -18,13 +21,16 @@ public:
     explicit PDComment(NanoSubWidget* parent);
 
     void setText(std::string text);
+    void setFontSize(float size);
     void setColors(NVGcolor textColor);
+    std::vector<std::string> buildLines(float widgetWidth);
 
 protected:
     void onNanoDisplay() override;
 
 private:
     std::string lText;
+    float fFontSize;
     NVGcolor textColor;
     NanoVG::FontId fFontId;
 
