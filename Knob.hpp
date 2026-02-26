@@ -15,9 +15,16 @@
 START_NAMESPACE_DISTRHO
 
 enum LogMode {
-    LINEAR = 0,
+    LIN = 0,
     LOG = 1,
     EXP = 2
+};
+
+enum LabelShow{
+    NEVER = 0,
+    ALWAYS = 1,
+    ACTIVE = 2,
+    TYPING = 3
 };
 
 class PDKnob : public PDWidget,
@@ -27,7 +34,7 @@ public:
     explicit PDKnob(NanoSubWidget *parent, PDKnobEventHandler::Callback* cb);
 
     void setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor);
-    void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
+    void setLabelStyle(NVGcolor textColor, int x, int y, int size);
     void setSteps(int steps);
     void setExpFactor(float expFactor);
     void setAngular(int angRange, int angOffset);
@@ -37,7 +44,7 @@ public:
     void setDrawSquare(bool drawSquare);
     void setShowTicks(bool showTicks);
     void setShowArc(bool showArc);
-    void setShowLabel(bool showLabel);
+    void setShowLabel(LabelShow showLabel);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
@@ -58,12 +65,13 @@ private:
     int angRange = 270;
     int angOffset = 0;
     float arcStart = 0.0f;
-    LogMode logMode = LINEAR;
+    LogMode logMode = LIN;
     bool circularDrag = false;
     bool drawSquare = true;
     bool showTicks = false;
     bool showArc = true;
-    bool showLabel = false;
+    LabelShow showLabel = NEVER;
+
     ScopedPointer<PDLabel> label;
 
     DISTRHO_LEAK_DETECTOR(PDKnob)

@@ -145,6 +145,13 @@ void PDKnob::onNanoDisplay()
 
         drawKnob(nvg, b);
     }
+
+    if (showLabel) {
+        char buffer[32];
+        std::snprintf(buffer, sizeof(buffer), "%.2f", getValue());
+        std::string result(buffer);
+        label->setText(result);
+    }
 }
 
 bool PDKnob::onMouse(const MouseEvent &ev)
@@ -164,13 +171,13 @@ void PDKnob::setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor fgColor, NV
     this->arcColor = arcColor;
 }
 
-void PDKnob::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
+void PDKnob::setLabelStyle(NVGcolor textColor, int x, int y, int size)
 {
     this->label = new PDLabel(this);
-    this->label->setText(text);
+    this->label->setText(" ");
     this->label->setColors(textColor);
-    this->label->setAbsolutePos(x, (y - size / 2));
-    this->label->setSize(size * text.length(), size);
+    this->label->setAbsolutePos((x - size / 5), (y - size / 3));
+    this->label->setSize(size, size);
 }
 
 void PDKnob::setSteps(int steps) {
@@ -211,7 +218,7 @@ void PDKnob::setShowArc(bool showArc) {
     this->showArc = showArc;
 }
 
-void PDKnob::setShowLabel(bool showLabel) {
+void PDKnob::setShowLabel(LabelShow showLabel) {
     this->showLabel = showLabel;
 }
 
