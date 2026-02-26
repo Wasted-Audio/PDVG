@@ -263,9 +263,9 @@ struct PDSliderEventHandler::PrivateData
             {
                 float vper;
                 if (startPos.getY() == endPos.getY())
-                    vper = float(x - sliderArea.getX()) / float(sliderArea.getWidth());
+                    vper = (x - sliderArea.getX()) / sliderArea.getWidth();
                 else
-                    vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
+                    vper = (y - sliderArea.getY()) / sliderArea.getHeight();
 
                 float linearValue;
                 if (inverted)
@@ -314,7 +314,7 @@ struct PDSliderEventHandler::PrivateData
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
 
-        // Convert to local coords — same space as startedX/startedY
+        // Convert to local coords - same space as startedX/startedY
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
         const bool horizontal = startPos.getY() == endPos.getY();
@@ -333,8 +333,8 @@ struct PDSliderEventHandler::PrivateData
 
             // Normalized delta from click origin
             const float normalizedDelta = horizontal
-                ? float(x - startedX) / float(sliderArea.getWidth())
-                : float(y - startedY) / float(sliderArea.getHeight());
+                ? (x - startedX) / sliderArea.getWidth()
+                : (y - startedY) / sliderArea.getHeight();
 
             float normalizedNew = inverted
                 ? normalizedBase - normalizedDelta
@@ -365,9 +365,9 @@ struct PDSliderEventHandler::PrivateData
                 float vper;
 
                 if (horizontal)
-                    vper = float(x - sliderArea.getX()) / float(sliderArea.getWidth());
+                    vper = (x - sliderArea.getX()) / sliderArea.getWidth();
                 else
-                    vper = float(y - sliderArea.getY()) / float(sliderArea.getHeight());
+                    vper = (y - sliderArea.getY()) / sliderArea.getHeight();
 
                 float linearValue;
                 if (inverted)
@@ -378,13 +378,9 @@ struct PDSliderEventHandler::PrivateData
                 float newValue = usingLog ? logscale(linearValue) : linearValue;
 
                 if (newValue < minimum)
-                {
                     valueTmp = newValue = minimum;
-                }
                 else if (newValue > maximum)
-                {
                     valueTmp = newValue = maximum;
-                }
                 else if (d_isNotZero(step))
                 {
                     valueTmp = newValue;
@@ -923,7 +919,6 @@ struct PDKnobEventHandler::PrivateData
     bool usingLog;
     bool jumpOnClick;
     bool dragging;
-    bool inverted;
     bool valueIsSet;
     double startedX;
     double startedY;
@@ -947,7 +942,6 @@ struct PDKnobEventHandler::PrivateData
           usingLog(false),
           jumpOnClick(false),
           dragging(false),
-          inverted(false),
           valueIsSet(false),
           startedX(0.0),
           startedY(0.0),
@@ -974,7 +968,6 @@ struct PDKnobEventHandler::PrivateData
           startPos(other->startPos),
           endPos(other->endPos),
           dragging(false),
-          inverted(other->inverted),
           valueIsSet(false),
           knobArea(other->knobArea)
 
@@ -1053,10 +1046,36 @@ struct PDKnobEventHandler::PrivateData
             }
             else
             {
+                float vper = (y - knobArea.getY()) / knobArea.getHeight();
 
+                float linearValue = maximum - vper * (maximum - minimum);
+
+                float newValue = usingLog ? logscale(linearValue) : linearValue;
+
+                if (newValue < minimum)
+                    valueTmp = newValue = minimum;
+                else if (newValue > maximum)
+                    valueTmp = newValue = maximum;
+                else if (d_isNotZero(step))
+                {
+                    valueTmp = newValue;
+                    const float rest = std::fmod(newValue, step);
+                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+                }
+
+                setValue(newValue, true);
             }
-        }
 
+            return true;
+        }
+        else if (dragging)
+        {
+            if (callback != nullptr)
+                callback->knobDragFinished(widget);
+
+            dragging = false;
+            return true;
+        }
         return false;
     }
 
@@ -1068,10 +1087,67 @@ struct PDKnobEventHandler::PrivateData
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
 
-        // Convert to local coords — same space as startedX/startedY
+        // Convert to local coords - same space as startedX/startedY
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
-        const bool horizontal = startPos.getY() == endPos.getY();
+
+        if (!jumpOnClick)
+        {
+            const float range = maximum - minimum;
+
+            float normalizedBase;
+            if (usingLog)
+                normalizedBase = (invlogscale(valueAtDragStart) - minimum) / range;
+            else
+                normalizedBase = (valueAtDragStart - minimum) / range;
+
+            const float normalizedDelta = (y - startedY) / knobArea.getHeight();
+
+            float normalizedNew = normalizedBase - normalizedDelta;
+
+            normalizedNew = std::max(0.0f, std::min(1.0f, normalizedNew));
+
+            float newValue;
+            if (usingLog)
+                newValue = logscale(normalizedNew * range + minimum);
+            else
+                newValue = normalizedNew * range + minimum;
+
+            if (d_isNotZero(step))
+            {
+                valueTmp = newValue;
+                const float rest = std::fmod(newValue - minimum, step);
+                newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+            }
+
+            setValue(newValue, true);
+        }
+        else
+        {
+            if (knobArea.containsY(y))
+            {
+                float vper = (y - knobArea.getY()) / knobArea.getHeight();
+                float linearValue = maximum - vper * (maximum - minimum);
+                float newValue = usingLog ? logscale(linearValue) : linearValue;
+
+                if (newValue < minimum)
+                    valueTmp = newValue = minimum;
+                else if (newValue > maximum)
+                    valueTmp = newValue = maximum;
+                else if (d_isNotZero(step))
+                {
+                    valueTmp = newValue;
+                    const float rest = std::fmod(newValue, step);
+                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+                }
+
+                setValue(newValue, true);
+            }
+            else
+            {
+                setValue(y < knobArea.getY() ? maximum : minimum, true);
+            }
+        }
 
         return true;
     }
@@ -1126,15 +1202,6 @@ struct PDKnobEventHandler::PrivateData
 
         return true;
     }
-
-    void setInverted(bool inv) noexcept
-    {
-        if (inverted == inv)
-            return;
-
-        inverted = inv;
-        widget->repaint();
-    }
 };
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -1177,7 +1244,7 @@ void PDKnobEventHandler::setDefault(const float def) noexcept
     pData->usingDefault = true;
 }
 
-void PDKnobEventHandler::setSliderArea(const double x, const double y,
+void PDKnobEventHandler::setKnobArea(const double x, const double y,
                                        const double w, const double h) noexcept
 {
     pData->knobArea = Rectangle<double>(x, y, w, h);
@@ -1211,16 +1278,6 @@ void PDKnobEventHandler::setStartPos(const int x, const int y) noexcept
 void PDKnobEventHandler::setEndPos(const int x, const int y) noexcept
 {
     pData->endPos = Point<int>(x, y);
-}
-
-void PDKnobEventHandler::setInverted(const bool inv) noexcept
-{
-    pData->setInverted(inv);
-}
-
-bool PDKnobEventHandler::isInverted() noexcept
-{
-    return pData->inverted;
 }
 
 void PDKnobEventHandler::setCallback(Callback *const callback) noexcept

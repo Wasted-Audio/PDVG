@@ -224,9 +224,7 @@ public:
 
     // NOTE: value is assumed to be scaled if using log
     void setDefault(float def) noexcept;
-    void setSliderArea(const double x, const double y, const double w, const double h) noexcept;
-    void setInverted(bool inverted) noexcept;
-    bool isInverted() noexcept;
+    void setKnobArea(const double x, const double y, const double w, const double h) noexcept;
     void setRange(float min, float max) noexcept;
     void setStep(float step) noexcept;
     void setUsingLogScale(bool yesNo) noexcept;
