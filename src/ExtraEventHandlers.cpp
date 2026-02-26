@@ -1091,6 +1091,8 @@ struct PDKnobEventHandler::PrivateData
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
 
+        const float divisor = (ev.mod & kModifierShift) ? 16.0f : 4.0f;
+
         if (!jumpOnClick)
         {
             const float range = maximum - minimum;
@@ -1101,7 +1103,7 @@ struct PDKnobEventHandler::PrivateData
             else
                 normalizedBase = (valueAtDragStart - minimum) / range;
 
-            const float normalizedDelta = (y - startedY) / knobArea.getHeight();
+            const float normalizedDelta = (y - startedY) / knobArea.getHeight() / divisor;
 
             float normalizedNew = normalizedBase - normalizedDelta;
 
@@ -1126,7 +1128,7 @@ struct PDKnobEventHandler::PrivateData
         {
             if (knobArea.containsY(y))
             {
-                float vper = (y - knobArea.getY()) / knobArea.getHeight();
+                float vper = (y - knobArea.getY()) / knobArea.getHeight() / divisor;
                 float linearValue = maximum - vper * (maximum - minimum);
                 float newValue = usingLog ? logscale(linearValue) : linearValue;
 
