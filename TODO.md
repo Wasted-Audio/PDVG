@@ -13,7 +13,7 @@
 * ~~canvas~~
   * ~~label~~
 * ~~comment~~
-  * word wrap
+  * ~~word wrap~~
 * knob - WIP
   * label
   * label_show
@@ -21,7 +21,7 @@
   * ~~ang_offset~~
   * ~~log_mode~~
   * exp_fact
-  * discrete
+  * ~~discrete~~
   * ~~ticks~~
   * ~~steps~~
   * ~~circular~~
@@ -29,9 +29,9 @@
   * ~~square~~
   * ~~arc_start~~
   * ~~arc_show~~
-* number
+* number - WIP
   * log mode+height
-* float
+* float - WIP
   * label text+pos
 
 ## UI Elements

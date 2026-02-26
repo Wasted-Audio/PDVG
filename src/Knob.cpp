@@ -175,6 +175,7 @@ void PDKnob::setLabel(std::string text, NVGcolor textColor, int x, int y, int si
 
 void PDKnob::setSteps(int steps) {
     this->steps = steps;
+    this->setStep(steps);
 }
 
 void PDKnob::setExpFactor(float expFactor) {
@@ -192,10 +193,6 @@ void PDKnob::setArcStart(float arcStart) {
 
 void PDKnob::setLogMode(LogMode logMode) {
     this->logMode = logMode;
-}
-
-void PDKnob::setDiscrete(bool discrete) {
-    this->discrete = discrete;
 }
 
 void PDKnob::setCircularDrag(bool circularDrag) {

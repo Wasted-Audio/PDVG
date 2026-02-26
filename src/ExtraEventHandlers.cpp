@@ -910,7 +910,7 @@ struct PDKnobEventHandler::PrivateData
 
     float minimum;
     float maximum;
-    float step;
+    int step;
     float value;
     float valueDef;
     float valueTmp;
@@ -918,6 +918,7 @@ struct PDKnobEventHandler::PrivateData
     bool usingDefault;
     bool usingLog;
     bool jumpOnClick;
+    bool discrete;
     bool dragging;
     bool valueIsSet;
     double startedX;
@@ -933,7 +934,7 @@ struct PDKnobEventHandler::PrivateData
           callback(nullptr),
           minimum(0.0f),
           maximum(1.0f),
-          step(0.0f),
+          step(0),
           value(0.5f),
           valueDef(value),
           valueTmp(value),
@@ -941,6 +942,7 @@ struct PDKnobEventHandler::PrivateData
           usingDefault(false),
           usingLog(false),
           jumpOnClick(false),
+          discrete(false),
           dragging(false),
           valueIsSet(false),
           startedX(0.0),
@@ -966,6 +968,7 @@ struct PDKnobEventHandler::PrivateData
           usingDefault(other->usingDefault),
           usingLog(other->usingLog),
           jumpOnClick(other->jumpOnClick),
+          discrete(other->discrete),
           startPos(other->startPos),
           endPos(other->endPos),
           dragging(false),
@@ -988,6 +991,7 @@ struct PDKnobEventHandler::PrivateData
         usingDefault = other->usingDefault;
         usingLog = other->usingLog;
         jumpOnClick = other->jumpOnClick;
+        discrete = other->discrete;
         lastClickTime = 0;
     }
 
@@ -1003,6 +1007,17 @@ struct PDKnobEventHandler::PrivateData
         const float b = std::log(maximum / minimum) / (maximum - minimum);
         const float a = maximum / std::exp(maximum * b);
         return std::log(v / a) / b;
+    }
+
+    inline float quantValue(int step, float newValue, float range, float minimum, float maximum) const
+    {
+        const int numSteps = std::round(range / step);
+        const float scaledStep = range / numSteps;
+
+        const float rest = std::fmod(newValue - minimum, scaledStep);
+        newValue = newValue - rest + (rest > scaledStep / 2.0f ? scaledStep : 0.0f);
+        newValue = clamp(newValue, maximum, minimum);
+        return newValue;
     }
 
     bool mouseEvent(const Widget::MouseEvent &ev)
@@ -1023,9 +1038,14 @@ struct PDKnobEventHandler::PrivateData
             if (!knobArea.contains(localPos))
                 return false;
 
+            const float range = maximum - minimum;
+
             if (lastClickTime > 0 && ev.time > lastClickTime && ev.time - lastClickTime <= 300)
             {
                 lastClickTime = 0;
+
+                if (step > 0 && discrete)
+                    valueDef = quantValue(step, valueDef, range, minimum, maximum);
 
                 setValue(valueDef, true);
                 valueTmp = value;
@@ -1050,7 +1070,7 @@ struct PDKnobEventHandler::PrivateData
             {
                 float vper = (y - knobArea.getY()) / knobArea.getHeight();
 
-                float linearValue = maximum - vper * (maximum - minimum);
+                float linearValue = maximum - vper * range;
 
                 float newValue = usingLog ? logscale(linearValue) : linearValue;
 
@@ -1058,12 +1078,10 @@ struct PDKnobEventHandler::PrivateData
                     valueTmp = newValue = minimum;
                 else if (newValue > maximum)
                     valueTmp = newValue = maximum;
-                // else if (d_isNotZero(step))
-                // {
-                //     valueTmp = newValue;
-                //     const float rest = std::fmod(newValue, step);
-                //     newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-                // }
+                else if (step > 0 && discrete)
+                {
+                    newValue = quantValue(step, newValue, range, minimum, maximum);
+                }
 
                 setValue(newValue, true);
             }
@@ -1092,12 +1110,11 @@ struct PDKnobEventHandler::PrivateData
         // Convert to local coords - same space as startedX/startedY
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
-
+        const float range = maximum - minimum;
         const float divisor = (ev.mod & kModifierShift) ? 16.0f : 4.0f;
 
         if (!jumpOnClick)
         {
-            const float range = maximum - minimum;
 
             float normalizedBase;
             if (usingLog)
@@ -1120,12 +1137,10 @@ struct PDKnobEventHandler::PrivateData
             else
                 newValue = normalizedNew * range + minimum;
 
-            // if (d_isNotZero(step))
-            // {
-            //     valueTmp = newValue;
-            //     const float rest = std::fmod(newValue - minimum, step);
-            //     newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-            // }
+            if (step > 0 && discrete)
+            {
+                newValue = quantValue(step, newValue, range, minimum, maximum);
+            }
 
             setValue(newValue, true);
         }
@@ -1134,19 +1149,17 @@ struct PDKnobEventHandler::PrivateData
             if (knobArea.containsY(y))
             {
                 float vper = (y - knobArea.getY()) / knobArea.getHeight() / divisor;
-                float linearValue = maximum - vper * (maximum - minimum);
+                float linearValue = maximum - vper * range;
                 float newValue = usingLog ? logscale(linearValue) : linearValue;
 
                 if (newValue < minimum)
                     valueTmp = newValue = minimum;
                 else if (newValue > maximum)
                     valueTmp = newValue = maximum;
-                // else if (d_isNotZero(step))
-                // {
-                //     valueTmp = newValue;
-                //     const float rest = std::fmod(newValue, step);
-                //     newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-                // }
+                else if (step > 0 && discrete)
+                {
+                    newValue = quantValue(step, newValue, range, minimum, maximum);
+                }
 
                 setValue(newValue, true);
             }
@@ -1275,6 +1288,11 @@ void PDKnobEventHandler::setUsingLogScale(const bool yesNo) noexcept
 void PDKnobEventHandler::setJumpOnClick(const bool yesNo) noexcept
 {
     pData->jumpOnClick = yesNo;
+}
+
+void PDKnobEventHandler::setDiscrete(const bool yesNo) noexcept
+{
+    pData->discrete = yesNo;
 }
 
 void PDKnobEventHandler::setStartPos(const int x, const int y) noexcept

@@ -229,6 +229,7 @@ public:
     void setStep(float step) noexcept;
     void setUsingLogScale(bool yesNo) noexcept;
     void setJumpOnClick(bool yesNo) noexcept;
+    void setDiscrete(bool yesNo) noexcept;
     void setStartPos(const int x, const int y) noexcept;
     void setEndPos(const int x, const int y) noexcept;
     void setCallback(Callback *callback) noexcept;

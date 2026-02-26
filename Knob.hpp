@@ -33,7 +33,6 @@ public:
     void setAngular(int angRange, int angOffset);
     void setArcStart(float arcStart);
     void setLogMode(LogMode logMode);
-    void setDiscrete(bool discrete);
     void setCircularDrag(bool circularDrag);
     void setDrawSquare(bool drawSquare);
     void setShowTicks(bool showTicks);
@@ -60,7 +59,6 @@ private:
     int angOffset = 0;
     float arcStart = 0.0f;
     LogMode logMode = LINEAR;
-    bool discrete = false;
     bool circularDrag = false;
     bool drawSquare = true;
     bool showTicks = false;
