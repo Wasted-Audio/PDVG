@@ -947,7 +947,8 @@ struct PDKnobEventHandler::PrivateData
           startedY(0.0),
           startPos(),
           endPos(),
-          knobArea()
+          knobArea(),
+          lastClickTime(0)
     {
     }
 
@@ -969,8 +970,8 @@ struct PDKnobEventHandler::PrivateData
           endPos(other->endPos),
           dragging(false),
           valueIsSet(false),
-          knobArea(other->knobArea)
-
+          knobArea(other->knobArea),
+          lastClickTime(0)
     {
     }
 
@@ -987,6 +988,7 @@ struct PDKnobEventHandler::PrivateData
         usingDefault = other->usingDefault;
         usingLog = other->usingLog;
         jumpOnClick = other->jumpOnClick;
+        lastClickTime = 0;
     }
 
     inline float logscale(const float v) const
@@ -1056,12 +1058,12 @@ struct PDKnobEventHandler::PrivateData
                     valueTmp = newValue = minimum;
                 else if (newValue > maximum)
                     valueTmp = newValue = maximum;
-                else if (d_isNotZero(step))
-                {
-                    valueTmp = newValue;
-                    const float rest = std::fmod(newValue, step);
-                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-                }
+                // else if (d_isNotZero(step))
+                // {
+                //     valueTmp = newValue;
+                //     const float rest = std::fmod(newValue, step);
+                //     newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+                // }
 
                 setValue(newValue, true);
             }
@@ -1103,7 +1105,10 @@ struct PDKnobEventHandler::PrivateData
             else
                 normalizedBase = (valueAtDragStart - minimum) / range;
 
-            const float normalizedDelta = (y - startedY) / knobArea.getHeight() / divisor;
+            const double movDiffX = startedX - x;
+            const double movDiffY = y - startedY;
+            double movDiff = std::abs(movDiffX) > std::abs(movDiffY) ? movDiffX : movDiffY;
+            const float normalizedDelta = movDiff / knobArea.getHeight() / divisor;
 
             float normalizedNew = normalizedBase - normalizedDelta;
 
@@ -1115,12 +1120,12 @@ struct PDKnobEventHandler::PrivateData
             else
                 newValue = normalizedNew * range + minimum;
 
-            if (d_isNotZero(step))
-            {
-                valueTmp = newValue;
-                const float rest = std::fmod(newValue - minimum, step);
-                newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-            }
+            // if (d_isNotZero(step))
+            // {
+            //     valueTmp = newValue;
+            //     const float rest = std::fmod(newValue - minimum, step);
+            //     newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+            // }
 
             setValue(newValue, true);
         }
@@ -1136,12 +1141,12 @@ struct PDKnobEventHandler::PrivateData
                     valueTmp = newValue = minimum;
                 else if (newValue > maximum)
                     valueTmp = newValue = maximum;
-                else if (d_isNotZero(step))
-                {
-                    valueTmp = newValue;
-                    const float rest = std::fmod(newValue, step);
-                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-                }
+                // else if (d_isNotZero(step))
+                // {
+                //     valueTmp = newValue;
+                //     const float rest = std::fmod(newValue, step);
+                //     newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
+                // }
 
                 setValue(newValue, true);
             }
