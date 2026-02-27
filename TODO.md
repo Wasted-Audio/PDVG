@@ -16,7 +16,7 @@
   * ~~word wrap~~
 * knob - WIP
   * ~~label~~
-  * label_show - WIP
+  * ~~label_show~~ (except when typing)
   * ~~ang_range~~
   * ~~ang_offset~~
   * ~~log_mode~~

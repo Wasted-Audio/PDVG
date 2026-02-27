@@ -146,16 +146,39 @@ void PDKnob::onNanoDisplay()
         drawKnob(nvg, b);
     }
 
-    if (showLabel) {
+    if (showLabel == ALWAYS || (showLabel == ACTIVE && isActive))
+    {
         char buffer[32];
         std::snprintf(buffer, sizeof(buffer), "%.2f", getValue());
         std::string result(buffer);
         label->setText(result);
     }
+    else if (showLabel == ACTIVE)
+    {
+        label->setText(" ");
+    }
 }
 
 bool PDKnob::onMouse(const MouseEvent &ev)
 {
+    if (ev.press && ev.button == 1)
+    {
+        const Point<int> screen = getScreenPos();
+        const Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
+        const bool inside = bounds.contains(ev.pos.getX() - screen.getX(), ev.pos.getY() - screen.getY());
+
+        if (inside && !isActive)
+        {
+            isActive = true;
+            repaint();
+        }
+        else if (!inside && isActive)
+        {
+            isActive = false;
+            repaint();
+        }
+    }
+
     return PDKnobEventHandler::mouseEvent(ev);
 }
 

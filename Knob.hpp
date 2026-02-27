@@ -24,7 +24,7 @@ enum LabelShow{
     NEVER = 0,
     ALWAYS = 1,
     ACTIVE = 2,
-    TYPING = 3
+    TYPING = 3 // not implemented
 };
 
 class PDKnob : public PDWidget,
@@ -71,6 +71,7 @@ private:
     bool showTicks = false;
     bool showArc = true;
     LabelShow showLabel = NEVER;
+    bool isActive = false;
 
     ScopedPointer<PDLabel> label;
 
