@@ -258,6 +258,8 @@ struct PDSliderEventHandler::PrivateData
             {
                 // Don't jump - capture current value as the drag baseline
                 valueAtDragStart = value;
+                startedX = x;
+                startedY = y;
             }
             else
             {
