@@ -131,6 +131,7 @@ void PDKnob::onNanoDisplay()
         float const scaleOffsetX = originalCentre.getX() * (1.0f - localScale);
         float const scaleOffsetY = originalCentre.getY() * (1.0f - localScale);
 
+        nvgSave(nvg);
         nvgTranslate(nvg, scaleOffsetX, scaleOffsetY);
         nvgScale(nvg, localScale, localScale);
 
@@ -142,9 +143,10 @@ void PDKnob::onNanoDisplay()
         nvgStrokeColor(nvg, cnvColor);
         nvgStrokeWidth(nvg, 1.0f);
         nvgStroke(nvg);
-
         drawKnob(nvg, b);
+        nvgRestore(nvg);
     }
+
 
     if (showLabel == ALWAYS || (showLabel == ACTIVE && isActive))
     {
@@ -196,10 +198,12 @@ void PDKnob::setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor fgColor, NV
 
 void PDKnob::setLabelStyle(NVGcolor textColor, int x, int y, int size)
 {
+    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+
     this->label = new PDLabel(this);
     this->label->setText(" ");
     this->label->setColors(textColor);
-    this->label->setAbsolutePos((x - size / 5), (y - size / 3));
+    this->label->setAbsolutePos((x - 2 * scaleFactor), (y - 4 * scaleFactor));
     this->label->setSize(size, size);
 }
 
