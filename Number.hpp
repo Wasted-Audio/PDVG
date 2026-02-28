@@ -20,7 +20,7 @@ class PDNumber : public PDWidget,
 public:
     explicit PDNumber(NanoSubWidget* parent, PDNumberEventHandler::Callback* cb);
 
-    void setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
+    void setColors(NVGcolor cvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
 
 protected:
@@ -29,9 +29,13 @@ protected:
     void onNanoDisplay() override;
 
 private:
+    NVGcolor cnvColor;
+    NVGcolor ioColor;
     NVGcolor bgColor;
     NVGcolor fgColor;
     NVGcolor flagColor;
+    bool isActive = false;
+
     ScopedPointer<PDLabel> label;
 
     DISTRHO_LEAK_DETECTOR(PDNumber)

@@ -25,7 +25,7 @@ void PDNumber::onNanoDisplay()
     NVGcontext* nvg = getContext();
 
     // WIP
-    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, fgColor, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, cnvColor, Corners::objectCornerRadius);
 
     float indent = 9.0f * scaleFactor;
     const Rectangle<float> iconBounds(
@@ -43,13 +43,33 @@ void PDNumber::onNanoDisplay()
     nvgLineTo(nvg, leftX, centreY - 5.0f * scaleFactor);
     nvgClosePath(nvg);
 
-    nvgFillColor(nvg, flagColor);
+    if (isActive)
+        nvgFillColor(nvg, flagColor);
+    else
+        nvgFillColor(nvg, ioColor);
     nvgFill(nvg);
     // WIP
 }
 
 bool PDNumber::onMouse(const MouseEvent &ev)
 {
+    if (ev.press && ev.button == 1)
+    {
+        const Point<int> screen = getScreenPos();
+        const Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
+        const bool inside = bounds.contains(ev.pos.getX() - screen.getX(), ev.pos.getY() - screen.getY());
+
+        if (inside && !isActive)
+        {
+            isActive = true;
+            repaint();
+        }
+        else if (!inside && isActive)
+        {
+            isActive = false;
+            repaint();
+        }
+    }
     return PDNumberEventHandler::mouseEvent(ev);
 }
 
@@ -58,7 +78,10 @@ bool PDNumber::onMotion(const MotionEvent &ev)
     return PDNumberEventHandler::motionEvent(ev);
 }
 
-void PDNumber::setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor) {
+void PDNumber::setColors(NVGcolor cvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor)
+{
+    this->cnvColor = cvColor;
+    this->ioColor = ioColor;
     this->bgColor = bgColor;
     this->fgColor = fgColor;
     this->flagColor = flagColor;
