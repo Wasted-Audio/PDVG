@@ -141,6 +141,7 @@ struct PDSliderEventHandler::PrivateData
     Point<int> endPos;
     Rectangle<double> sliderArea;
     uint lastClickTime;
+    uint8_t lastMod;
 
     PrivateData(PDSliderEventHandler *const s, SubWidget *const w)
         : self(s),
@@ -163,7 +164,9 @@ struct PDSliderEventHandler::PrivateData
           startedY(0.0),
           startPos(),
           endPos(),
-          sliderArea()
+          sliderArea(),
+          lastClickTime(0),
+          lastMod(0)
     {
     }
 
@@ -186,8 +189,9 @@ struct PDSliderEventHandler::PrivateData
           dragging(false),
           inverted(other->inverted),
           valueIsSet(false),
-          sliderArea(other->sliderArea)
-
+          sliderArea(other->sliderArea),
+          lastClickTime(0),
+          lastMod(0)
     {
     }
 
@@ -320,9 +324,17 @@ struct PDSliderEventHandler::PrivateData
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
         const bool horizontal = startPos.getY() == endPos.getY();
+        const float divisor = (ev.mod & kModifierShift) ? 10.0f : 1.0f;
 
         if (steadyOnClick)
         {
+            if (ev.mod != lastMod)
+            {
+                startedX = x;
+                startedY = y;
+                valueAtDragStart = value;
+                lastMod = ev.mod;
+            }
             // Work in normalized [0,1] space so log scale is handled correctly
             const float range = maximum - minimum;
 
