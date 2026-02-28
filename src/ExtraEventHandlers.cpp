@@ -124,7 +124,6 @@ struct PDSliderEventHandler::PrivateData
 
     float minimum;
     float maximum;
-    float step;
     float value;
     float valueDef;
     float valueTmp;
@@ -149,7 +148,6 @@ struct PDSliderEventHandler::PrivateData
           callback(nullptr),
           minimum(0.0f),
           maximum(1.0f),
-          step(0.0f),
           value(0.5f),
           valueDef(value),
           valueTmp(value),
@@ -176,7 +174,6 @@ struct PDSliderEventHandler::PrivateData
           callback(other->callback),
           minimum(other->minimum),
           maximum(other->maximum),
-          step(other->step),
           value(other->value),
           valueDef(other->valueDef),
           valueTmp(value),
@@ -200,7 +197,6 @@ struct PDSliderEventHandler::PrivateData
         callback = other->callback;
         minimum = other->minimum;
         maximum = other->maximum;
-        step = other->step;
         value = other->value;
         valueDef = other->valueDef;
         valueTmp = value;
@@ -289,12 +285,6 @@ struct PDSliderEventHandler::PrivateData
                 {
                     valueTmp = newValue = maximum;
                 }
-                else if (d_isNotZero(step))
-                {
-                    valueTmp = newValue;
-                    const float rest = std::fmod(newValue, step);
-                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-                }
 
                 setValue(newValue, true);
             }
@@ -324,7 +314,7 @@ struct PDSliderEventHandler::PrivateData
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
         const bool horizontal = startPos.getY() == endPos.getY();
-        const float divisor = (ev.mod & kModifierShift) ? 10.0f : 1.0f;
+        const float divisor = (ev.mod & kModifierShift) ? 6.0f : 1.0f;
 
         if (steadyOnClick)
         {
@@ -347,8 +337,8 @@ struct PDSliderEventHandler::PrivateData
 
             // Normalized delta from click origin
             const float normalizedDelta = horizontal
-                ? (x - startedX) / sliderArea.getWidth()
-                : (y - startedY) / sliderArea.getHeight();
+                ? (x - startedX) / sliderArea.getWidth() / divisor
+                : (y - startedY) / sliderArea.getHeight() / divisor;
 
             float normalizedNew = inverted
                 ? normalizedBase - normalizedDelta
@@ -362,13 +352,6 @@ struct PDSliderEventHandler::PrivateData
                 newValue = logscale(minimum + normalizedNew * range);
             else
                 newValue = minimum + normalizedNew * range;
-
-            if (d_isNotZero(step))
-            {
-                valueTmp = newValue;
-                const float rest = std::fmod(newValue - minimum, step);
-                newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-            }
 
             setValue(newValue, true);
         }
@@ -395,12 +378,6 @@ struct PDSliderEventHandler::PrivateData
                     valueTmp = newValue = minimum;
                 else if (newValue > maximum)
                     valueTmp = newValue = maximum;
-                else if (d_isNotZero(step))
-                {
-                    valueTmp = newValue;
-                    const float rest = std::fmod(newValue, step);
-                    newValue = newValue - rest + (rest > step / 2.0f ? step : 0.0f);
-                }
 
                 setValue(newValue, true);
             }
@@ -529,11 +506,6 @@ void PDSliderEventHandler::setSliderArea(const double x, const double y,
 void PDSliderEventHandler::setRange(const float min, const float max) noexcept
 {
     pData->setRange(min, max);
-}
-
-void PDSliderEventHandler::setStep(const float step) noexcept
-{
-    pData->step = step;
 }
 
 void PDSliderEventHandler::setUsingLogScale(const bool yesNo) noexcept
