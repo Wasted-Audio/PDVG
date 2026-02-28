@@ -929,6 +929,7 @@ struct PDKnobEventHandler::PrivateData
     Point<int> endPos;
     Rectangle<double> knobArea;
     uint lastClickTime;
+    uint8_t lastMod;
 
     PrivateData(PDKnobEventHandler *const s, SubWidget *const w)
         : self(s),
@@ -952,7 +953,8 @@ struct PDKnobEventHandler::PrivateData
           startPos(),
           endPos(),
           knobArea(),
-          lastClickTime(0)
+          lastClickTime(0),
+          lastMod(0)
     {
     }
 
@@ -976,7 +978,8 @@ struct PDKnobEventHandler::PrivateData
           dragging(false),
           valueIsSet(false),
           knobArea(other->knobArea),
-          lastClickTime(0)
+          lastClickTime(0),
+          lastMod(0)
     {
     }
 
@@ -994,7 +997,6 @@ struct PDKnobEventHandler::PrivateData
         usingLog = other->usingLog;
         jumpOnClick = other->jumpOnClick;
         discrete = other->discrete;
-        lastClickTime = 0;
     }
 
     inline float logscale(const float v) const
@@ -1113,10 +1115,17 @@ struct PDKnobEventHandler::PrivateData
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
         const float range = maximum - minimum;
-        const float divisor = (ev.mod & kModifierShift) ? 16.0f : 4.0f;
+        const float divisor = (ev.mod & kModifierShift) ? 12.0f : 3.0f;
 
         if (!jumpOnClick)
         {
+            if (ev.mod != lastMod)
+            {
+                startedX = x;
+                startedY = y;
+                valueAtDragStart = value;
+                lastMod = ev.mod;
+            }
 
             float normalizedBase;
             if (usingLog)
