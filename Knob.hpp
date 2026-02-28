@@ -14,12 +14,6 @@
 
 START_NAMESPACE_DISTRHO
 
-enum LogMode {
-    LIN = 0,
-    LOG = 1,
-    EXP = 2
-};
-
 enum LabelShow{
     NEVER = 0,
     ALWAYS = 1,
@@ -36,10 +30,8 @@ public:
     void setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor);
     void setLabelStyle(NVGcolor textColor, int x, int y, int size);
     void setSteps(int steps);
-    void setExpFactor(float expFactor);
     void setAngular(int angRange, int angOffset);
     void setArcStart(float arcStart);
-    void setLogMode(LogMode logMode);
     void setCircularDrag(bool circularDrag);
     void setDrawSquare(bool drawSquare);
     void setShowTicks(bool showTicks);
@@ -61,11 +53,9 @@ private:
     NVGcolor arcColor;
     float arcBegin = 3.927f, arcEnd = 8.639f;
     int steps = 0;
-    float expFactor = 0.0f;
     int angRange = 270;
     int angOffset = 0;
     float arcStart = 0.0f;
-    LogMode logMode = LIN;
     bool circularDrag = false;
     bool drawSquare = true;
     bool showTicks = false;

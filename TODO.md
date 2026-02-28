@@ -20,7 +20,7 @@
   * ~~ang_range~~
   * ~~ang_offset~~
   * ~~log_mode~~
-  * exp_fact
+  * ~~exp_fact~~
   * ~~discrete~~
   * ~~ticks~~
   * ~~steps~~
@@ -30,9 +30,13 @@
   * ~~arc_start~~
   * ~~arc_show~~
 * number - WIP
+  * float editor
   * log mode+height
 * float - WIP
+  * float editor
   * label text+pos
+* bang
+  * label
 
 ## UI Elements
 

@@ -918,7 +918,8 @@ struct PDKnobEventHandler::PrivateData
     float valueTmp;
     float valueAtDragStart;
     bool usingDefault;
-    bool usingLog;
+    LogMode logMode;
+    float expFact;
     bool jumpOnClick;
     bool discrete;
     bool dragging;
@@ -943,7 +944,8 @@ struct PDKnobEventHandler::PrivateData
           valueTmp(value),
           valueAtDragStart(0.0f),
           usingDefault(false),
-          usingLog(false),
+          logMode(LogMode::LIN),
+          expFact(1.0f),
           jumpOnClick(false),
           discrete(false),
           dragging(false),
@@ -970,7 +972,8 @@ struct PDKnobEventHandler::PrivateData
           valueTmp(value),
           valueAtDragStart(other->valueAtDragStart),
           usingDefault(other->usingDefault),
-          usingLog(other->usingLog),
+          logMode(other->logMode),
+          expFact(other->expFact),
           jumpOnClick(other->jumpOnClick),
           discrete(other->discrete),
           startPos(other->startPos),
@@ -994,7 +997,8 @@ struct PDKnobEventHandler::PrivateData
         valueTmp = value;
         valueAtDragStart = other->valueAtDragStart;
         usingDefault = other->usingDefault;
-        usingLog = other->usingLog;
+        logMode = other->logMode;
+        expFact = other->expFact;
         jumpOnClick = other->jumpOnClick;
         discrete = other->discrete;
     }
@@ -1011,6 +1015,18 @@ struct PDKnobEventHandler::PrivateData
         const float b = std::log(maximum / minimum) / (maximum - minimum);
         const float a = maximum / std::exp(maximum * b);
         return std::log(v / a) / b;
+    }
+
+    inline float expscale(const float v) const
+    {
+        const float t = (v - minimum) / (maximum - minimum);
+        return minimum + std::pow(t, expFact) * (maximum - minimum);
+    }
+
+    inline float invexpscale(const float v) const
+    {
+        const float t = (v - minimum) / (maximum - minimum);
+        return minimum + std::pow(t, 1.0f / expFact) * (maximum - minimum);
     }
 
     inline float quantValue(int step, float newValue, float range, float minimum, float maximum) const
@@ -1076,7 +1092,13 @@ struct PDKnobEventHandler::PrivateData
 
                 float linearValue = maximum - vper * range;
 
-                float newValue = usingLog ? logscale(linearValue) : linearValue;
+                float newValue;
+                if (logMode == LogMode::LOG)
+                    newValue = logscale(linearValue);
+                else if (logMode == LogMode::EXP)
+                    newValue = expscale(linearValue);
+                else
+                    newValue = linearValue;
 
                 if (newValue < minimum)
                     valueTmp = newValue = minimum;
@@ -1128,8 +1150,10 @@ struct PDKnobEventHandler::PrivateData
             }
 
             float normalizedBase;
-            if (usingLog)
+            if (logMode == LogMode::LOG)
                 normalizedBase = (invlogscale(valueAtDragStart) - minimum) / range;
+            else if (logMode == LogMode::EXP)
+                normalizedBase = (invexpscale(valueAtDragStart) - minimum) / range;
             else
                 normalizedBase = (valueAtDragStart - minimum) / range;
 
@@ -1143,8 +1167,10 @@ struct PDKnobEventHandler::PrivateData
             normalizedNew = std::max(0.0f, std::min(1.0f, normalizedNew));
 
             float newValue;
-            if (usingLog)
+            if (logMode == LogMode::LOG)
                 newValue = logscale(normalizedNew * range + minimum);
+            else if (logMode == LogMode::EXP)
+                newValue = expscale(normalizedNew * range + minimum);
             else
                 newValue = normalizedNew * range + minimum;
 
@@ -1161,7 +1187,13 @@ struct PDKnobEventHandler::PrivateData
             {
                 float vper = (y - knobArea.getY()) / knobArea.getHeight() / divisor;
                 float linearValue = maximum - vper * range;
-                float newValue = usingLog ? logscale(linearValue) : linearValue;
+                float newValue;
+                if (logMode == LogMode::LOG)
+                    newValue = logscale(linearValue);
+                else if (logMode == LogMode::EXP)
+                    newValue = (linearValue);
+                else
+                    newValue = linearValue;
 
                 if (newValue < minimum)
                     valueTmp = newValue = minimum;
@@ -1192,7 +1224,15 @@ struct PDKnobEventHandler::PrivateData
     float getNormalizedValue() const noexcept
     {
         const float diff = maximum - minimum;
-        return ((usingLog ? invlogscale(value) : value) - minimum) / diff;
+        float normValue;
+        if (logMode == LogMode::LOG)
+            normValue = invlogscale(value);
+        else if (logMode == LogMode::EXP)
+            normValue = invexpscale(value);
+        else
+            normValue = value;
+
+        return (normValue - minimum) / diff;
     }
 
     void setRange(const float min, const float max) noexcept
@@ -1291,9 +1331,14 @@ void PDKnobEventHandler::setStep(const float step) noexcept
     pData->step = step;
 }
 
-void PDKnobEventHandler::setUsingLogScale(const bool yesNo) noexcept
+void PDKnobEventHandler::setUsingLogScale(const LogMode mode) noexcept
 {
-    pData->usingLog = yesNo;
+    pData->logMode = mode;
+}
+
+void PDKnobEventHandler::setExpFactor(const float expFact) noexcept
+{
+    pData->expFact = expFact;
 }
 
 void PDKnobEventHandler::setJumpOnClick(const bool yesNo) noexcept

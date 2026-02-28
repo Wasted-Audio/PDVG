@@ -212,10 +212,6 @@ void PDKnob::setSteps(int steps) {
     this->setStep(steps);
 }
 
-void PDKnob::setExpFactor(float expFactor) {
-    this->expFactor = expFactor;
-}
-
 void PDKnob::setAngular(int angRange, int angOffset) {
     this->angRange = angRange;
     this->angOffset = angOffset;
@@ -223,10 +219,6 @@ void PDKnob::setAngular(int angRange, int angOffset) {
 
 void PDKnob::setArcStart(float arcStart) {
     this->arcStart = arcStart;
-}
-
-void PDKnob::setLogMode(LogMode logMode) {
-    this->logMode = logMode;
 }
 
 void PDKnob::setCircularDrag(bool circularDrag) {

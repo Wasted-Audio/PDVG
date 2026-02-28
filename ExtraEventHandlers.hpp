@@ -199,6 +199,12 @@ public:
         kKnobStateDraggingHover = kKnobStateDragging | kKnobStateHover
     };
 
+    enum LogMode {
+        LIN = 0,
+        LOG = 1,
+        EXP = 2
+    };
+
     class Callback
     {
     public:
@@ -227,7 +233,8 @@ public:
     void setKnobArea(const double x, const double y, const double w, const double h) noexcept;
     void setRange(float min, float max) noexcept;
     void setStep(float step) noexcept;
-    void setUsingLogScale(bool yesNo) noexcept;
+    void setUsingLogScale(LogMode mode) noexcept;
+    void setExpFactor(float expFact) noexcept;
     void setJumpOnClick(bool yesNo) noexcept;
     void setDiscrete(bool yesNo) noexcept;
     void setStartPos(const int x, const int y) noexcept;
