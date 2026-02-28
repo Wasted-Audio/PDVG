@@ -20,18 +20,27 @@ class PDFloat : public PDWidget,
 public:
     explicit PDFloat(NanoSubWidget* parent, PDNumberEventHandler::Callback* cb);
 
-    void setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
+    void setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
     bool onMotion(const MotionEvent &ev) override;
+
+    void drawFlag(NVGcontext* nvg, Rectangle<float> b, Rectangle<float> sb, NVGcolor cornerColor);
     void onNanoDisplay() override;
 
 private:
+    NVGcolor cnvColor;
+    NVGcolor ioColor;
     NVGcolor bgColor;
     NVGcolor fgColor;
     NVGcolor flagColor;
+    bool isActive = false;
+    NVGcolor outEdgeColor;
+    NVGcolor inEdgeColor;
+    NVGcolor cornerColor;
+
     ScopedPointer<PDLabel> label;
 
     DISTRHO_LEAK_DETECTOR(PDFloat)

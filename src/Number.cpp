@@ -78,9 +78,9 @@ bool PDNumber::onMotion(const MotionEvent &ev)
     return PDNumberEventHandler::motionEvent(ev);
 }
 
-void PDNumber::setColors(NVGcolor cvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor)
+void PDNumber::setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor)
 {
-    this->cnvColor = cvColor;
+    this->cnvColor = cnvColor;
     this->ioColor = ioColor;
     this->bgColor = bgColor;
     this->fgColor = fgColor;

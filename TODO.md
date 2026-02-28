@@ -30,9 +30,11 @@
   * ~~arc_start~~
   * ~~arc_show~~
 * number - WIP
+  * ~~flag~~
   * float editor
   * log mode+height
 * float - WIP
+  * ~~flag~~
   * float editor
   * label text+pos
 * bang
