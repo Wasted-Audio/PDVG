@@ -315,6 +315,7 @@ struct PDSliderEventHandler::PrivateData
         const double y = ev.pos.getY() - screen.getY();
         const bool horizontal = startPos.getY() == endPos.getY();
         const float divisor = (ev.mod & kModifierShift) ? 6.0f : 1.0f;
+        const float range = maximum - minimum;
 
         if (steadyOnClick)
         {
@@ -325,8 +326,6 @@ struct PDSliderEventHandler::PrivateData
                 valueAtDragStart = value;
                 lastMod = ev.mod;
             }
-            // Work in normalized [0,1] space so log scale is handled correctly
-            const float range = maximum - minimum;
 
             // Normalized value at drag start
             float normalizedBase;
@@ -347,11 +346,9 @@ struct PDSliderEventHandler::PrivateData
             normalizedNew = std::max(0.0f, std::min(1.0f, normalizedNew));
 
             // Convert back to value space, applying log scale if needed
-            float newValue;
-            if (usingLog)
-                newValue = logscale(minimum + normalizedNew * range);
-            else
-                newValue = minimum + normalizedNew * range;
+            float newValue = usingLog
+                ? logscale(minimum + normalizedNew * range)
+                : minimum + normalizedNew * range;
 
             setValue(newValue, true);
         }
@@ -359,18 +356,12 @@ struct PDSliderEventHandler::PrivateData
         {
             if ((horizontal && sliderArea.containsX(x)) || (!horizontal && sliderArea.containsY(y)))
             {
-                float vper;
+                float vper = horizontal
+                    ? (x - sliderArea.getX()) / sliderArea.getWidth()
+                    : (y - sliderArea.getY()) / sliderArea.getHeight();
 
-                if (horizontal)
-                    vper = (x - sliderArea.getX()) / sliderArea.getWidth();
-                else
-                    vper = (y - sliderArea.getY()) / sliderArea.getHeight();
-
-                float linearValue;
-                if (inverted)
-                    linearValue = maximum - vper * (maximum - minimum);
-                else
-                    linearValue = minimum + vper * (maximum - minimum);
+                float linearValue = inverted ? maximum - vper * range
+                                             : minimum + vper * range;
 
                 float newValue = usingLog ? logscale(linearValue) : linearValue;
 
@@ -380,16 +371,6 @@ struct PDSliderEventHandler::PrivateData
                     valueTmp = newValue = maximum;
 
                 setValue(newValue, true);
-            }
-            else if (horizontal)
-            {
-                setValue(x < sliderArea.getX() ? (inverted ? maximum : minimum)
-                                               : (inverted ? minimum : maximum), true);
-            }
-            else
-            {
-                setValue(y < sliderArea.getY() ? (inverted ? maximum : minimum)
-                                               : (inverted ? minimum : maximum), true);
             }
         }
 
