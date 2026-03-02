@@ -46,6 +46,35 @@ private:
     DISTRHO_LEAK_DETECTOR(PDToggleEventHandler)
 };
 
+class PDBangEventHandler
+{
+public:
+    class Callback
+    {
+    public:
+        virtual ~Callback() {}
+        virtual void bangClicked(SubWidget *widget) = 0;
+    };
+
+    explicit PDBangEventHandler(SubWidget *self);
+    explicit PDBangEventHandler(SubWidget *self, const PDBangEventHandler &other);
+    PDBangEventHandler &operator=(const PDBangEventHandler &other);
+    ~PDBangEventHandler();
+
+    bool isDown() const noexcept;
+    void setDown(bool down) noexcept;
+
+    void setCallback(Callback *callback) noexcept;
+    bool mouseEvent(const Widget::MouseEvent &ev);
+
+protected:
+private:
+    struct PrivateData;
+    PrivateData *const pData;
+
+    DISTRHO_LEAK_DETECTOR(PDBangEventHandler)
+};
+
 class PDSliderEventHandler
 {
 public:

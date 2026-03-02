@@ -37,8 +37,8 @@
   * ~~flag~~
   * float editor
   * label text+pos
-* bang
-  * label
+* ~~bang~~
+  * ~~label~~
 
 ## UI Elements
 

@@ -115,6 +115,110 @@ void PDToggleEventHandler::setDown(const bool down) noexcept
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// begin bang
+
+struct PDBangEventHandler::PrivateData
+{
+    PDBangEventHandler *const self;
+    SubWidget *const widget;
+    PDBangEventHandler::Callback *callback;
+
+    bool isDown;
+
+    PrivateData(PDBangEventHandler *const s, SubWidget *const w)
+        : self(s),
+          widget(w),
+          isDown(false),
+          callback(nullptr)
+    {
+    }
+
+    PrivateData(PDBangEventHandler *const s, SubWidget *const w, PrivateData *const other)
+        : self(s),
+          widget(w),
+          callback(other->callback),
+          isDown(other->isDown)
+
+    {
+    }
+
+    void assignFrom(PrivateData *const other)
+    {
+        callback = other->callback;
+        isDown = other->isDown;
+    }
+
+    bool mouseEvent(const Widget::MouseEvent &ev)
+    {
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        if (ev.press && pdWidget->contains(ev.pos))
+        {
+            isDown = true;
+            widget->repaint();
+
+            if (callback != nullptr)
+            {
+                try
+                {
+                    callback->bangClicked(widget);
+                }
+                DISTRHO_SAFE_EXCEPTION("BangEventHandler::mouseEvent");
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    void setDown(const bool down) noexcept
+    {
+        isDown = down;
+        widget->repaint();
+    }
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+
+PDBangEventHandler::PDBangEventHandler(SubWidget *const self)
+    : pData(new PrivateData(this, self)) {}
+
+PDBangEventHandler::PDBangEventHandler(SubWidget *const self, const PDBangEventHandler &other)
+    : pData(new PrivateData(this, self, other.pData)) {}
+
+PDBangEventHandler &PDBangEventHandler::operator=(const PDBangEventHandler &other)
+{
+    pData->assignFrom(other.pData);
+    return *this;
+}
+
+PDBangEventHandler::~PDBangEventHandler()
+{
+    delete pData;
+}
+
+void PDBangEventHandler::setCallback(Callback *const callback) noexcept
+{
+    pData->callback = callback;
+}
+
+bool PDBangEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+{
+    return pData->mouseEvent(ev);
+}
+
+bool PDBangEventHandler::isDown() const noexcept
+{
+    return pData->isDown;
+}
+
+void PDBangEventHandler::setDown(const bool down) noexcept
+{
+    return pData->setDown(down);
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // begin slider
 struct PDSliderEventHandler::PrivateData
 {
