@@ -43,5 +43,5 @@
 ## UI Elements
 
 * ~~subpatches~~
-  * ~~covering other objects~~
+  * ~~covering other objects~~ (currently needs a [patch](https://github.com/DISTRHO/DPF/pull/521/changes) on DPF for correct scissor of child objects)
   * rounded corders (likely needs extending DPF nanovg for missing `nvgRoundedScissor`)
