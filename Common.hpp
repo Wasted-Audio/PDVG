@@ -83,13 +83,20 @@ constexpr Type jmap (Type value0To1, Type targetRangeMin, Type targetRangeMax)
     return targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin);
 }
 
-
 /** Remaps a value from a source range to a target range. */
 template <typename Type>
 Type jmap (Type sourceValue, Type sourceRangeMin, Type sourceRangeMax, Type targetRangeMin, Type targetRangeMax)
 {
     return targetRangeMin + ((targetRangeMax - targetRangeMin) * (sourceValue - sourceRangeMin)) / (sourceRangeMax - sourceRangeMin);
 }
+
+/** Converts an angle in degrees to radians. */
+template <typename FloatType>
+constexpr FloatType degreesToRadians (FloatType degrees) noexcept     { return degrees * (NVG_PI / FloatType (180)); }
+
+/** Converts an angle in radians to degrees. */
+template <typename FloatType>
+constexpr FloatType radiansToDegrees (FloatType radians) noexcept     { return radians * (FloatType (180) / NVG_PI); }
 
 
 static float getColorBrightness(NVGcolor c)

@@ -51,10 +51,9 @@ private:
     NVGcolor bgColor;
     NVGcolor fgColor;
     NVGcolor arcColor;
-    float arcBegin = 3.927f, arcEnd = 8.639f;
+    float arcBegin = 3.927f;
+    float arcEnd = 8.639f;
     int steps = 0;
-    int angRange = 270;
-    int angOffset = 0;
     float arcStart = 0.0f;
     bool circularDrag = false;
     bool drawSquare = true;

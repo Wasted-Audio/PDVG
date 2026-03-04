@@ -213,8 +213,9 @@ void PDKnob::setSteps(int steps) {
 }
 
 void PDKnob::setAngular(int angRange, int angOffset) {
-    this->angRange = angRange;
-    this->angOffset = angOffset;
+    angOffset -= angRange / 2;
+    this->arcBegin = degreesToRadians<float>(angOffset) + NVG_PI * 2.0;
+    this->arcEnd = degreesToRadians<float>(angRange + angOffset) + NVG_PI * 2.0;
 }
 
 void PDKnob::setArcStart(float arcStart) {
