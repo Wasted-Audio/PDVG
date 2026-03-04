@@ -10,6 +10,7 @@
 
 #include "ExtraEventHandlers.hpp"
 #include "Label.hpp"
+#include "DragNum.hpp"
 #include "PDWidget.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -26,6 +27,7 @@ public:
 protected:
     bool onMouse(const MouseEvent &ev) override;
     bool onMotion(const MotionEvent &ev) override;
+    bool onKeyboard(const KeyboardEvent &ev) override;
 
     void drawFlag(NVGcontext* nvg, Rectangle<float> b, Rectangle<float> sb, NVGcolor cornerColor);
     void onNanoDisplay() override;
@@ -41,6 +43,7 @@ private:
     NVGcolor inEdgeColor;
     NVGcolor cornerColor;
 
+    ScopedPointer<PDDragNum> dragNum;
     ScopedPointer<PDLabel> label;
 
     DISTRHO_LEAK_DETECTOR(PDFloat)

@@ -818,6 +818,161 @@ uint PDRadioEventHandler::getHover() const noexcept { return pData->hoverPos; }
 // end radio
 // --------------------------------------------------------------------------------------------------------------------
 
+// begin draggable number
+
+struct PDDragNumEventHandler::PrivateData
+{
+    PDDragNumEventHandler *const self;
+    SubWidget *const widget;
+    PDDragNumEventHandler::Callback *callback;
+
+    float minimum;
+    float maximum;
+    float value;
+    float valueDef;
+    float valueTmp;
+    float valueAtDragStart;
+    bool usingLog;
+    bool dragging;
+
+    PrivateData(PDDragNumEventHandler *const s, SubWidget *const w)
+        : self(s),
+          widget(w),
+          callback(nullptr),
+          minimum(0.0f),
+          maximum(1.0f),
+          value(0.5f),
+          valueDef(value),
+          valueTmp(value),
+          valueAtDragStart(0.0f),
+          usingLog(false),
+          dragging(false)
+    {
+    }
+
+    PrivateData(PDDragNumEventHandler *const s, SubWidget *const w, PrivateData *const other)
+        : self(s),
+          widget(w),
+          callback(other->callback),
+          minimum(other->minimum),
+          maximum(other->maximum),
+          value(other->value),
+          valueDef(other->valueDef),
+          valueTmp(other->valueTmp),
+          valueAtDragStart(other->valueAtDragStart),
+          usingLog(other->usingLog),
+          dragging(false)
+    {
+    }
+
+    void assignFrom(PrivateData *const other)
+    {
+        callback = other->callback;
+        minimum = other->minimum;
+        maximum = other->maximum;
+        value = other->value;
+        valueDef = other->valueDef;
+        valueTmp = other->valueTmp;
+        valueAtDragStart = other->valueAtDragStart;
+        usingLog = other->usingLog;
+    }
+
+    bool mouseEvent(const Widget::MouseEvent &ev)
+    {
+        if (ev.button != 1)
+            return false;
+    }
+    bool motionEvent(const Widget::MotionEvent &ev)
+    {
+        if (!dragging)
+            return false;
+    }
+    bool scrollEvent(const Widget::ScrollEvent &ev)
+    {
+        return false;
+    }
+    bool keyboardEvent(const Widget::KeyboardEvent &ev)
+    {
+        return false;
+    }
+
+    bool setValue(const float value2, const bool sendCallback)
+    {
+        value = value2;
+        widget->repaint();
+
+        if (sendCallback && callback != nullptr)
+        {
+            try
+            {
+                callback->numberValueChanged(widget, value);
+            }
+            DISTRHO_SAFE_EXCEPTION("PDDragNumEventHandler::setValue");
+        }
+
+        return true;
+    }
+};
+
+PDDragNumEventHandler::PDDragNumEventHandler(SubWidget *const self)
+    : pData(new PrivateData(this, self)) {}
+
+PDDragNumEventHandler::PDDragNumEventHandler(SubWidget *const self, const PDDragNumEventHandler &other)
+    : pData(new PrivateData(this, self, other.pData)) {}
+
+PDDragNumEventHandler &PDDragNumEventHandler::operator=(const PDDragNumEventHandler &other)
+{
+    pData->assignFrom(other.pData);
+    return *this;
+}
+
+PDDragNumEventHandler::~PDDragNumEventHandler()
+{
+    delete pData;
+}
+
+float PDDragNumEventHandler::getValue() const noexcept
+{
+    return pData->value;
+}
+
+bool PDDragNumEventHandler::setValue(const float value, const bool sendCallback) noexcept
+{
+    return pData->setValue(value, sendCallback);
+}
+
+void PDDragNumEventHandler::setRange(float min, float max) noexcept
+{
+    pData->minimum = min;
+    pData->maximum = max;
+}
+
+void PDDragNumEventHandler::setCallback(Callback *const callback) noexcept
+{
+    pData->callback = callback;
+}
+
+bool PDDragNumEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+{
+    return pData->mouseEvent(ev);
+}
+
+bool PDDragNumEventHandler::motionEvent(const Widget::MotionEvent &ev)
+{
+    return pData->motionEvent(ev);
+}
+
+bool PDDragNumEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
+{
+    return pData->scrollEvent(ev);
+}
+
+bool PDDragNumEventHandler::keyboardEvent(const Widget::KeyboardEvent &ev)
+{
+    return pData->keyboardEvent(ev);
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 // begin number
 
 struct PDNumberEventHandler::PrivateData

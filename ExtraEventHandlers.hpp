@@ -181,6 +181,41 @@ private:
     DISTRHO_LEAK_DETECTOR(PDRadioEventHandler)
 };
 
+class PDDragNumEventHandler
+{
+public:
+    class Callback
+    {
+    public:
+        virtual ~Callback() {}
+        virtual void numberValueChanged(SubWidget *widget, float value) = 0;
+    };
+
+    explicit PDDragNumEventHandler(SubWidget *self);
+    explicit PDDragNumEventHandler(SubWidget *self, const PDDragNumEventHandler &other);
+    PDDragNumEventHandler &operator=(const PDDragNumEventHandler &other);
+    ~PDDragNumEventHandler();
+
+    float getValue() const noexcept;
+
+    virtual bool setValue(float value, bool sendCallback = false) noexcept;
+
+    void setRange(float min, float max) noexcept;
+    void setCallback(Callback *callback) noexcept;
+
+    bool mouseEvent(const Widget::MouseEvent &ev);
+    bool motionEvent(const Widget::MotionEvent &ev);
+    bool scrollEvent(const Widget::ScrollEvent &ev);
+    bool keyboardEvent(const Widget::KeyboardEvent &ev);
+
+protected:
+private:
+    struct PrivateData;
+    PrivateData *const pData;
+
+    DISTRHO_LEAK_DETECTOR(PDDragNumEventHandler)
+};
+
 class PDNumberEventHandler
 {
 public:

@@ -86,6 +86,11 @@ bool PDFloat::onMotion(const MotionEvent &ev)
     return PDNumberEventHandler::motionEvent(ev);
 }
 
+bool PDFloat::onKeyboard(const KeyboardEvent &ev)
+{
+    return dragNum->onKeyboard(ev);
+}
+
 void PDFloat::setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor) {
     this->cnvColor = cnvColor;
     this->ioColor = ioColor;

@@ -15,7 +15,7 @@
 START_NAMESPACE_DISTRHO
 
 class PDNumber : public PDWidget,
-               public PDNumberEventHandler
+                 public PDNumberEventHandler
 {
 public:
     explicit PDNumber(NanoSubWidget* parent, PDNumberEventHandler::Callback* cb);
