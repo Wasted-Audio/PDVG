@@ -265,8 +265,7 @@ public:
     void setExpFactor(float expFact) noexcept;
     void setJumpOnClick(bool yesNo) noexcept;
     void setDiscrete(bool yesNo) noexcept;
-    void setStartPos(const int x, const int y) noexcept;
-    void setEndPos(const int x, const int y) noexcept;
+    void setArc(float arcBegin, float arcEnd) noexcept;
     void setCallback(Callback *callback) noexcept;
 
     bool mouseEvent(const Widget::MouseEvent &ev);

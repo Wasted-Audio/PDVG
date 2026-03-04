@@ -14,7 +14,7 @@
   * ~~label~~
 * ~~comment~~
   * ~~word wrap~~
-* knob - WIP
+* ~~knob~~
   * ~~label~~
   * ~~label_show~~ (except when typing)
   * ~~ang_range~~
@@ -25,7 +25,7 @@
   * ~~ticks~~
   * ~~steps~~
   * ~~circular~~
-  * jump
+  * ~~jump~~
   * ~~square~~
   * ~~arc_start~~
   * ~~arc_show~~

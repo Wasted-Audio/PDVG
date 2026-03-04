@@ -13,6 +13,8 @@ START_NAMESPACE_DGL
 
 // --------------------------------------------------------------------------------------------------------------------
 
+#define PI 3.14159265358979323846264338327f
+
 struct PDToggleEventHandler::PrivateData
 {
     PDToggleEventHandler *const self;
@@ -987,8 +989,8 @@ struct PDKnobEventHandler::PrivateData
     bool valueIsSet;
     double startedX;
     double startedY;
-    Point<int> startPos;
-    Point<int> endPos;
+    float arcBegin;
+    float arcEnd;
     Rectangle<double> knobArea;
     uint lastClickTime;
     uint8_t lastMod;
@@ -1013,8 +1015,8 @@ struct PDKnobEventHandler::PrivateData
           valueIsSet(false),
           startedX(0.0),
           startedY(0.0),
-          startPos(),
-          endPos(),
+          arcBegin(3.927f),
+          arcEnd(8.639f),
           knobArea(),
           lastClickTime(0),
           lastMod(0)
@@ -1037,8 +1039,8 @@ struct PDKnobEventHandler::PrivateData
           expFact(other->expFact),
           jumpOnClick(other->jumpOnClick),
           discrete(other->discrete),
-          startPos(other->startPos),
-          endPos(other->endPos),
+          arcBegin(other->arcBegin),
+          arcEnd(other->arcEnd),
           dragging(false),
           valueIsSet(false),
           knobArea(other->knobArea),
@@ -1149,9 +1151,21 @@ struct PDKnobEventHandler::PrivateData
             }
             else
             {
-                float vper = (y - knobArea.getY()) / knobArea.getHeight();
+                // float vper = (y - knobArea.getY()) / knobArea.getHeight();
 
-                float linearValue = maximum - vper * range;
+                // float linearValue = maximum - vper * range;
+
+                const double cx = knobArea.getX() + knobArea.getWidth() * 0.5;
+                const double cy = knobArea.getY() + knobArea.getHeight() * 0.5;
+                const float dx = x - cx;
+                const float dy = y - cy;
+
+                float angle = std::atan2(dx, -dy);
+                while (angle < 0.0f || angle < arcBegin)
+                    angle += PI * 2.0f;
+
+                const float vper = (angle - arcBegin) / (arcEnd - arcBegin);
+                float linearValue = minimum + clamp(vper, 1.0f, 0.0f) * range;
 
                 float newValue;
                 if (logMode == LogMode::LOG)
@@ -1200,78 +1214,45 @@ struct PDKnobEventHandler::PrivateData
         const float range = maximum - minimum;
         const float divisor = (ev.mod & kModifierShift) ? 12.0f : 3.0f;
 
-        if (!jumpOnClick)
+        if (ev.mod != lastMod)
         {
-            if (ev.mod != lastMod)
-            {
-                startedX = x;
-                startedY = y;
-                valueAtDragStart = value;
-                lastMod = ev.mod;
-            }
-
-            float normalizedBase;
-            if (logMode == LogMode::LOG)
-                normalizedBase = (invlogscale(valueAtDragStart) - minimum) / range;
-            else if (logMode == LogMode::EXP)
-                normalizedBase = (invexpscale(valueAtDragStart) - minimum) / range;
-            else
-                normalizedBase = (valueAtDragStart - minimum) / range;
-
-            const double movDiffX = startedX - x;
-            const double movDiffY = y - startedY;
-            double movDiff = std::abs(movDiffX) > std::abs(movDiffY) ? movDiffX : movDiffY;
-            const float normalizedDelta = movDiff / knobArea.getHeight() / divisor;
-
-            float normalizedNew = normalizedBase - normalizedDelta;
-
-            normalizedNew = std::max(0.0f, std::min(1.0f, normalizedNew));
-
-            float newValue;
-            if (logMode == LogMode::LOG)
-                newValue = logscale(normalizedNew * range + minimum);
-            else if (logMode == LogMode::EXP)
-                newValue = expscale(normalizedNew * range + minimum);
-            else
-                newValue = normalizedNew * range + minimum;
-
-            if (step > 0 && discrete)
-            {
-                newValue = quantValue(step, newValue, range, minimum, maximum);
-            }
-
-            setValue(newValue, true);
+            startedX = x;
+            startedY = y;
+            valueAtDragStart = value;
+            lastMod = ev.mod;
         }
+
+        float normalizedBase;
+        if (logMode == LogMode::LOG)
+            normalizedBase = (invlogscale(valueAtDragStart) - minimum) / range;
+        else if (logMode == LogMode::EXP)
+            normalizedBase = (invexpscale(valueAtDragStart) - minimum) / range;
         else
+            normalizedBase = (valueAtDragStart - minimum) / range;
+
+        const double movDiffX = startedX - x;
+        const double movDiffY = y - startedY;
+        double movDiff = std::abs(movDiffX) > std::abs(movDiffY) ? movDiffX : movDiffY;
+        const float normalizedDelta = movDiff / knobArea.getHeight() / divisor;
+
+        float normalizedNew = normalizedBase - normalizedDelta;
+
+        normalizedNew = std::max(0.0f, std::min(1.0f, normalizedNew));
+
+        float newValue;
+        if (logMode == LogMode::LOG)
+            newValue = logscale(normalizedNew * range + minimum);
+        else if (logMode == LogMode::EXP)
+            newValue = expscale(normalizedNew * range + minimum);
+        else
+            newValue = normalizedNew * range + minimum;
+
+        if (step > 0 && discrete)
         {
-            if (knobArea.containsY(y))
-            {
-                float vper = (y - knobArea.getY()) / knobArea.getHeight() / divisor;
-                float linearValue = maximum - vper * range;
-                float newValue;
-                if (logMode == LogMode::LOG)
-                    newValue = logscale(linearValue);
-                else if (logMode == LogMode::EXP)
-                    newValue = (linearValue);
-                else
-                    newValue = linearValue;
-
-                if (newValue < minimum)
-                    valueTmp = newValue = minimum;
-                else if (newValue > maximum)
-                    valueTmp = newValue = maximum;
-                else if (step > 0 && discrete)
-                {
-                    newValue = quantValue(step, newValue, range, minimum, maximum);
-                }
-
-                setValue(newValue, true);
-            }
-            else
-            {
-                setValue(y < knobArea.getY() ? maximum : minimum, true);
-            }
+            newValue = quantValue(step, newValue, range, minimum, maximum);
         }
+
+        setValue(newValue, true);
 
         return true;
     }
@@ -1412,14 +1393,10 @@ void PDKnobEventHandler::setDiscrete(const bool yesNo) noexcept
     pData->discrete = yesNo;
 }
 
-void PDKnobEventHandler::setStartPos(const int x, const int y) noexcept
+void PDKnobEventHandler::setArc(const float arcBegin, const float arcEnd) noexcept
 {
-    pData->startPos = Point<int>(x, y);
-}
-
-void PDKnobEventHandler::setEndPos(const int x, const int y) noexcept
-{
-    pData->endPos = Point<int>(x, y);
+    pData->arcBegin = arcBegin;
+    pData->arcEnd = arcEnd;
 }
 
 void PDKnobEventHandler::setCallback(Callback *const callback) noexcept
