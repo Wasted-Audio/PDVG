@@ -5,6 +5,7 @@
 
 #include "nanovg.h"
 
+#include "Fonts/InterRegular.hpp"
 #include "Common.hpp"
 #include "DragNum.hpp"
 
@@ -15,12 +16,36 @@ PDDragNum::PDDragNum(NanoSubWidget *parent, PDDragNumEventHandler::Callback *con
       PDDragNumEventHandler(this)
 {
     PDDragNumEventHandler::setCallback(cb);
+
+    using namespace InterRegular;
+    NanoVG::FontId interId = createFontFromMemory("inter", (const uchar *)InterRegularData, InterRegularDataSize, 0);
+    fFontId = interId;
 }
 
 void PDDragNum::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+
+    NVGcontext* nvg = getContext();
+
+    nvgIntersectScissor(nvg, 0.5f, 0.5f, getWidth() - 1, getHeight() - 1);
+
+    if (hoveredDecimal >= 0) {
+        const float alpha = isDragging() ? 0.5f : 0.3f;
+        auto const highlightColour = nvgRGBA(outlineColor.r, outlineColor.g, outlineColor.b, alpha * 255);
+        drawRoundedRect(nvg, hoveredDecimalPosition.getX(), hoveredDecimalPosition.getY() - 1, hoveredDecimalPosition.getWidth(), hoveredDecimalPosition.getHeight(), highlightColour, highlightColour, 2.5f);
+    }
+
+    nvgFontFaceId(nvg, fFontId);
+    nvgFontSize(nvg, getHeight() * 0.862f);
+    nvgTextLetterSpacing(nvg, 0.15f);
+    nvgTextAlign(nvg, NVG_ALIGN_MIDDLE | NVG_ALIGN_LEFT);
+    nvgFillColor(nvg, textColor);
+
+    auto const listText = currentValue;
+    auto const textArea = reduceRectangle(b, 2); // border.subtractedFrom(getBounds());
+    nvgText(nvg, textArea.getX(), textArea.getY() + textArea.getHeight() / 2.0f + 1.5f * scaleFactor, listText.c_str(), nullptr);
 
 }
 

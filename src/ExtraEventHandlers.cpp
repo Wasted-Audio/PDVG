@@ -820,6 +820,11 @@ uint PDRadioEventHandler::getHover() const noexcept { return pData->hoverPos; }
 
 // begin draggable number
 
+enum DragMode {
+    Regular,
+    Integer,
+    Logarithmic
+};
 struct PDDragNumEventHandler::PrivateData
 {
     PDDragNumEventHandler *const self;
@@ -834,6 +839,7 @@ struct PDDragNumEventHandler::PrivateData
     float valueAtDragStart;
     bool usingLog;
     bool dragging;
+    DragMode dragMode;
 
     PrivateData(PDDragNumEventHandler *const s, SubWidget *const w)
         : self(s),
@@ -846,7 +852,8 @@ struct PDDragNumEventHandler::PrivateData
           valueTmp(value),
           valueAtDragStart(0.0f),
           usingLog(false),
-          dragging(false)
+          dragging(false),
+          dragMode(Regular)
     {
     }
 
@@ -861,7 +868,8 @@ struct PDDragNumEventHandler::PrivateData
           valueTmp(other->valueTmp),
           valueAtDragStart(other->valueAtDragStart),
           usingLog(other->usingLog),
-          dragging(false)
+          dragging(false),
+          dragMode(other->dragMode)
     {
     }
 
@@ -875,22 +883,50 @@ struct PDDragNumEventHandler::PrivateData
         valueTmp = other->valueTmp;
         valueAtDragStart = other->valueAtDragStart;
         usingLog = other->usingLog;
+        dragMode = other->dragMode;
     }
 
     bool mouseEvent(const Widget::MouseEvent &ev)
     {
         if (ev.button != 1)
             return false;
+
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        const Point<int> screen = pdWidget->getScreenPos();
+
+        if (ev.press)
+        {
+            if (!pdWidget->contains(ev.pos))
+                return false;
+
+            dragging = true;
+            return true;
+        }
+        else if (dragging)
+        {
+            if (callback != nullptr)
+                callback->numberValueChanged(widget, valueTmp);
+
+            dragging = false;
+            return true;
+        }
+        return false;
     }
+
     bool motionEvent(const Widget::MotionEvent &ev)
     {
         if (!dragging)
             return false;
+
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        const Point<int> screen = pdWidget->getScreenPos();
     }
+
     bool scrollEvent(const Widget::ScrollEvent &ev)
     {
         return false;
     }
+
     bool keyboardEvent(const Widget::KeyboardEvent &ev)
     {
         return false;
@@ -934,6 +970,11 @@ PDDragNumEventHandler::~PDDragNumEventHandler()
 float PDDragNumEventHandler::getValue() const noexcept
 {
     return pData->value;
+}
+
+bool PDDragNumEventHandler::isDragging() noexcept
+{
+    return pData->dragging;
 }
 
 bool PDDragNumEventHandler::setValue(const float value, const bool sendCallback) noexcept

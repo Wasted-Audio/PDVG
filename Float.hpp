@@ -23,6 +23,7 @@ public:
 
     void setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
+    void setRange(float min, float max);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;

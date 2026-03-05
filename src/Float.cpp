@@ -15,6 +15,8 @@ PDFloat::PDFloat(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb
       PDNumberEventHandler(this)
 {
     PDNumberEventHandler::setCallback(cb);
+
+    dragNum = new PDDragNum(this, this);
 }
 
 void PDFloat::drawFlag(NVGcontext* nvg, Rectangle<float> b, Rectangle<float> sb, NVGcolor cornerColor)
@@ -106,6 +108,11 @@ void PDFloat::setLabel(std::string text, NVGcolor textColor, int x, int y, int s
     this->label->setColors(textColor);
     this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
+}
+
+void PDFloat::setRange(float min, float max)
+{
+    dragNum->setRange(min, max);
 }
 
 END_NAMESPACE_DISTRHO

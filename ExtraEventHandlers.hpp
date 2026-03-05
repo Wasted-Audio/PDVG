@@ -197,6 +197,7 @@ public:
     ~PDDragNumEventHandler();
 
     float getValue() const noexcept;
+    bool isDragging() noexcept;
 
     virtual bool setValue(float value, bool sendCallback = false) noexcept;
 
