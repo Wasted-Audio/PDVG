@@ -201,6 +201,7 @@ public:
 
     virtual bool setValue(float value, bool sendCallback = false) noexcept;
 
+    void setDefault(float def) noexcept;
     void setRange(float min, float max) noexcept;
     void setCallback(Callback *callback) noexcept;
 

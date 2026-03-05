@@ -43,6 +43,16 @@ void PDFloat::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
+    if (dragNum != nullptr)
+    {
+        if ((uint)dragNum->getWidth() != getWidth() ||
+            (uint)dragNum->getHeight() != getHeight())
+        {
+            dragNum->setAbsolutePos(1.0f * scaleFactor, 3.0f * scaleFactor);
+            dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
+        }
+    }
+
     // WIP
     if (isActive){
         outEdgeColor = flagColor;
@@ -80,25 +90,41 @@ bool PDFloat::onMouse(const MouseEvent &ev)
             repaint();
         }
     }
-    return PDNumberEventHandler::mouseEvent(ev);
+
+    if (dragNum != nullptr)
+        return dragNum->onMouse(ev);
+    return false;
 }
 
 bool PDFloat::onMotion(const MotionEvent &ev)
 {
-    return PDNumberEventHandler::motionEvent(ev);
+    if (dragNum != nullptr)
+        return dragNum->onMotion(ev);
+    return false;
 }
 
 bool PDFloat::onKeyboard(const KeyboardEvent &ev)
 {
-    return dragNum->onKeyboard(ev);
+    if (dragNum != nullptr)
+        return dragNum->onKeyboard(ev);
+    return false;
 }
 
-void PDFloat::setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor) {
+void PDFloat::setColors(
+    NVGcolor cnvColor,
+    NVGcolor ioColor,
+    NVGcolor bgColor,
+    NVGcolor fgColor,
+    NVGcolor flagColor
+) {
     this->cnvColor = cnvColor;
     this->ioColor = ioColor;
     this->bgColor = bgColor;
     this->fgColor = fgColor;
     this->flagColor = flagColor;
+
+    if (dragNum != nullptr)
+        dragNum->setColors(bgColor, fgColor);
 }
 
 void PDFloat::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
@@ -112,7 +138,22 @@ void PDFloat::setLabel(std::string text, NVGcolor textColor, int x, int y, int s
 
 void PDFloat::setRange(float min, float max)
 {
-    dragNum->setRange(min, max);
+    if (dragNum != nullptr)
+        dragNum->setRange(min, max);
+}
+
+void PDFloat::setDefault(float def) {
+    if (dragNum != nullptr)
+        dragNum->setDefault(def);
+
+}
+
+void PDFloat::numberValueChanged(SubWidget *widget, float value)
+{
+    if (widget == dragNum)
+    {
+        setValue(value, true);
+    }
 }
 
 END_NAMESPACE_DISTRHO

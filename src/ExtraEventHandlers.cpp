@@ -840,6 +840,7 @@ struct PDDragNumEventHandler::PrivateData
     bool usingLog;
     bool dragging;
     DragMode dragMode;
+    uint lastClickTime;
 
     PrivateData(PDDragNumEventHandler *const s, SubWidget *const w)
         : self(s),
@@ -853,7 +854,8 @@ struct PDDragNumEventHandler::PrivateData
           valueAtDragStart(0.0f),
           usingLog(false),
           dragging(false),
-          dragMode(Regular)
+          dragMode(Regular),
+          lastClickTime(0)
     {
     }
 
@@ -869,7 +871,8 @@ struct PDDragNumEventHandler::PrivateData
           valueAtDragStart(other->valueAtDragStart),
           usingLog(other->usingLog),
           dragging(false),
-          dragMode(other->dragMode)
+          dragMode(other->dragMode),
+          lastClickTime(0)
     {
     }
 
@@ -899,6 +902,17 @@ struct PDDragNumEventHandler::PrivateData
             if (!pdWidget->contains(ev.pos))
                 return false;
 
+            if (lastClickTime > 0 && ev.time > lastClickTime && ev.time - lastClickTime <= 300)
+            {
+                lastClickTime = 0;
+
+                setValue(valueDef, true);
+                valueTmp = value;
+                return true;
+            }
+
+            lastClickTime = ev.time;
+
             dragging = true;
             return true;
         }
@@ -920,6 +934,8 @@ struct PDDragNumEventHandler::PrivateData
 
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
+
+        return true;
     }
 
     bool scrollEvent(const Widget::ScrollEvent &ev)
@@ -980,6 +996,11 @@ bool PDDragNumEventHandler::isDragging() noexcept
 bool PDDragNumEventHandler::setValue(const float value, const bool sendCallback) noexcept
 {
     return pData->setValue(value, sendCallback);
+}
+
+void PDDragNumEventHandler::setDefault(const float def) noexcept
+{
+    pData->valueDef = def;
 }
 
 void PDDragNumEventHandler::setRange(float min, float max) noexcept

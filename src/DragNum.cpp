@@ -22,6 +22,12 @@ PDDragNum::PDDragNum(NanoSubWidget *parent, PDDragNumEventHandler::Callback *con
     fFontId = interId;
 }
 
+std::string PDDragNum::formatNumber(float value) {
+    char buffer[64];
+    snprintf(buffer, sizeof(buffer), "%.2f", value);
+    return buffer;
+}
+
 void PDDragNum::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
@@ -29,7 +35,9 @@ void PDDragNum::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
-    nvgIntersectScissor(nvg, 0.5f, 0.5f, getWidth() - 1, getHeight() - 1);
+    currentValue = formatNumber(getValue());
+
+    nvgIntersectScissor(nvg, 0.5f, 0.5f, getWidth() - 1 * scaleFactor, getHeight() - 1 * scaleFactor);
 
     if (hoveredDecimal >= 0) {
         const float alpha = isDragging() ? 0.5f : 0.3f;
@@ -46,7 +54,6 @@ void PDDragNum::onNanoDisplay()
     auto const listText = currentValue;
     auto const textArea = reduceRectangle(b, 2); // border.subtractedFrom(getBounds());
     nvgText(nvg, textArea.getX(), textArea.getY() + textArea.getHeight() / 2.0f + 1.5f * scaleFactor, listText.c_str(), nullptr);
-
 }
 
 bool PDDragNum::onMouse(const MouseEvent &ev)
@@ -62,6 +69,11 @@ bool PDDragNum::onMotion(const MotionEvent &ev)
 bool PDDragNum::onKeyboard(const KeyboardEvent &ev)
 {
     return PDDragNumEventHandler::keyboardEvent(ev);
+}
+
+void PDDragNum::setColors(NVGcolor outlineColor, NVGcolor textColor) {
+    this->outlineColor = outlineColor;
+    this->textColor = textColor;
 }
 
 END_NAMESPACE_DISTRHO

@@ -27,6 +27,8 @@ public:
 
     explicit PDDragNum(NanoSubWidget* parent, PDDragNumEventHandler::Callback* cb);
 
+    void setColors(NVGcolor outlineColor, NVGcolor textColor);
+
     bool onMouse(const MouseEvent &ev) override;
     bool onMotion(const MotionEvent &ev) override;
     bool onKeyboard(const KeyboardEvent &ev) override;
@@ -60,8 +62,11 @@ private:
     double valueToResetTo = 0.0;
     double valueToRevertTo = 0.0;
     int maxPrecision = 6;
-    NVGcolor outlineColor, textColor;
+    NVGcolor outlineColor;
+    NVGcolor textColor;
     NanoVG::FontId fFontId;
+
+    std::string formatNumber(float value);
 
     DISTRHO_LEAK_DETECTOR(PDDragNum)
 };
