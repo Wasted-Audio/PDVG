@@ -15,6 +15,8 @@ PDNumber::PDNumber(NanoSubWidget *parent, PDNumberEventHandler::Callback *const 
       PDNumberEventHandler(this)
 {
     PDNumberEventHandler::setCallback(cb);
+
+    dragNum = new PDDragNum(this, this);
 }
 
 void PDNumber::onNanoDisplay()
@@ -23,6 +25,16 @@ void PDNumber::onNanoDisplay()
     const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
+
+    if (dragNum != nullptr)
+    {
+        if ((uint)dragNum->getWidth() != getWidth() ||
+            (uint)dragNum->getHeight() != getHeight())
+        {
+            dragNum->setAbsolutePos(10.0f * scaleFactor, 1.0f * scaleFactor);
+            dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
+        }
+    }
 
     // WIP
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, cnvColor, Corners::objectCornerRadius);
@@ -70,21 +82,41 @@ bool PDNumber::onMouse(const MouseEvent &ev)
             repaint();
         }
     }
-    return PDNumberEventHandler::mouseEvent(ev);
+
+    if (dragNum != nullptr)
+        return dragNum->onMouse(ev);
+    return false;
 }
 
 bool PDNumber::onMotion(const MotionEvent &ev)
 {
-    return PDNumberEventHandler::motionEvent(ev);
+    if (dragNum != nullptr)
+        return dragNum->onMotion(ev);
+    return false;
 }
 
-void PDNumber::setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor)
+bool PDNumber::onKeyboard(const KeyboardEvent &ev)
 {
+    if (dragNum != nullptr)
+        return dragNum->onKeyboard(ev);
+    return false;
+}
+
+void PDNumber::setColors(
+    NVGcolor cnvColor,
+    NVGcolor ioColor,
+    NVGcolor bgColor,
+    NVGcolor fgColor,
+    NVGcolor flagColor
+) {
     this->cnvColor = cnvColor;
     this->ioColor = ioColor;
     this->bgColor = bgColor;
     this->fgColor = fgColor;
     this->flagColor = flagColor;
+
+    if (dragNum != nullptr)
+        dragNum->setColors(bgColor, fgColor);
 }
 
 void PDNumber::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
@@ -94,6 +126,26 @@ void PDNumber::setLabel(std::string text, NVGcolor textColor, int x, int y, int 
     this->label->setColors(textColor);
     this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
+}
+
+void PDNumber::setRange(float min, float max)
+{
+    if (dragNum != nullptr)
+        dragNum->setRange(min, max);
+}
+
+void PDNumber::setDefault(float def) {
+    if (dragNum != nullptr)
+        dragNum->setDefault(def);
+
+}
+
+void PDNumber::numberValueChanged(SubWidget *widget, float value)
+{
+    if (widget == dragNum)
+    {
+        setValue(value, true);
+    }
 }
 
 END_NAMESPACE_DISTRHO

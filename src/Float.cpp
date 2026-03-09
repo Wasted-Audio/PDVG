@@ -48,7 +48,7 @@ void PDFloat::onNanoDisplay()
         if ((uint)dragNum->getWidth() != getWidth() ||
             (uint)dragNum->getHeight() != getHeight())
         {
-            dragNum->setAbsolutePos(1.0f * scaleFactor, 3.0f * scaleFactor);
+            dragNum->setAbsolutePos(1.0f * scaleFactor, 2.0f * scaleFactor);
             dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
         }
     }
