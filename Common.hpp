@@ -27,6 +27,13 @@ struct Border {
     int right;
 };
 
+enum LabelPos {
+    Left,
+    Right,
+    Top,
+    Bottom
+};
+
 inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
 {
     nvgFillColor(nvg, icol);

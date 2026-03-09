@@ -36,7 +36,7 @@
 * float - WIP
   * ~~flag~~
   * float editor
-  * label text+pos
+  * ~~label text+pos~~
 * ~~bang~~
   * ~~label~~
 

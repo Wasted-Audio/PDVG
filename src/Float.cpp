@@ -127,13 +127,37 @@ void PDFloat::setColors(
         dragNum->setColors(bgColor, fgColor);
 }
 
-void PDFloat::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
+void PDFloat::setLabel(std::string text, NVGcolor textColor, int size, LabelPos labelPos)
 {
+    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);
-    this->label->setAbsolutePos(x, (y - size / 2));
-    this->label->setSize(size * text.length(), size);
+    this->label->setSize(size * text.length() / 2.5f, size);
+
+    float x = 0.0f;
+    float y = 0.0f;
+
+    switch(labelPos)
+    {
+        case LabelPos::Left:
+            x = - (float) this->label->getWidth() - 2.0f * scaleFactor;
+            y = (float) this->getHeight() / 2.0f - (float) this->label->getHeight() / 2.0f;
+            break;
+        case LabelPos::Top:
+            y = - (float) this->label->getHeight() - 2.0f * scaleFactor;
+            break;
+        case LabelPos::Right:
+            x = (float) this->getWidth() + 2.0f * scaleFactor;
+            y = (float) this->getHeight() / 2.0f - (float) this->label->getHeight() / 2.0f;
+            break;
+        case LabelPos::Bottom:
+            y = (float) this->getHeight() + 2.0f * scaleFactor;
+            break;
+    }
+
+    this->label->setAbsolutePos(x, y);
 }
 
 void PDFloat::setRange(float min, float max)

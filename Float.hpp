@@ -23,7 +23,7 @@ public:
     explicit PDFloat(NanoSubWidget* parent, PDNumberEventHandler::Callback* cb);
 
     void setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
-    void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
+    void setLabel(std::string text, NVGcolor textColor, int size, LabelPos labelPos);
     void setRange(float min, float max);
     void setDefault(float def);
 
@@ -47,6 +47,7 @@ private:
     NVGcolor outEdgeColor;
     NVGcolor inEdgeColor;
     NVGcolor cornerColor;
+    LabelPos labelPos;
 
     ScopedPointer<PDDragNum> dragNum;
     ScopedPointer<PDLabel> label;
