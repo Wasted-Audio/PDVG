@@ -51,7 +51,7 @@ private:
     bool handleFocusLossManually = false;
     float minimumHorizontalScale = 1.0f;
 
-    Rectangle<int> border { 1, 5, 1, 5 };
+    Border border { 1, 5, 1, 5 };
 
     DragMode dragMode : 2 = Regular;
     bool isMinLimited : 1 = false;

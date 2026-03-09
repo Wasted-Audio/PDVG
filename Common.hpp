@@ -20,6 +20,13 @@ struct Corners {
     static inline float objectCornerRadius = 2.75f;
 };
 
+struct Border {
+    int top;
+    int left;
+    int bottom;
+    int right;
+};
+
 inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
 {
     nvgFillColor(nvg, icol);
@@ -52,6 +59,16 @@ static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
     );
 
     return nR;
+}
+
+static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
+{
+    return Rectangle<float>(
+        r.getX() + border.left,
+        r.getY() + border.top,
+        r.getWidth() - (border.left + border.right),
+        r.getHeight() - (border.top + border.bottom)
+    );
 }
 
 static float valToPropOfLen(float const value, float const length)

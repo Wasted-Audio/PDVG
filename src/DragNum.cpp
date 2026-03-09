@@ -52,7 +52,7 @@ void PDDragNum::onNanoDisplay()
     nvgFillColor(nvg, textColor);
 
     auto const listText = currentValue;
-    auto const textArea = reduceRectangle(b, 2); // border.subtractedFrom(getBounds());
+    auto const textArea = subtractBorder(b, border);
     nvgText(nvg, textArea.getX(), textArea.getY() + textArea.getHeight() / 2.0f + 1.5f * scaleFactor, listText.c_str(), nullptr);
 }
 
