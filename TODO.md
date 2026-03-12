@@ -29,13 +29,12 @@
   * ~~square~~
   * ~~arc_start~~
   * ~~arc_show~~
-* number - WIP
+* ~~number~~ - MVP
   * ~~flag~~
-  * float editor
-  * log mode+height
-* float - WIP
+  * ~~float editor~~
+* ~~float~~ - MVP
   * ~~flag~~
-  * float editor
+  * ~~float editor~~
   * ~~label text+pos~~
 * ~~bang~~
   * ~~label~~
@@ -45,3 +44,12 @@
 * ~~subpatches~~
   * ~~covering other objects~~ (currently needs a [patch](https://github.com/DISTRHO/DPF/pull/521/changes) on DPF for correct scissor of child objects)
   * rounded corders (likely needs extending DPF nanovg for missing `nvgRoundedScissor`)
+
+## Interactive Elements
+
+* Draggable Number (used by Number and Float) - WIP
+  * log mode+height
+  * hide trailing zeros
+  * hide decimal point if no decimals
+  * highlight mouse-over decimal
+  * edit selected decimal
