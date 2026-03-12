@@ -24,9 +24,7 @@ void PDRadio::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
-    auto const outlineColour = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
-
-    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, outlineColour, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
     auto isHorizontal = this->getHorizontal();
     bool isVertical = !isHorizontal;

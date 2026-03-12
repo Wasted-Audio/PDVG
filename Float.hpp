@@ -22,8 +22,7 @@ class PDFloat : public PDWidget,
 public:
     explicit PDFloat(NanoSubWidget* parent, PDNumberEventHandler::Callback* cb);
 
-    void setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
-    void setLabel(std::string text, NVGcolor textColor, int size, LabelPos labelPos);
+    void setLabel(std::string text, int size, LabelPos labelPos);
     void setRange(float min, float max);
     void setDefault(float def);
     bool setValue(float value, bool sendCallback = false) noexcept override;
@@ -39,11 +38,6 @@ protected:
     void onNanoDisplay() override;
 
 private:
-    NVGcolor cnvColor;
-    NVGcolor ioColor;
-    NVGcolor bgColor;
-    NVGcolor fgColor;
-    NVGcolor flagColor;
     bool isActive = false;
     NVGcolor outEdgeColor;
     NVGcolor inEdgeColor;

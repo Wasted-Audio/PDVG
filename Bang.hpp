@@ -21,7 +21,7 @@ class PDBang : public PDWidget,
 public:
     explicit PDBang(NanoSubWidget* parent, PDBangEventHandler::Callback* cb);
 
-    void setColors(NVGcolor ioColor, NVGcolor outColor, NVGcolor bgColor, NVGcolor fgColor);
+    void setColors( NVGcolor bgColor, NVGcolor fgColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setInterval(uint32_t intervalMs);
     void idleCallback();
@@ -31,8 +31,6 @@ protected:
     void onNanoDisplay() override;
 
 private:
-    NVGcolor ioColor;
-    NVGcolor outColor;
     NVGcolor bgColor;
     NVGcolor fgColor;
     ScopedPointer<PDLabel> label;

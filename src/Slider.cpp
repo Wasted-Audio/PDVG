@@ -32,7 +32,7 @@ void PDSlider::onNanoDisplay()
     NVGcontext* nvg = getContext();
 
     // box
-    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, bgColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
     // tick
     float thumbSize = 4.0f * scaleFactor;
@@ -70,8 +70,7 @@ bool PDSlider::onMotion(const MotionEvent &ev)
 
 void PDSlider::setHorizontal() { isHorizontal = true; }
 
-void PDSlider::setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor sliderColor) {
-    this->cnvColor = cnvColor;
+void PDSlider::setColors(NVGcolor bgColor, NVGcolor sliderColor) {
     this->bgColor = bgColor;
     this->sliderColor = sliderColor;
 }

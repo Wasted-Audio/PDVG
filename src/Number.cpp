@@ -37,7 +37,7 @@ void PDNumber::onNanoDisplay()
     }
 
     // WIP
-    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, cnvColor, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
 
     float indent = 9.0f * scaleFactor;
     const Rectangle<float> iconBounds(
@@ -56,9 +56,9 @@ void PDNumber::onNanoDisplay()
     nvgClosePath(nvg);
 
     if (isActive)
-        nvgFillColor(nvg, flagColor);
+        nvgFillColor(nvg, Colors::selColor);
     else
-        nvgFillColor(nvg, ioColor);
+        nvgFillColor(nvg, Colors::ioColor);
     nvgFill(nvg);
     // WIP
 }
@@ -103,17 +103,11 @@ bool PDNumber::onKeyboard(const KeyboardEvent &ev)
 }
 
 void PDNumber::setColors(
-    NVGcolor cnvColor,
-    NVGcolor ioColor,
     NVGcolor bgColor,
-    NVGcolor fgColor,
-    NVGcolor flagColor
+    NVGcolor fgColor
 ) {
-    this->cnvColor = cnvColor;
-    this->ioColor = ioColor;
     this->bgColor = bgColor;
     this->fgColor = fgColor;
-    this->flagColor = flagColor;
 
     if (dragNum != nullptr)
         dragNum->setColors(bgColor, fgColor);

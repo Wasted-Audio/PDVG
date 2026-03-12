@@ -104,10 +104,9 @@ void PDKnob::onNanoDisplay()
     NVGcontext* nvg = getContext();
 
     if (drawSquare) {
-        auto const outlineColour = cnvColor;
         auto const lineThickness = std::max(b.getWidth() * 0.03f, 1.0f);
 
-        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, outlineColour, Corners::objectCornerRadius);
+        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
 
         if (!showArc) {
             nvgBeginPath(nvg);
@@ -140,7 +139,7 @@ void PDKnob::onNanoDisplay()
         nvgCircle(nvg, circleCenterX, circleCenterY, circleBounds.getWidth() / 2.0f);
         nvgFill(nvg);
 
-        nvgStrokeColor(nvg, cnvColor);
+        nvgStrokeColor(nvg, Colors::outColor);
         nvgStrokeWidth(nvg, 1.0f);
         nvgStroke(nvg);
         drawKnob(nvg, b);
@@ -189,20 +188,19 @@ bool PDKnob::onMotion(const MotionEvent &ev)
     return PDKnobEventHandler::motionEvent(ev);
 }
 
-void PDKnob::setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor) {
-    this->cnvColor = cnvColor;
+void PDKnob::setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor) {
     this->bgColor = bgColor;
     this->fgColor = fgColor;
     this->arcColor = arcColor;
 }
 
-void PDKnob::setLabelStyle(NVGcolor textColor, int x, int y, int size)
+void PDKnob::setLabelStyle(int x, int y, int size)
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
 
     this->label = new PDLabel(this);
     this->label->setText(" ");
-    this->label->setColors(textColor);
+    this->label->setColors(Colors::textColor);
     this->label->setAbsolutePos((x - 2 * scaleFactor), (y - 4 * scaleFactor));
     this->label->setSize(size, size);
 }

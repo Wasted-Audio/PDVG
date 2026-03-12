@@ -22,7 +22,6 @@ public:
 
     void setText(std::string text);
     void setFontSize(float size);
-    void setColors(NVGcolor textColor);
     std::vector<std::string> buildLines(float widgetWidth);
 
 protected:
@@ -31,7 +30,6 @@ protected:
 private:
     std::string lText;
     float fFontSize;
-    NVGcolor textColor;
     NanoVG::FontId fFontId;
 
     DISTRHO_LEAK_DETECTOR(PDComment)

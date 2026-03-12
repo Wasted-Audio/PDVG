@@ -6,6 +6,7 @@
 #include "NanoVG.hpp"
 #include "nanovg.h"
 
+#include "Common.hpp"
 #include "Comment.hpp"
 #include "Fonts/InterRegular.hpp"
 
@@ -87,7 +88,7 @@ void PDComment::onNanoDisplay()
 
     fontFaceId(fFontId);
     fontSize(fFontSize);
-    fillColor(textColor);
+    fillColor(Colors::textColor);
     textAlign(NVG_ALIGN_TOP);
 
     std::vector<std::string> lines = buildLines(widgetWidth);
@@ -116,10 +117,6 @@ void PDComment::setText(std::string text) {
 
 void PDComment::setFontSize(float size) {
     fFontSize = size;
-}
-
-void PDComment::setColors(NVGcolor textColor) {
-    this->textColor = textColor;
 }
 
 END_NAMESPACE_DISTRHO

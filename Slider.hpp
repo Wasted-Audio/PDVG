@@ -21,7 +21,7 @@ public:
     explicit PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback* cb);
 
     void setHorizontal();
-    void setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor sliderColor);
+    void setColors(NVGcolor bgColor, NVGcolor sliderColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
 
 protected:
@@ -32,7 +32,6 @@ protected:
 
 private:
     bool isHorizontal = false;
-    NVGcolor cnvColor;
     NVGcolor bgColor;
     NVGcolor sliderColor;
     ScopedPointer<PDLabel> label;

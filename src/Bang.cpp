@@ -27,7 +27,7 @@ void PDBang::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
-    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, outColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
     const Rectangle<float> bs = reduceRectangle(b, 1 * scaleFactor);
     auto const width = std::max(bs.getWidth(), bs.getHeight());
@@ -41,7 +41,7 @@ void PDBang::onNanoDisplay()
 
     nvgBeginPath(nvg);
     nvgCircle(nvg, bs.getX() + bs.getWidth() / 2.0f, bs.getY() + bs.getHeight() / 2.0f, outerCircleBounds.getWidth() / 2.0f);
-    nvgStrokeColor(nvg, ioColor);
+    nvgStrokeColor(nvg, Colors::ioColor);
     nvgStrokeWidth(nvg, circleThickness);
     nvgStroke(nvg);
 
@@ -58,9 +58,7 @@ bool PDBang::onMouse(const MouseEvent &ev)
     return PDBangEventHandler::mouseEvent(ev);
 }
 
-void PDBang::setColors(NVGcolor ioColor, NVGcolor outColor, NVGcolor bgColor, NVGcolor fgColor) {
-    this->ioColor = ioColor;
-    this->outColor = outColor;
+void PDBang::setColors(NVGcolor bgColor, NVGcolor fgColor) {
     this->bgColor = bgColor;
     this->fgColor = fgColor;
 }

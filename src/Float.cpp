@@ -17,6 +17,7 @@ PDFloat::PDFloat(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb
     PDNumberEventHandler::setCallback(cb);
 
     dragNum = new PDDragNum(this, this);
+    dragNum->setColors(Colors::bgColor, Colors::textColor);
 }
 
 void PDFloat::drawFlag(NVGcontext* nvg, Rectangle<float> b, Rectangle<float> sb, NVGcolor cornerColor)
@@ -55,17 +56,17 @@ void PDFloat::onNanoDisplay()
 
     // WIP
     if (isActive){
-        outEdgeColor = flagColor;
-        inEdgeColor = flagColor;
-        cornerColor = flagColor;
+        outEdgeColor = Colors::selColor;
+        inEdgeColor = Colors::selColor;
+        cornerColor = Colors::selColor;
     } else {
-        outEdgeColor = cnvColor;
-        inEdgeColor = bgColor;
-        cornerColor = ioColor;
+        outEdgeColor = Colors::outColor;
+        inEdgeColor = Colors::bgColor;
+        cornerColor = Colors::ioColor;
     }
 
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), outEdgeColor, outEdgeColor, Corners::objectCornerRadius * scaleFactor);
-    drawRoundedRect(nvg, sb.getX(), sb.getY(), sb.getWidth(), sb.getHeight(), bgColor, inEdgeColor, Corners::objectCornerRadius * scaleFactor);
+    drawRoundedRect(nvg, sb.getX(), sb.getY(), sb.getWidth(), sb.getHeight(), Colors::bgColor, inEdgeColor, Corners::objectCornerRadius * scaleFactor);
 
     drawFlag(nvg, b, sb, cornerColor);
     // WIP
@@ -110,30 +111,13 @@ bool PDFloat::onKeyboard(const KeyboardEvent &ev)
     return false;
 }
 
-void PDFloat::setColors(
-    NVGcolor cnvColor,
-    NVGcolor ioColor,
-    NVGcolor bgColor,
-    NVGcolor fgColor,
-    NVGcolor flagColor
-) {
-    this->cnvColor = cnvColor;
-    this->ioColor = ioColor;
-    this->bgColor = bgColor;
-    this->fgColor = fgColor;
-    this->flagColor = flagColor;
-
-    if (dragNum != nullptr)
-        dragNum->setColors(bgColor, fgColor);
-}
-
-void PDFloat::setLabel(std::string text, NVGcolor textColor, int size, LabelPos labelPos)
+void PDFloat::setLabel(std::string text, int size, LabelPos labelPos)
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
 
     this->label = new PDLabel(this);
     this->label->setText(text);
-    this->label->setColors(textColor);
+    this->label->setColors(Colors::textColor);
     this->label->setSize(size * text.length() / 2.5f, size);
 
     float x = 0.0f;

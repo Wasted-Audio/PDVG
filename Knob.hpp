@@ -27,8 +27,8 @@ class PDKnob : public PDWidget,
 public:
     explicit PDKnob(NanoSubWidget *parent, PDKnobEventHandler::Callback* cb);
 
-    void setColors(NVGcolor cnvColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor);
-    void setLabelStyle(NVGcolor textColor, int x, int y, int size);
+    void setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor);
+    void setLabelStyle(int x, int y, int size);
     void setSteps(int steps);
     void setAngular(int angRange, int angOffset);
     void setArcStart(float arcStart);
@@ -47,7 +47,6 @@ protected:
     void onNanoDisplay() override;
 
 private:
-    NVGcolor cnvColor;
     NVGcolor bgColor;
     NVGcolor fgColor;
     NVGcolor arcColor;

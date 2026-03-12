@@ -23,14 +23,9 @@ void PDSubpatch::onNanoDisplay()
     // Border is currently not drawn on the correct level
     beginPath();
     roundedRect(0, 0, getWidth(), getHeight(), Corners::objectCornerRadius * scaleFactor);
-    strokeColor(borderColor);
+    strokeColor(Colors::outColor);
     strokeWidth(2.0f);
     stroke();
-}
-
-void PDSubpatch::setColors(NVGcolor borderColor)
-{
-    this->borderColor = borderColor;
 }
 
 END_NAMESPACE_DISTRHO

@@ -22,7 +22,7 @@ class PDNumber : public PDWidget,
 public:
     explicit PDNumber(NanoSubWidget* parent, PDNumberEventHandler::Callback* cb);
 
-    void setColors(NVGcolor cnvColor, NVGcolor ioColor, NVGcolor bgColor, NVGcolor fgColor, NVGcolor flagColor);
+    void setColors(NVGcolor bgColor, NVGcolor fgColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setRange(float min, float max);
     void setDefault(float def);
@@ -38,11 +38,8 @@ protected:
     void onNanoDisplay() override;
 
 private:
-    NVGcolor cnvColor;
-    NVGcolor ioColor;
     NVGcolor bgColor;
     NVGcolor fgColor;
-    NVGcolor flagColor;
     bool isActive = false;
 
     ScopedPointer<PDDragNum> dragNum;
