@@ -839,8 +839,10 @@ struct PDDragNumEventHandler::PrivateData
     float valueAtDragStart;
     bool usingLog;
     bool dragging;
+    double startedY;
     DragMode dragMode;
     uint lastClickTime;
+    uint8_t lastMod;
 
     PrivateData(PDDragNumEventHandler *const s, SubWidget *const w)
         : self(s),
@@ -854,8 +856,10 @@ struct PDDragNumEventHandler::PrivateData
           valueAtDragStart(0.0f),
           usingLog(false),
           dragging(false),
+          startedY(0.0),
           dragMode(Regular),
-          lastClickTime(0)
+          lastClickTime(0),
+          lastMod(0)
     {
     }
 
@@ -872,7 +876,8 @@ struct PDDragNumEventHandler::PrivateData
           usingLog(other->usingLog),
           dragging(false),
           dragMode(other->dragMode),
-          lastClickTime(0)
+          lastClickTime(0),
+          lastMod(0)
     {
     }
 
@@ -889,6 +894,13 @@ struct PDDragNumEventHandler::PrivateData
         dragMode = other->dragMode;
     }
 
+    double limitValue(double v) const
+    {
+        if (minimum == 0.0f && maximum == 0.0f)
+            return v;
+        return std::max((double)minimum, std::min((double)maximum, v));
+    }
+
     bool mouseEvent(const Widget::MouseEvent &ev)
     {
         if (ev.button != 1)
@@ -896,6 +908,8 @@ struct PDDragNumEventHandler::PrivateData
 
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
+        const double y = ev.pos.getY() - screen.getY();
+        const float x = (float)(ev.pos.getX() - screen.getX());
 
         if (ev.press)
         {
@@ -912,8 +926,10 @@ struct PDDragNumEventHandler::PrivateData
             }
 
             lastClickTime = ev.time;
-
             dragging = true;
+            valueAtDragStart = value;
+            startedY = y;
+
             return true;
         }
         else if (dragging)
@@ -934,6 +950,19 @@ struct PDDragNumEventHandler::PrivateData
 
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
+        const double y = ev.pos.getY() - screen.getY();
+        const float divisor = (ev.mod & kModifierShift) ? 6.0f : 1.0f;
+
+        if (ev.mod != lastMod)
+        {
+            startedY = y;
+            valueAtDragStart = value;
+            lastMod = ev.mod;
+        }
+
+        float newValue = valueAtDragStart - (y + startedY) / divisor;
+        newValue = limitValue(newValue);
+        setValue(newValue, false);
 
         return true;
     }
