@@ -960,9 +960,9 @@ struct PDDragNumEventHandler::PrivateData
             lastMod = ev.mod;
         }
 
-        float newValue = valueAtDragStart - (y + startedY) / divisor;
+        float newValue = valueAtDragStart - (y - startedY) / divisor;
         newValue = limitValue(newValue);
-        setValue(newValue, false);
+        setValue(newValue, true);
 
         return true;
     }
@@ -979,7 +979,10 @@ struct PDDragNumEventHandler::PrivateData
 
     bool setValue(const float value2, const bool sendCallback)
     {
-        value = value2;
+        if (d_isEqual(value, value2))
+            return false;
+
+        valueTmp = value = value2;
         widget->repaint();
 
         if (sendCallback && callback != nullptr)

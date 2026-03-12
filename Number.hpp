@@ -26,6 +26,7 @@ public:
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setRange(float min, float max);
     void setDefault(float def);
+    bool setValue(float value, bool sendCallback = false) noexcept override;
 
     void numberValueChanged(SubWidget *widget, float value) override;
 

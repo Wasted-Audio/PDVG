@@ -140,6 +140,18 @@ void PDNumber::setDefault(float def) {
 
 }
 
+bool PDNumber::setValue(float value, bool sendCallback) noexcept
+{
+    if (PDNumberEventHandler::setValue(value, sendCallback))
+    {
+        if (dragNum != nullptr)
+            dragNum->setValue(value, false);
+        return true;
+    }
+    return false;
+}
+
+
 void PDNumber::numberValueChanged(SubWidget *widget, float value)
 {
     if (widget == dragNum)
