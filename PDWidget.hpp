@@ -28,6 +28,7 @@ public:
         return pos;
     }
 
+    // Overload default SubWidget contains() method to compare against absolute screen position
     bool contains(const Point<double>& pos) const
     {
         const Point<int> screen = getScreenPos();
