@@ -28,7 +28,26 @@ For a full example see the [pdvg-example-plugin](https://github.com/Wasted-Audio
 
 ## Configuration
 
-All custom colors must use a valid `NVGcolor` object.
+All custom colors must use a valid `NVGcolor` object. You can use `nvgRGBA(r, g, b, a)` or `nvgRGB(r, g, b)` for this.
+
+### Theme
+
+It is possible to overload the following theme colors:
+
+```cpp
+Colors::cnvColor        // Canvas
+Colors::textColor       // Text
+Colors::ioColor         // Object internal outline
+Colors::bgColor         // Background
+Colors::selColor        // Selected
+Colors::outColor        // Object outline
+```
+
+And the following corner:
+
+```cpp
+Corners::objectCornerRadius  // Default 2.75f;
+```
 
 ### Primary configuration
 
@@ -102,13 +121,12 @@ Widgets that belong to a plugin parameter need to have their id set:
 
 ### Slider settings
 
-Slider orientation (horizontal or vertical) is setup by correctly configuring the size, sliderArea, startPosition, and endPosition.
-
 ```cpp
-mySlider->setSliderArea(0, 0, <width>, <height>);   // hit area of the slider
-mySlider->setStartPos(<startX>, <startY>);          // position where the slider starts
-mySlider->setEndPos(<endX>, <endY>);                // position where the slider ends
-mySlider->setInverted(true);                        // optional: invert the slider behavior
+mySlider->setSliderArea(0, 0, <width>, <height>);   // Hit area of the slider
+mySlider->setStartPos(<startX>, <startY>);          // Position where the slider starts
+mySlider->setEndPos(<endX>, <endY>);                // Position where the slider ends
+mySlider->setInverted(true);                        // Optional - invert the slider behavior
+mySlider->setHorizontal();                          // Optional - make slider horizontal
 mySlider->setRange(0.0001f, 10.0f);                 // Set min/max range
 mySlider->setDefault(3.0f);                         // Default value
 mySlider->setUsingLogScale(true);                   // Enable log scale
@@ -162,7 +180,8 @@ myFloat->setDefault(3.33f);             // Default value
 ### Bang settings
 
 ```cpp
-myBang->setColors(                      // Configure colors
+myBang->setInterval(uint32_t intervalMs)    // Set the length of the visual flash when triggered. Default is 250ms
+myBang->setColors(                          // Configure colors
     <background_color>,
     <foreground_color>
 );
@@ -191,5 +210,5 @@ myKnob->setColors(                                              // Configure col
     <arc_color>
 );
 myKnob->setLabelStyle(<x>, <y>, <size>);                        // Configure label
-myKnob->setShowLabel(LabelShow::ALWAYS);                        // Optional - defaults to `NEVER`, other values: `ALWAYS`, `ACTIVE`, `TYPING`
+myKnob->setShowLabel(LabelShow::ALWAYS);                        // Optional - defaults to `NEVER`, other values: `ALWAYS`, `ACTIVE`, `TYPING` (not implemented)
 ```
