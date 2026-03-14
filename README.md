@@ -98,6 +98,8 @@ myFloat->setLabel("my label", <size>, LabelPos::Top)
 ### Canvas settings
 
 ```cpp
+myCanvas = new PDCanvas(mainPatch);
+...
 myCanvas->setColors(<canvasColor>);
 ```
 
@@ -106,6 +108,8 @@ myCanvas->setColors(<canvasColor>);
 Comment text that is longer than the widget width will be wrapped to a new line on the last full word that still fits.
 
 ```cpp
+myComment = new PDComment(mainPatch);
+...
 std::string myCommentString = "test comment";
 myComment->setText(myCommentString);
 myComment->setFontSize(<size>);
@@ -113,7 +117,7 @@ myComment->setFontSize(<size>);
 
 ### Parameters
 
-Widgets that belong to a plugin parameter need to have their id set:
+Widgets that belong to a plugin parameter need to have its id set:
 
 ```cpp
 <object>->setId(kParameter);
@@ -122,6 +126,8 @@ Widgets that belong to a plugin parameter need to have their id set:
 ### Slider settings
 
 ```cpp
+mySlider = new PDSlider(mainPatch, this);
+...
 mySlider->setSliderArea(0, 0, <width>, <height>);   // Hit area of the slider
 mySlider->setStartPos(<startX>, <startY>);          // Position where the slider starts
 mySlider->setEndPos(<endX>, <endY>);                // Position where the slider ends
@@ -140,6 +146,8 @@ mySlider->setColors(                                // Configure colors
 ### Toggle settings
 
 ```cpp
+myToggle = new PDToggle(mainPatch, this);
+...
 myToggle->setColors(                    // Configure colors
     <background_color>,
     <toggled_color>
@@ -149,9 +157,11 @@ myToggle->setColors(                    // Configure colors
 ### Radio button settings
 
 ```cpp
-myRadio2->setStep(8);                   // Number of steps
-myRadio2->setHorizontal();              // Optional - make it horizontal
-myRadio2->setColors(                    // Configure colors
+myRadio = new PDRadio(mainPatch, this);
+...
+myRadio->setStep(8);                   // Number of steps
+myRadio->setHorizontal();              // Optional - make it horizontal
+myRadio->setColors(                    // Configure colors
     <background_color>,
     <radio_color>
 );
@@ -160,6 +170,8 @@ myRadio2->setColors(                    // Configure colors
 ### Number settings
 
 ```cpp
+myNumber = PDNumber(mainPatch, this);
+...
 myNumber->setRange(0.0f, 1000.0f);      // Set min/max range
 myNumber->setDefault(666.6f);           // Default value
 myNumber->setColors(                    // Configure colors
@@ -173,6 +185,8 @@ myNumber->setColors(                    // Configure colors
 Float object gets all its colors from the main theme settings.
 
 ```cpp
+myFloat = new PDFloat(mainPatch, this);
+...
 myFloat->setRange(-10.0f, 10.0f);       // Set min/max range
 myFloat->setDefault(3.33f);             // Default value
 ```
@@ -180,6 +194,8 @@ myFloat->setDefault(3.33f);             // Default value
 ### Bang settings
 
 ```cpp
+myBang = new PDBang(mainPatch, this);
+...
 myBang->setInterval(uint32_t intervalMs)    // Set the length of the visual flash when triggered. Default is 250ms
 myBang->setColors(                          // Configure colors
     <background_color>,
@@ -192,6 +208,8 @@ myBang->setColors(                          // Configure colors
 This object has many optional configurations to change the style and behavior. The label text color is taken from the main theme text color.
 
 ```cpp
+myKnob = new PDKnob(mainPatch, this);
+...
 myKnob->setKnobArea(0.0f, 0.0f, <width>, <height>);             // Set the knob hit area (should be the same as the size)
 myKnob->setRange(0.0f, 127.0f);                                 // set min/max range
 myKnob->setDefault(99.0f);                                      // Default value
