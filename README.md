@@ -1,6 +1,6 @@
 # NanoVG based widget library for DPF
 
-This library is meant to emulate plugdata UI objects for use in DPF plugins.
+This library is meant to emulate [plugdata](https://plugdata.org) UI objects for use in DPF plugins.
 
 For a full example see the [pdvg-example-plugin](https://github.com/Wasted-Audio/pdvg-example-plugin/).
 
