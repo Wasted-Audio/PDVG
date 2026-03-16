@@ -21,61 +21,18 @@ PDComment::PDComment(NanoSubWidget* parent) : NanoWidget(parent)
 
 std::vector<std::string> PDComment::buildLines(float widgetWidth)
 {
-    NVGcontext* nvg = getContext();
-
-    // Split text on spaces
-    std::vector<std::string> words;
-    {
-        std::istringstream ss(lText);
-        std::string w;
-        while (ss >> w)
-            words.push_back(w);
-    }
-
+    NVGcontext* const nvg = getContext();
     std::vector<std::string> lines;
-    std::string currentLine;
-    float currentWidth = 0.0f;
 
-    auto measureWord = [&](const std::string& word) -> float {
-        float bounds[4];
-        nvgTextBounds(nvg, 0, 0, word.c_str(), nullptr, bounds);
-        return bounds[2] - bounds[0];
-    };
+    const char* start = lText.c_str();
+    const char* const end = start + lText.size();
+    NVGtextRow row;
 
-    float spaceWidth = measureWord(" ");
-
-    for (const auto& word : words)
+    while (start < end && nvgTextBreakLines(nvg, start, end, widgetWidth, &row, 1))
     {
-        float wordWidth = measureWord(word);
-
-        if (currentLine.empty())
-        {
-            // First word on the line. always place it (clip if too wide).
-            currentLine  = word;
-            currentWidth = wordWidth;
-        }
-        else
-        {
-            float needed = currentWidth + spaceWidth + wordWidth;
-            if (needed <= widgetWidth)
-            {
-                // Word fits, append.
-                currentLine  += ' ';
-                currentLine  += word;
-                currentWidth  = needed;
-            }
-            else
-            {
-                // Word doesn't fit. flush current line and start a new one.
-                lines.push_back(currentLine);
-                currentLine  = word;
-                currentWidth = wordWidth;
-            }
-        }
+        lines.emplace_back(row.start, row.end);
+        start = row.next;
     }
-
-    if (!currentLine.empty())
-        lines.push_back(currentLine);
 
     return lines;
 }
@@ -97,7 +54,6 @@ void PDComment::onNanoDisplay()
     if (totalHeight != getHeight())
         setHeight(totalHeight);
 
-    nvgScissor(nvg, 0.0f, 0.0f, widgetWidth, totalHeight);
     beginPath();
 
     float y = 0.0f;
