@@ -97,8 +97,6 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void sliderDragStarted(SubWidget *widget) = 0;
-        virtual void sliderDragFinished(SubWidget *widget) = 0;
         virtual void sliderValueChanged(SubWidget *widget, float value) = 0;
     };
 
@@ -274,8 +272,6 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void knobDragStarted(SubWidget *widget) = 0;
-        virtual void knobDragFinished(SubWidget *widget) = 0;
         virtual void knobValueChanged(SubWidget *widget, float value) = 0;
     };
 

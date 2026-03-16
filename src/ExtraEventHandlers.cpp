@@ -354,11 +354,7 @@ struct PDSliderEventHandler::PrivateData
             }
 
             lastClickTime = ev.time;
-
             dragging = true;
-
-            if (callback != nullptr)
-                callback->sliderDragStarted(widget);
 
             if (steadyOnClick)
             {
@@ -393,9 +389,6 @@ struct PDSliderEventHandler::PrivateData
         }
         else if (dragging)
         {
-            if (callback != nullptr)
-                callback->sliderDragFinished(widget);
-
             dragging = false;
             return true;
         }
@@ -1390,9 +1383,6 @@ struct PDKnobEventHandler::PrivateData
             startedX = x;
             startedY = y;
 
-            if (callback != nullptr)
-                callback->knobDragStarted(widget);
-
             if (!jumpOnClick)
             {
                 // Don't jump - capture current value as the drag baseline
@@ -1440,9 +1430,6 @@ struct PDKnobEventHandler::PrivateData
         }
         else if (dragging)
         {
-            if (callback != nullptr)
-                callback->knobDragFinished(widget);
-
             dragging = false;
             return true;
         }
