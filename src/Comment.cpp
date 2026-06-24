@@ -45,7 +45,7 @@ void PDComment::onNanoDisplay()
 
     fontFaceId(fFontId);
     fontSize(fFontSize);
-    fillColor(Colors::textColor);
+    fillColor(Colors::comTextColor);
     textAlign(NVG_ALIGN_TOP);
 
     std::vector<std::string> lines = buildLines(widgetWidth);

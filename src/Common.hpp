@@ -18,10 +18,11 @@ struct Corners {
 
 struct Colors {
     static inline NVGcolor cnvColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
-    static inline NVGcolor textColor = nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF);
+    static inline NVGcolor cnvTextColor = nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF);
     static inline NVGcolor ioColor = nvgRGBA(0x62, 0x62, 0x62, 0xFF);
     static inline NVGcolor bgColor = nvgRGBA(0x19, 0x19, 0x19, 0xFF);
     static inline NVGcolor selColor = nvgRGBA(0xFF, 0xAC, 0xAB, 0xFF);
+    static inline NVGcolor comTextColor = nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF);
     static inline NVGcolor outColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 };
 
