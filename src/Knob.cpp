@@ -200,7 +200,7 @@ void PDKnob::setLabelStyle(int x, int y, int size)
 
     this->label = new PDLabel(this);
     this->label->setText(" ");
-    this->label->setColors(Colors::textColor);
+    this->label->setColors(Colors::cnvTextColor);
     this->label->setAbsolutePos((x - 2 * scaleFactor), (y - 4 * scaleFactor));
     this->label->setSize(size, size);
 }
