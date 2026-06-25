@@ -20,7 +20,7 @@ PDToggle::PDToggle(NanoSubWidget *const parent, PDToggleEventHandler::Callback *
 void PDToggle::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     bool val = isDown();
 

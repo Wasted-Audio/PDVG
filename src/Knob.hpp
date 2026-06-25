@@ -42,8 +42,8 @@ protected:
     bool onMouse(const MouseEvent &ev) override;
     bool onMotion(const MotionEvent &ev) override;
 
-    void drawKnob(NVGcontext* nvg, Rectangle<float> pBounds);
-    void drawTicks(NVGcontext* nvg, Rectangle<float> pBounds, float startAngle, float endAngle, float tickWidth);
+    void drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds);
+    void drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float startAngle, float endAngle, float tickWidth);
     void onNanoDisplay() override;
 
 private:

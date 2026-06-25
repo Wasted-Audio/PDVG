@@ -17,7 +17,7 @@ PDKnob::PDKnob(NanoSubWidget *parent, PDKnobEventHandler::Callback *const cb)
     PDKnobEventHandler::setCallback(cb);
 }
 
-void PDKnob::drawTicks(NVGcontext* nvg, Rectangle<float> pBounds, float startAngle, float endAngle, float tickWidth)
+void PDKnob::drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float startAngle, float endAngle, float tickWidth)
 {
     auto const centerX = pBounds.getX() + pBounds.getWidth() / 2.0f;
     auto const centerY = pBounds.getY() + pBounds.getHeight() / 2.0f;
@@ -41,10 +41,10 @@ void PDKnob::drawTicks(NVGcontext* nvg, Rectangle<float> pBounds, float startAng
     }
 }
 
-void PDKnob::drawKnob(NVGcontext* nvg, Rectangle<float> pBounds)
+void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> bounds = reduceRectangle(pBounds, getWidth() * 0.14f);
+    const DGL::Rectangle<float> bounds = reduceRectangle(pBounds, getWidth() * 0.14f);
     auto const lineThickness = std::max(bounds.getWidth() * 0.09f, 1.5f);
 
     auto const knobNormValue = getNormalizedValue();
@@ -99,7 +99,7 @@ void PDKnob::drawKnob(NVGcontext* nvg, Rectangle<float> pBounds)
 void PDKnob::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
@@ -126,7 +126,7 @@ void PDKnob::onNanoDisplay()
         auto circleCenterY = circleBounds.getY() + circleBounds.getHeight() / 2.0f;
 
         float constexpr localScale = 1.3f;
-        auto const originalCentre = Rectangle<float>(circleCenterX, circleCenterY, circleBounds.getWidth() / 2.0f, circleBounds.getHeight() / 2.0f);
+        auto const originalCentre = DGL::Rectangle<float>(circleCenterX, circleCenterY, circleBounds.getWidth() / 2.0f, circleBounds.getHeight() / 2.0f);
         float const scaleOffsetX = originalCentre.getX() * (1.0f - localScale);
         float const scaleOffsetY = originalCentre.getY() * (1.0f - localScale);
 
@@ -165,7 +165,7 @@ bool PDKnob::onMouse(const MouseEvent &ev)
     if (ev.press && ev.button == 1)
     {
         const Point<int> screen = getScreenPos();
-        const Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
+        const DGL::Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
         const bool inside = bounds.contains(ev.pos.getX() - screen.getX(), ev.pos.getY() - screen.getY());
 
         if (inside && !isActive)

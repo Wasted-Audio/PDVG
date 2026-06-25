@@ -244,7 +244,7 @@ struct PDSliderEventHandler::PrivateData
     double startedY;
     Point<int> startPos;
     Point<int> endPos;
-    Rectangle<double> sliderArea;
+    DGL::Rectangle<double> sliderArea;
     uint lastClickTime;
     uint8_t lastMod;
 
@@ -572,7 +572,7 @@ void PDSliderEventHandler::setDefault(const float def) noexcept
 void PDSliderEventHandler::setSliderArea(const double x, const double y,
                                        const double w, const double h) noexcept
 {
-    pData->sliderArea = Rectangle<double>(x, y, w, h);
+    pData->sliderArea = DGL::Rectangle<double>(x, y, w, h);
 }
 
 void PDSliderEventHandler::setRange(const float min, const float max) noexcept
@@ -1233,7 +1233,7 @@ struct PDKnobEventHandler::PrivateData
     double startedY;
     float arcBegin;
     float arcEnd;
-    Rectangle<double> knobArea;
+    DGL::Rectangle<double> knobArea;
     uint lastClickTime;
     uint8_t lastMod;
 
@@ -1596,7 +1596,7 @@ void PDKnobEventHandler::setDefault(const float def) noexcept
 void PDKnobEventHandler::setKnobArea(const double x, const double y,
                                        const double w, const double h) noexcept
 {
-    pData->knobArea = Rectangle<double>(x, y, w, h);
+    pData->knobArea = DGL::Rectangle<double>(x, y, w, h);
 }
 
 void PDKnobEventHandler::setRange(const float min, const float max) noexcept

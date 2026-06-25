@@ -60,11 +60,11 @@ static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
     return c;
 }
 
-static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
+static DGL::Rectangle<float> reduceRectangle(DGL::Rectangle<float> r, float amount)
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
-    Rectangle<float> nR(
+    DGL::Rectangle<float> nR(
         r.getX() + amount,
         r.getY() + amount,
         r.getWidth() - amount * 2,
@@ -74,9 +74,9 @@ static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
     return nR;
 }
 
-static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
+static DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border border)
 {
-    return Rectangle<float>(
+    return DGL::Rectangle<float>(
         r.getX() + border.left,
         r.getY() + border.top,
         r.getWidth() - (border.left + border.right),

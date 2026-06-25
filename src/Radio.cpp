@@ -20,7 +20,7 @@ PDRadio::PDRadio(NanoSubWidget *const parent, PDRadioEventHandler::Callback *con
 void PDRadio::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
@@ -55,7 +55,7 @@ void PDRadio::onNanoDisplay()
         auto const hoverIdx = getHover();
         float const hoverX = isVertical ? 0 : hoverIdx * size;
         float const hoverY = isVertical ? hoverIdx * size : 0;
-        const Rectangle<float> hoverRect(
+        const DGL::Rectangle<float> hoverRect(
             hoverX,
             hoverY,
             size,
@@ -68,7 +68,7 @@ void PDRadio::onNanoDisplay()
 
     auto const selected = getValue();
 
-    const Rectangle<float> selection(
+    const DGL::Rectangle<float> selection(
         isVertical ? 0 : selected * size,
         isVertical ? selected * size : 0,
         size,
