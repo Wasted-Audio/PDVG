@@ -31,7 +31,7 @@ std::string PDDragNum::formatNumber(float value) {
 void PDDragNum::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 

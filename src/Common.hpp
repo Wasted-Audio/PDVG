@@ -50,7 +50,7 @@ inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h,
     nvgStroke(nvg);
 }
 
-static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
+inline NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
 {
     NVGcolor c;
     c.r = a.r + (b.r - a.r) * val;
@@ -60,11 +60,11 @@ static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
     return c;
 }
 
-static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
+inline DGL::Rectangle<float> reduceRectangle(DGL::Rectangle<float> r, float amount)
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
-    Rectangle<float> nR(
+    DGL::Rectangle<float> nR(
         r.getX() + amount,
         r.getY() + amount,
         r.getWidth() - amount * 2,
@@ -74,9 +74,9 @@ static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
     return nR;
 }
 
-static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
+inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border border)
 {
-    return Rectangle<float>(
+    return DGL::Rectangle<float>(
         r.getX() + border.left,
         r.getY() + border.top,
         r.getWidth() - (border.left + border.right),
@@ -84,7 +84,7 @@ static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
     );
 }
 
-static float valToPropOfLen(float const value, float const length)
+inline float valToPropOfLen(float const value, float const length)
 {
     return value / length;
 }
@@ -129,7 +129,7 @@ template <typename FloatType>
 constexpr FloatType radiansToDegrees (FloatType radians) noexcept     { return radians * (FloatType (180) / NVG_PI); }
 
 
-static float getColorBrightness(NVGcolor c)
+inline float getColorBrightness(NVGcolor c)
 {
     float brightness = 0.0f;
 

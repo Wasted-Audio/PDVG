@@ -36,7 +36,7 @@ private:
     int decimalDrag = 0;
     int hoveredDecimal = -1;
     double dragValue = 0.0;
-    Rectangle<float> hoveredDecimalPosition;
+    DGL::Rectangle<float> hoveredDecimalPosition;
     std::string currentValue;
     Border border { 1, 5, 1, 5 };
     NVGcolor outlineColor;
