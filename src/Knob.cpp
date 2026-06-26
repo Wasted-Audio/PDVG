@@ -43,7 +43,7 @@ void PDKnob::drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float sta
 
 void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
 {
-    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+    // const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const DGL::Rectangle<float> bounds = reduceRectangle(pBounds, getWidth() * 0.14f);
     auto const lineThickness = std::max(bounds.getWidth() * 0.09f, 1.5f);
 
@@ -98,7 +98,7 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
 
 void PDKnob::onNanoDisplay()
 {
-    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+    // const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();

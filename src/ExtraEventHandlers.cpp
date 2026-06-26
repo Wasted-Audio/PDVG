@@ -902,7 +902,7 @@ struct PDDragNumEventHandler::PrivateData
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
         const double y = ev.pos.getY() - screen.getY();
-        const float x = (float)(ev.pos.getX() - screen.getX());
+        // const float x = (float)(ev.pos.getX() - screen.getX());
 
         if (ev.press)
         {

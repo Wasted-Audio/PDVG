@@ -35,7 +35,7 @@ void PDRadio::onNanoDisplay()
     nvgStrokeWidth(nvg, 1.0f * scaleFactor);
 
     nvgBeginPath(nvg);
-    for (int i = 1; i < numItems; i++) {
+    for (int i = 1; i < int(numItems); i++) {
         if (isVertical) {
             nvgMoveTo(nvg, 1 * scaleFactor, i * size);
             nvgLineTo(nvg, size - 0.5 * scaleFactor, i * size);
