@@ -21,6 +21,7 @@ public:
     explicit PDPopmenu(NanoSubWidget* parent, PDPopmenuEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor fgColor);
+    void setNoSelectLabel(std::string label);
     void setOptions(std::vector<std::string> options);
     void setFontSize(float size);
 
@@ -32,6 +33,7 @@ private:
     NVGcolor fgColor;
     NVGcolor bgColor;
     float fontSize;
+    std::string noSelectLabel;
     std::vector<std::string> options;
 
     DISTRHO_LEAK_DETECTOR(PDPopmenu)

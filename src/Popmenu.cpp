@@ -62,6 +62,11 @@ void PDPopmenu::setColors(NVGcolor bgColor, NVGcolor fgColor)
     this->fgColor = fgColor;
 }
 
+void PDPopmenu::setNoSelectLabel(std::string label)
+{
+    this->noSelectLabel = label;
+}
+
 void PDPopmenu::setOptions(std::vector<std::string> options)
 {
     this->options = options;
