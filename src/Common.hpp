@@ -64,14 +64,12 @@ static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
-    Rectangle<float> nR(
+    return Rectangle<float>(
         r.getX() + amount,
         r.getY() + amount,
         r.getWidth() - amount * 2,
         r.getHeight() - amount * 2
     );
-
-    return nR;
 }
 
 static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
@@ -81,6 +79,36 @@ static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
         r.getY() + border.top,
         r.getWidth() - (border.left + border.right),
         r.getHeight() - (border.top + border.bottom)
+    );
+}
+
+static Rectangle<float> removeFromRight(Rectangle<float> r, float amount)
+{
+    return Rectangle<float>(
+        r.getX(),
+        r.getY(),
+        r.getWidth() - amount,
+        r.getHeight()
+    );
+}
+
+static Rectangle<float> resizeCentered(Rectangle<float> r, float width, float height)
+{
+    return Rectangle<float>(
+        r.getX() + (r.getWidth() - width) / 2.0f,
+        r.getY() + (r.getHeight() - height) / 2.0f,
+        width,
+        height
+    );
+}
+
+static Rectangle<float> translateRectangle(Rectangle<float> r, float x, float y)
+{
+    return Rectangle<float>(
+        r.getX() + x,
+        r.getY() + y,
+        r.getWidth(),
+        r.getHeight()
     );
 }
 
