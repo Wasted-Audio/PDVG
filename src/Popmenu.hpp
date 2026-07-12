@@ -27,6 +27,7 @@ public:
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
+    bool onMotion(const MotionEvent &ev) override;
     void renderText(NVGcontext* nvg, DGL::Rectangle<float> bounds);
     void onNanoDisplay() override;
 

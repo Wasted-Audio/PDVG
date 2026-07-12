@@ -338,6 +338,7 @@ public:
     void setCallback(Callback *callback) noexcept;
 
     bool mouseEvent(const Widget::MouseEvent &ev);
+    bool motionEvent(const Widget::MotionEvent &ev);
 
 protected:
 private:

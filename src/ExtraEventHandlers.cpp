@@ -1698,16 +1698,13 @@ struct PDPopmenuEventHandler::PrivateData
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         if (ev.press && pdWidget->contains(ev.pos))
         {
-            // if (callback != nullptr)
-            // {
-            //     try
-            //     {
-            //         callback->popmenuClicked(widget, value);
-            //     }
-            //     DISTRHO_SAFE_EXCEPTION("PDPopmenuEventHandler::mouseEvent");
-            // }
             return true;
         }
+        return false;
+    }
+
+    bool motionEvent(const Widget::MotionEvent &ev)
+    {
         return false;
     }
 
@@ -1772,6 +1769,11 @@ void PDPopmenuEventHandler::setCallback(Callback *const callback) noexcept
 bool PDPopmenuEventHandler::mouseEvent(const Widget::MouseEvent &ev)
 {
     return pData->mouseEvent(ev);
+}
+
+bool PDPopmenuEventHandler::motionEvent(const Widget::MotionEvent &ev)
+{
+    return pData->motionEvent(ev);
 }
 
 // end popmenu

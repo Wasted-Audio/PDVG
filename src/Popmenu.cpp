@@ -74,6 +74,11 @@ bool PDPopmenu::onMouse(const MouseEvent &ev)
     return PDPopmenuEventHandler::mouseEvent(ev);
 }
 
+bool PDPopmenu::onMotion(const MotionEvent &ev)
+{
+    return PDPopmenuEventHandler::motionEvent(ev);
+}
+
 void PDPopmenu::setColors(NVGcolor bgColor, NVGcolor fgColor)
 {
     this->bgColor = bgColor;
