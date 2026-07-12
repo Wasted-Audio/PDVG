@@ -27,26 +27,27 @@ void PDPopmenu::onNanoDisplay()
 
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
 
-    // auto textBounds = getLocalBounds().reduced(2).translated(2, 0);
     auto textBounds = translateRectangle(reduceRectangle(b, 2), 2, 0);
     // if (!textBounds.isEmpty()) {
         // textRenderer.renderText(nvg, textBounds.toFloat(), getImageScale());
     // }
 
-    // auto const triangleBounds = b.removeFromRight(20).withSizeKeepingCentre(20, std::min(getHeight(), 12));
     auto const triangleBounds = resizeCentered(removeFromRight(b, 20), 20, std::min((int)b.getHeight(), 12));
+
+    auto const triangleBoundsCenterX = triangleBounds.getX() + triangleBounds.getWidth() / 2.0f;
+    auto const triangleBoundsBottom = triangleBounds.getY() + triangleBounds.getHeight();
 
     nvgStrokeColor(nvg, fgColor);
     nvgBeginPath(nvg);
-    nvgMoveTo(nvg, (triangleBounds.getX() - triangleBounds.getWidth() / 2.0f) - 3 * scaleFactor, triangleBounds.getY() + 3 * scaleFactor);
-    nvgLineTo(nvg, (triangleBounds.getX() - triangleBounds.getWidth() / 2.0f), triangleBounds.getY());
-    nvgLineTo(nvg, (triangleBounds.getX() - triangleBounds.getWidth() / 2.0f) + 3 * scaleFactor, triangleBounds.getY() + 3 * scaleFactor);
+    nvgMoveTo(nvg, triangleBoundsCenterX - 3 * scaleFactor, triangleBounds.getY() + 3 * scaleFactor);
+    nvgLineTo(nvg, triangleBoundsCenterX, triangleBounds.getY());
+    nvgLineTo(nvg, triangleBoundsCenterX + 3 * scaleFactor, triangleBounds.getY() + 3 * scaleFactor);
     nvgStroke(nvg);
 
     nvgBeginPath(nvg);
-    nvgMoveTo(nvg, (triangleBounds.getX() - triangleBounds.getWidth() / 2.0f) - 3 * scaleFactor, triangleBounds.getY() - triangleBounds.getHeight() - 3 * scaleFactor);
-    nvgLineTo(nvg, (triangleBounds.getX() - triangleBounds.getWidth() / 2.0f), triangleBounds.getY() - triangleBounds.getHeight());
-    nvgLineTo(nvg, (triangleBounds.getX() - triangleBounds.getWidth() / 2.0f) + 3 * scaleFactor, triangleBounds.getY() - triangleBounds.getHeight() - 3 * scaleFactor);
+    nvgMoveTo(nvg, triangleBoundsCenterX - 3 * scaleFactor, triangleBoundsBottom - 3 * scaleFactor);
+    nvgLineTo(nvg, triangleBoundsCenterX, triangleBoundsBottom);
+    nvgLineTo(nvg, triangleBoundsCenterX + 3 * scaleFactor, triangleBoundsBottom - 3 * scaleFactor);
     nvgStroke(nvg);
 }
 
