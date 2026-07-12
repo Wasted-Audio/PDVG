@@ -10,7 +10,7 @@
 
 START_NAMESPACE_DGL
 
-static float clamp(float x, float upper, float lower)
+inline float clamp(float x, float upper, float lower)
 {
     return std::min(upper, std::max(x, lower));
 }

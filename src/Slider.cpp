@@ -20,7 +20,7 @@ PDSlider::PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback *const 
 void PDSlider::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
     float norm = getNormalizedValue();
     float val;
 
@@ -38,7 +38,7 @@ void PDSlider::onNanoDisplay()
     float thumbSize = 4.0f * scaleFactor;
     auto const cornerSize = (Corners::objectCornerRadius * scaleFactor) / 2.0f;
 
-    Rectangle<float> sB;
+    DGL::Rectangle<float> sB;
     auto const bR = reduceRectangle(b, 1.0f);
 
     if (isHorizontal) {

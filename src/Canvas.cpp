@@ -20,7 +20,7 @@ PDCanvas::PDCanvas(NanoSubWidget* parent)
 void PDCanvas::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 

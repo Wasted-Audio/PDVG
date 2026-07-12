@@ -22,7 +22,7 @@ PDNumber::PDNumber(NanoSubWidget *parent, PDNumberEventHandler::Callback *const 
 void PDNumber::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
@@ -40,7 +40,7 @@ void PDNumber::onNanoDisplay()
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
 
     float indent = 9.0f * scaleFactor;
-    const Rectangle<float> iconBounds(
+    const DGL::Rectangle<float> iconBounds(
         (b.getX() + 4.0f * scaleFactor),
         (b.getY() + 4.0f * scaleFactor),
         (indent - 4.0f * scaleFactor),
@@ -68,7 +68,7 @@ bool PDNumber::onMouse(const MouseEvent &ev)
     if (ev.press && ev.button == 1)
     {
         const Point<int> screen = getScreenPos();
-        const Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
+        const DGL::Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
         const bool inside = bounds.contains(ev.pos.getX() - screen.getX(), ev.pos.getY() - screen.getY());
 
         if (inside && !isActive)

@@ -34,7 +34,7 @@ protected:
     bool onMotion(const MotionEvent &ev) override;
     bool onKeyboard(const KeyboardEvent &ev) override;
 
-    void drawFlag(NVGcontext* nvg, Rectangle<float> b, Rectangle<float> sb, NVGcolor cornerColor);
+    void drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<float> sb, NVGcolor cornerColor);
     void onNanoDisplay() override;
 
 private:

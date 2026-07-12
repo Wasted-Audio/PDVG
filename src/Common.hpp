@@ -51,7 +51,7 @@ inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h,
     nvgStroke(nvg);
 }
 
-static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
+inline NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
 {
     NVGcolor c;
     c.r = a.r + (b.r - a.r) * val;
@@ -61,11 +61,11 @@ static NVGcolor interpolateColors(NVGcolor a, NVGcolor b, float val)
     return c;
 }
 
-static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
+inline DGL::Rectangle<float> reduceRectangle(DGL::Rectangle<float> r, float amount)
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
-    return Rectangle<float>(
+    return DGL::Rectangle<float>(
         r.getX() + amount,
         r.getY() + amount,
         r.getWidth() - amount * 2,
@@ -73,9 +73,9 @@ static Rectangle<float> reduceRectangle(Rectangle<float> r, float amount)
     );
 }
 
-static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
+inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border border)
 {
-    return Rectangle<float>(
+    return DGL::Rectangle<float>(
         r.getX() + border.left,
         r.getY() + border.top,
         r.getWidth() - (border.left + border.right),
@@ -83,12 +83,11 @@ static Rectangle<float> subtractBorder(Rectangle<float> r, Border border)
     );
 }
 
-static Rectangle<float> removeFromRight(Rectangle<float> r, float amount)
+static DGL::Rectangle<float> removeFromRight(DGL::Rectangle<float> r, float amount)
 {
     float amountRemove = jmin(amount, r.getWidth());
-    r.setWidth(r.getWidth() - amountRemove);
 
-    return Rectangle<float>(
+    return DGL::Rectangle<float>(
         r.getX() + r.getWidth() - amountRemove,
         r.getY(),
         amountRemove,
@@ -96,9 +95,9 @@ static Rectangle<float> removeFromRight(Rectangle<float> r, float amount)
     );
 }
 
-static Rectangle<float> resizeCentered(Rectangle<float> r, float width, float height)
+static DGL::Rectangle<float> resizeCentered(DGL::Rectangle<float> r, float width, float height)
 {
-    return Rectangle<float>(
+    return DGL::Rectangle<float>(
         r.getX() + (r.getWidth() - width) / 2.0f,
         r.getY() + (r.getHeight() - height) / 2.0f,
         width,
@@ -106,9 +105,9 @@ static Rectangle<float> resizeCentered(Rectangle<float> r, float width, float he
     );
 }
 
-static Rectangle<float> translateRectangle(Rectangle<float> r, float x, float y)
+static DGL::Rectangle<float> translateRectangle(DGL::Rectangle<float> r, float x, float y)
 {
-    return Rectangle<float>(
+    return DGL::Rectangle<float>(
         r.getX() + x,
         r.getY() + y,
         r.getWidth(),

@@ -17,19 +17,19 @@ PDBang::PDBang(NanoSubWidget *const parent, PDBangEventHandler::Callback *const 
       PDBangEventHandler(this)
 {
     PDBangEventHandler::setCallback(cb);
-    getParentWindow().addIdleCallback(this);
+    getWindow().addIdleCallback(this);
 }
 
 void PDBang::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
-    const Rectangle<float> bs = reduceRectangle(b, 1 * scaleFactor);
+    const DGL::Rectangle<float> bs = reduceRectangle(b, 1 * scaleFactor);
     auto const width = std::max(bs.getWidth(), bs.getHeight());
 
     auto const sizeReduction = std::min(1.0f, getWidth() / 20.0f);
@@ -83,9 +83,10 @@ void PDBang::idleCallback()
     if (now - lastTick < intervalMs)
         return;
 
-    if (isDown())
+    if (isDown()){
         setDown(false);
         repaint();
+    }
 }
 
 END_NAMESPACE_DISTRHO

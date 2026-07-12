@@ -21,7 +21,7 @@ PDPopmenu::PDPopmenu(NanoSubWidget* parent, PDPopmenuEventHandler::Callback* cb)
 void PDPopmenu::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
 

@@ -20,7 +20,7 @@ PDFloat::PDFloat(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb
     dragNum->setColors(Colors::bgColor, Colors::cnvTextColor);
 }
 
-void PDFloat::drawFlag(NVGcontext* nvg, Rectangle<float> b, Rectangle<float> sb, NVGcolor cornerColor)
+void PDFloat::drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<float> sb, NVGcolor cornerColor)
 {
     float width = sb.getHeight() * 0.4f;
     float x = sb.getWidth() - width;
@@ -39,8 +39,8 @@ void PDFloat::drawFlag(NVGcontext* nvg, Rectangle<float> b, Rectangle<float> sb,
 void PDFloat::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
-    const Rectangle<float> sb = reduceRectangle(b, 0.5f * scaleFactor);
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const DGL::Rectangle<float> sb = reduceRectangle(b, 0.5f * scaleFactor);
 
     NVGcontext* nvg = getContext();
 
@@ -77,7 +77,7 @@ bool PDFloat::onMouse(const MouseEvent &ev)
     if (ev.press && ev.button == 1)
     {
         const Point<int> screen = getScreenPos();
-        const Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
+        const DGL::Rectangle<float> bounds(0.0f, 0.0f, getWidth(), getHeight());
         const bool inside = bounds.contains(ev.pos.getX() - screen.getX(), ev.pos.getY() - screen.getY());
 
         if (inside && !isActive)
