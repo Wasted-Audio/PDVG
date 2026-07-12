@@ -7,7 +7,7 @@
 
 #include "Common.hpp"
 #include "Popmenu.hpp"
-
+#include "Fonts/InterRegular.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -16,6 +16,26 @@ PDPopmenu::PDPopmenu(NanoSubWidget* parent, PDPopmenuEventHandler::Callback* cb)
       PDPopmenuEventHandler(this)
 {
     PDPopmenuEventHandler::setCallback(cb);
+
+    using namespace InterRegular;
+    NanoVG:FontId interId = createFontFromMemory("inter", (const uchar *)InterRegularData, InterRegularDataSize, 0);
+    fFontId = interId;
+}
+
+void PDPopmenu::renderText(NVGcontext* nvg, DGL::Rectangle<float> bounds)
+{
+    beginPath();
+
+    auto fAlign = NVG_ALIGN_TOP;
+    auto value = (int) getValue();
+    auto fText = options[value].c_str();
+
+    fontFaceId(fFontId);
+    fontSize(fFontSize * 1.5f);
+    fillColor(Colors::cnvTextColor);
+    textAlign(fAlign);
+    text(bounds.getX(), bounds.getY(), fText, NULL);
+    closePath();
 }
 
 void PDPopmenu::onNanoDisplay()
@@ -27,10 +47,8 @@ void PDPopmenu::onNanoDisplay()
 
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
 
-    auto textBounds = translateRectangle(reduceRectangle(b, 2), 2, 0);
-    // if (!textBounds.isEmpty()) {
-        // textRenderer.renderText(nvg, textBounds.toFloat(), getImageScale());
-    // }
+    auto textBounds = translateRectangle(reduceRectangle(b, 2 * scaleFactor), 2 * scaleFactor, 0);
+    renderText(nvg, textBounds);
 
     auto const triangleBounds = resizeCentered(removeFromRight(b, 20), 20, std::min((int)b.getHeight(), 12));
 
@@ -72,9 +90,9 @@ void PDPopmenu::setOptions(std::vector<std::string> options)
     this->options = options;
 }
 
-void PDPopmenu::setFontSize(float fontSize)
+void PDPopmenu::setFontSize(int fontSize)
 {
-    this->fontSize = fontSize;
+    this->fFontSize = fontSize;
 }
 
 END_NAMESPACE_DISTRHO

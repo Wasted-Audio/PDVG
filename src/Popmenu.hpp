@@ -23,18 +23,21 @@ public:
     void setColors(NVGcolor bgColor, NVGcolor fgColor);
     void setNoSelectLabel(std::string label);
     void setOptions(std::vector<std::string> options);
-    void setFontSize(float size);
+    void setFontSize(int size);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
+    void renderText(NVGcontext* nvg, DGL::Rectangle<float> bounds);
     void onNanoDisplay() override;
 
 private:
     NVGcolor fgColor;
     NVGcolor bgColor;
-    float fontSize;
+    int fFontSize;
     std::string noSelectLabel;
     std::vector<std::string> options;
+
+    NanoVG::FontId fFontId;
 
     DISTRHO_LEAK_DETECTOR(PDPopmenu)
 };
