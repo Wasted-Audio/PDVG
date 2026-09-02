@@ -9,6 +9,7 @@
 #include <cstring>
 #include "nanovg.h"
 #include "Widget.hpp"
+#include "Jutils.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -64,14 +65,12 @@ inline DGL::Rectangle<float> reduceRectangle(DGL::Rectangle<float> r, float amou
 {
     // (x + delta, y + delta, w - delta * 2, h - delta * 2)
 
-    DGL::Rectangle<float> nR(
+    return DGL::Rectangle<float>(
         r.getX() + amount,
         r.getY() + amount,
         r.getWidth() - amount * 2,
         r.getHeight() - amount * 2
     );
-
-    return nR;
 }
 
 inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border border)
@@ -84,52 +83,44 @@ inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border bord
     );
 }
 
-inline float valToPropOfLen(float const value, float const length)
+static DGL::Rectangle<float> removeFromRight(DGL::Rectangle<float> r, float amount)
+{
+    float amountRemove = jmin(amount, r.getWidth());
+
+    return DGL::Rectangle<float>(
+        r.getX() + r.getWidth() - amountRemove,
+        r.getY(),
+        amountRemove,
+        r.getHeight()
+    );
+}
+
+static DGL::Rectangle<float> resizeCentered(DGL::Rectangle<float> r, float width, float height)
+{
+    return DGL::Rectangle<float>(
+        r.getX() + (r.getWidth() - width) / 2.0f,
+        r.getY() + (r.getHeight() - height) / 2.0f,
+        width,
+        height
+    );
+}
+
+static DGL::Rectangle<float> translateRectangle(DGL::Rectangle<float> r, float x, float y)
+{
+    return DGL::Rectangle<float>(
+        r.getX() + x,
+        r.getY() + y,
+        r.getWidth(),
+        r.getHeight()
+    );
+}
+
+static float valToPropOfLen(float const value, float const length)
 {
     return value / length;
 }
 
-
-/** Some utility functions taken from JUCE ISC code */
-
-/** Returns the smaller of two values. */
-template <typename Type>
-constexpr Type jmin (Type a, Type b) { return b < a ? b : a; }
-
-/** Returns the larger of two values. */
-template <typename Type>
-constexpr Type jmax (Type a, Type b) { return a < b ? b : a; }
-
-/** Returns the larger of three values. */
-template <typename Type>
-constexpr Type jmax (Type a, Type b, Type c) { return a < b ? (b < c ? c : b) : (a < c ? c : a); }
-
-/** Remaps a normalised value (between 0 and 1) to a target range.
-    This effectively returns (targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin)).
-*/
-template <typename Type>
-constexpr Type jmap (Type value0To1, Type targetRangeMin, Type targetRangeMax)
-{
-    return targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin);
-}
-
-/** Remaps a value from a source range to a target range. */
-template <typename Type>
-Type jmap (Type sourceValue, Type sourceRangeMin, Type sourceRangeMax, Type targetRangeMin, Type targetRangeMax)
-{
-    return targetRangeMin + ((targetRangeMax - targetRangeMin) * (sourceValue - sourceRangeMin)) / (sourceRangeMax - sourceRangeMin);
-}
-
-/** Converts an angle in degrees to radians. */
-template <typename FloatType>
-constexpr FloatType degreesToRadians (FloatType degrees) noexcept     { return degrees * (NVG_PI / FloatType (180)); }
-
-/** Converts an angle in radians to degrees. */
-template <typename FloatType>
-constexpr FloatType radiansToDegrees (FloatType radians) noexcept     { return radians * (FloatType (180) / NVG_PI); }
-
-
-inline float getColorBrightness(NVGcolor c)
+static float getColorBrightness(NVGcolor c)
 {
     float brightness = 0.0f;
 
