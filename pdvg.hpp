@@ -6,6 +6,7 @@
 #include "src/Bang.hpp"
 #include "src/Canvas.hpp"
 #include "src/Common.hpp"
+#include "src/Jutils.hpp"
 #include "src/Comment.hpp"
 #include "src/DragNum.hpp"
 #include "src/ExtraEventHandlers.hpp"
