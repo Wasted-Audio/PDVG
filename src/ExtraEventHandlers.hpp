@@ -315,6 +315,39 @@ private:
     DISTRHO_LEAK_DETECTOR(PDKnobEventHandler)
 };
 
+class PDPopmenuEventHandler
+{
+public:
+    class Callback
+    {
+    public:
+        virtual ~Callback() {}
+        virtual void popmenuClicked(SubWidget *widget, uint index) = 0;
+    };
+
+    explicit PDPopmenuEventHandler(SubWidget *self);
+    explicit PDPopmenuEventHandler(SubWidget *self, const PDPopmenuEventHandler &other);
+    PDPopmenuEventHandler &operator=(const PDPopmenuEventHandler &other);
+    ~PDPopmenuEventHandler();
+
+    uint getValue() const noexcept;
+
+    virtual bool setValue(int value, bool sendCallback = false) noexcept;
+
+    void setLength(int length) noexcept;
+    void setCallback(Callback *callback) noexcept;
+
+    bool mouseEvent(const Widget::MouseEvent &ev);
+    bool motionEvent(const Widget::MotionEvent &ev);
+
+protected:
+private:
+    struct PrivateData;
+    PrivateData *const pData;
+
+    DISTRHO_LEAK_DETECTOR(PDPopmenuEventHandler)
+};
+
 // --------------------------------------------------------------------------------------------------------------------
 
 END_NAMESPACE_DGL

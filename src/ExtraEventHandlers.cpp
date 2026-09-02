@@ -36,7 +36,6 @@ struct PDToggleEventHandler::PrivateData
           widget(w),
           callback(other->callback),
           isDown(other->isDown)
-
     {
     }
 
@@ -682,7 +681,6 @@ struct PDRadioEventHandler::PrivateData
 
     bool mouseEvent(const Widget::MouseEvent &ev)
     {
-
         if (ev.button != 1)
             return false;
 
@@ -1655,5 +1653,129 @@ bool PDKnobEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
     return pData->scrollEvent(ev);
 }
 // end knob
+// --------------------------------------------------------------------------------------------------------------------
+
+// begin popmenu
+struct PDPopmenuEventHandler::PrivateData
+{
+    PDPopmenuEventHandler *const self;
+    SubWidget *const widget;
+    PDPopmenuEventHandler::Callback *callback;
+
+    uint length;
+    uint value;
+
+    PrivateData(PDPopmenuEventHandler *const s, SubWidget *const w)
+        : self(s),
+          widget(w),
+          callback(nullptr),
+          length(0),
+          value(0)
+    {
+    }
+
+    PrivateData(PDPopmenuEventHandler *const s, SubWidget *const w, PrivateData *const other)
+        : self(s),
+          widget(w),
+          callback(other->callback),
+          length(other->length),
+          value(other->value)
+    {
+    }
+
+    void assignFrom(PrivateData *const other)
+    {
+        callback = other->callback;
+        length = other->length;
+        value = other->value;
+    }
+
+    bool mouseEvent(const Widget::MouseEvent &ev)
+    {
+        if (ev.button != 1)
+            return false;
+
+        PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
+        if (ev.press && pdWidget->contains(ev.pos))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool motionEvent(const Widget::MotionEvent &ev)
+    {
+        return false;
+    }
+
+    bool setValue(const uint value2, const bool sendCallback)
+    {
+        if (value != value2)
+        {
+            value = value2;
+            if (sendCallback && callback != nullptr)
+            {
+                try
+                {
+                    callback->popmenuClicked(widget, value);
+                }
+                DISTRHO_SAFE_EXCEPTION("PDPopmenuEventHandler::setValue");
+            }
+            return true;
+        }
+        return false;
+    }
+};
+
+// --------------------------------------------------------------------------------------------------------------------
+
+PDPopmenuEventHandler::PDPopmenuEventHandler(SubWidget *const self)
+    : pData(new PrivateData(this, self)) {}
+
+PDPopmenuEventHandler::PDPopmenuEventHandler(SubWidget *const self, const PDPopmenuEventHandler &other)
+    : pData(new PrivateData(this, self, other.pData)) {}
+
+PDPopmenuEventHandler &PDPopmenuEventHandler::operator=(const PDPopmenuEventHandler &other)
+{
+    pData->assignFrom(other.pData);
+    return *this;
+}
+
+PDPopmenuEventHandler::~PDPopmenuEventHandler()
+{
+    delete pData;
+}
+
+uint PDPopmenuEventHandler::getValue() const noexcept
+{
+    return pData->value;
+}
+
+bool PDPopmenuEventHandler::setValue(const int value, const bool sendCallback) noexcept
+{
+    return pData->setValue(static_cast<uint>(value), sendCallback);
+}
+
+void PDPopmenuEventHandler::setLength(int length) noexcept
+{
+    pData->length = length;
+}
+
+void PDPopmenuEventHandler::setCallback(Callback *const callback) noexcept
+{
+    pData->callback = callback;
+}
+
+bool PDPopmenuEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+{
+    return pData->mouseEvent(ev);
+}
+
+bool PDPopmenuEventHandler::motionEvent(const Widget::MotionEvent &ev)
+{
+    return pData->motionEvent(ev);
+}
+
+// end popmenu
 
 END_NAMESPACE_DGL

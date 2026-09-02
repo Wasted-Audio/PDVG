@@ -5,6 +5,7 @@
 
 #include "src/Bang.hpp"
 #include "src/Canvas.hpp"
+#include "src/Jutils.hpp"
 #include "src/Common.hpp"
 #include "src/Comment.hpp"
 #include "src/DragNum.hpp"
@@ -19,3 +20,4 @@
 #include "src/Slider.hpp"
 #include "src/Subpatch.hpp"
 #include "src/Knob.hpp"
+#include "src/Popmenu.hpp"
