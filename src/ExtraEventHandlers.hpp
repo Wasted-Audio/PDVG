@@ -202,6 +202,14 @@ public:
 
     void setDefault(float def) noexcept;
     void setRange(float min, float max) noexcept;
+
+    void setDragDecimal(int decimal) noexcept;
+    int getDragDecimal() const noexcept;
+
+    void setUsingLogScale(bool yesNo) noexcept;
+    bool isUsingLogScale() const noexcept;
+    void setLogarithmicHeight(double logHeight) noexcept;
+
     void setCallback(Callback *callback) noexcept;
 
     bool mouseEvent(const Widget::MouseEvent &ev);

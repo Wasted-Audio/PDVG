@@ -6,6 +6,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "NanoVG.hpp"
 #include "nanovg.h"
 
@@ -24,6 +25,7 @@ public:
     explicit PDDragNum(NanoSubWidget* parent, PDDragNumEventHandler::Callback* cb);
 
     void setColors(NVGcolor outlineColor, NVGcolor textColor);
+    void setBorder(Border border);
 
     bool onMouse(const MouseEvent &ev) override;
     bool onMotion(const MotionEvent &ev) override;
@@ -33,17 +35,18 @@ protected:
     void onNanoDisplay() override;
 
 private:
-    int decimalDrag = 0;
+    static constexpr int maxPrecision = 6;
     int hoveredDecimal = -1;
-    double dragValue = 0.0;
-    DGL::Rectangle<float> hoveredDecimalPosition;
-    std::string currentValue;
     Border border { 1, 5, 1, 5 };
     NVGcolor outlineColor;
     NVGcolor textColor;
     NanoVG::FontId fFontId;
+    std::vector<NVGglyphPosition> glyphs;
+    size_t decimalPointIndex = 0;
 
-    std::string formatNumber(float value);
+    std::string formatNumber(float value, int precision) const;
+    int getDecimalAtScreenPos(const Point<double>& pos) const;
+    void setHoveredDecimal(int decimal);
 
     DISTRHO_LEAK_DETECTOR(PDDragNum)
 };
