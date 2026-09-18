@@ -47,9 +47,9 @@
 
 ## Interactive Elements
 
-* Draggable Number (used by Number and Float) - WIP
-  * log mode+height
-  * hide trailing zeros
-  * hide decimal point if no decimals
-  * highlight mouse-over decimal
-  * edit selected decimal
+* ~~Draggable Number~~ (used by Number and Float)
+  * ~~log mode+height~~
+  * ~~hide trailing zeros~~
+  * ~~hide decimal point if no decimals~~
+  * ~~highlight mouse-over decimal~~
+  * ~~edit selected decimal~~

@@ -42,7 +42,6 @@ private:
     NVGcolor outEdgeColor;
     NVGcolor inEdgeColor;
     NVGcolor cornerColor;
-    LabelPos labelPos;
 
     ScopedPointer<PDDragNum> dragNum;
     ScopedPointer<PDLabel> label;

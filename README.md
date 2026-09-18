@@ -175,6 +175,8 @@ myNumber = PDNumber(mainPatch, this);
 ...
 myNumber->setRange(0.0f, 1000.0f);      // Set min/max range
 myNumber->setDefault(666.6f);           // Default value
+myNumber->setUsingLogScale(true);       // Optional - logarithmic dragging
+myNumber->setLogarithmicHeight(256);    // Optional - pixels to drag across the log range. Defaults to 256
 myNumber->setColors(                    // Configure colors
     <background_color>,
     <foreground_color>

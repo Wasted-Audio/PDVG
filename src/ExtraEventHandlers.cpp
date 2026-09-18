@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: ISC
 */
 
+#include <cmath>
+
 #include "SubWidget.hpp"
 
 #include "ExtraEventHandlers.hpp"
@@ -850,11 +852,6 @@ uint PDRadioEventHandler::getHover() const noexcept { return pData->hoverPos; }
 
 // begin draggable number
 
-enum DragMode {
-    Regular,
-    Integer,
-    Logarithmic
-};
 struct PDDragNumEventHandler::PrivateData
 {
     PDDragNumEventHandler *const self;
@@ -870,7 +867,9 @@ struct PDDragNumEventHandler::PrivateData
     bool usingLog;
     bool dragging;
     double startedY;
-    DragMode dragMode;
+    int decimalDrag;
+    double logarithmicHeight;
+    double lastLogarithmicDragPosition;
     uint lastClickTime;
     uint8_t lastMod;
 
@@ -879,7 +878,7 @@ struct PDDragNumEventHandler::PrivateData
           widget(w),
           callback(nullptr),
           minimum(0.0f),
-          maximum(1.0f),
+          maximum(0.0f),
           value(0.5f),
           valueDef(value),
           valueTmp(value),
@@ -887,7 +886,9 @@ struct PDDragNumEventHandler::PrivateData
           usingLog(false),
           dragging(false),
           startedY(0.0),
-          dragMode(Regular),
+          decimalDrag(0),
+          logarithmicHeight(256.0),
+          lastLogarithmicDragPosition(0.0),
           lastClickTime(0),
           lastMod(0)
     {
@@ -905,7 +906,9 @@ struct PDDragNumEventHandler::PrivateData
           valueAtDragStart(other->valueAtDragStart),
           usingLog(other->usingLog),
           dragging(false),
-          dragMode(other->dragMode),
+          decimalDrag(other->decimalDrag),
+          logarithmicHeight(other->logarithmicHeight),
+          lastLogarithmicDragPosition(0.0),
           lastClickTime(0),
           lastMod(0)
     {
@@ -921,7 +924,8 @@ struct PDDragNumEventHandler::PrivateData
         valueTmp = other->valueTmp;
         valueAtDragStart = other->valueAtDragStart;
         usingLog = other->usingLog;
-        dragMode = other->dragMode;
+        decimalDrag = other->decimalDrag;
+        logarithmicHeight = other->logarithmicHeight;
     }
 
     double limitValue(double v) const
@@ -939,7 +943,6 @@ struct PDDragNumEventHandler::PrivateData
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
         const double y = ev.pos.getY() - screen.getY();
-        // const float x = (float)(ev.pos.getX() - screen.getX());
 
         if (ev.press)
         {
@@ -959,6 +962,12 @@ struct PDDragNumEventHandler::PrivateData
             dragging = true;
             valueAtDragStart = value;
             startedY = y;
+            lastLogarithmicDragPosition = y;
+            lastMod = ev.mod;
+
+            // Log mode always drags the whole number
+            if (usingLog)
+                decimalDrag = 0;
 
             return true;
         }
@@ -973,15 +982,22 @@ struct PDDragNumEventHandler::PrivateData
         return false;
     }
 
+    // Shift drags one decimal finer, except in log mode which always drags the whole number
+    int getEffectiveDecimal() const noexcept
+    {
+        if (usingLog || decimalDrag < 0)
+            return decimalDrag;
+        return decimalDrag + ((lastMod & kModifierShift) ? 1 : 0);
+    }
+
     bool motionEvent(const Widget::MotionEvent &ev)
     {
-        if (!dragging)
+        if (!dragging || decimalDrag < 0)
             return false;
 
         PDWidget* pdWidget = dynamic_cast<PDWidget*>(widget);
         const Point<int> screen = pdWidget->getScreenPos();
         const double y = ev.pos.getY() - screen.getY();
-        const float divisor = (ev.mod & kModifierShift) ? 6.0f : 1.0f;
 
         if (ev.mod != lastMod)
         {
@@ -990,9 +1006,45 @@ struct PDDragNumEventHandler::PrivateData
             lastMod = ev.mod;
         }
 
-        float newValue = valueAtDragStart - (y - startedY) / divisor;
-        newValue = limitValue(newValue);
-        setValue(newValue, true);
+        double logMin = minimum;
+        double logMax = maximum;
+
+        if (usingLog)
+        {
+            if (d_isZero(logMin) && d_isZero(logMax))
+                logMax = 1.0;
+
+            if (logMax > 0.0)
+            {
+                if (logMin <= 0.0)
+                    logMin = 0.01 * logMax;
+            }
+            else if (logMin > 0.0)
+            {
+                logMax = 0.01 * logMin;
+            }
+        }
+
+        // A range with no positive bound (e.g. [-100, 0]) can't be scaled logarithmically, so drag it linearly
+        if (usingLog && logMin > 0.0 && logMax > 0.0)
+        {
+            const double dy = lastLogarithmicDragPosition - y;
+            const double k = std::exp(std::log(logMax / logMin) / std::max(logarithmicHeight, 10.0));
+            const double clamped = std::max(logMin, std::min(logMax, (double)value));
+
+            lastLogarithmicDragPosition = y;
+
+            setValue(limitValue(clamped * std::pow(k, dy)), true);
+
+            return true;
+        }
+
+        const int decimal = getEffectiveDecimal();
+        const double scale = std::pow(10.0, decimal);
+        const double newValue = valueAtDragStart - (y - startedY) * 0.7 / scale;
+
+        // round() for decimals, since float error would truncate e.g. 0.7f to 0.6
+        setValue(limitValue(decimal > 0 ? std::round(newValue * scale) / scale : std::trunc(newValue)), true);
 
         return true;
     }
@@ -1069,6 +1121,31 @@ void PDDragNumEventHandler::setRange(float min, float max) noexcept
 {
     pData->minimum = min;
     pData->maximum = max;
+}
+
+void PDDragNumEventHandler::setDragDecimal(const int decimal) noexcept
+{
+    pData->decimalDrag = decimal;
+}
+
+int PDDragNumEventHandler::getDragDecimal() const noexcept
+{
+    return pData->getEffectiveDecimal();
+}
+
+void PDDragNumEventHandler::setUsingLogScale(const bool yesNo) noexcept
+{
+    pData->usingLog = yesNo;
+}
+
+bool PDDragNumEventHandler::isUsingLogScale() const noexcept
+{
+    return pData->usingLog;
+}
+
+void PDDragNumEventHandler::setLogarithmicHeight(const double logHeight) noexcept
+{
+    pData->logarithmicHeight = logHeight;
 }
 
 void PDDragNumEventHandler::setCallback(Callback *const callback) noexcept
@@ -1158,13 +1235,11 @@ struct PDNumberEventHandler::PrivateData
 
     bool mouseEvent(const Widget::MouseEvent &ev)
     {
-        if (ev.button != 1)
-            return false;
+        return false;
     }
     bool motionEvent(const Widget::MotionEvent &ev)
     {
-        if (!dragging)
-            return false;
+        return false;
     }
     bool scrollEvent(const Widget::ScrollEvent &ev)
     {
