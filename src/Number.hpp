@@ -26,6 +26,8 @@ public:
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setRange(float min, float max);
     void setDefault(float def);
+    void setUsingLogScale(bool yesNo);
+    void setLogarithmicHeight(double logHeight);
     bool setValue(float value, bool sendCallback = false) noexcept override;
 
     void numberValueChanged(SubWidget *widget, float value) override;

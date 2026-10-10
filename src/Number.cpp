@@ -16,7 +16,11 @@ PDNumber::PDNumber(NanoSubWidget *parent, PDNumberEventHandler::Callback *const 
 {
     PDNumberEventHandler::setCallback(cb);
 
+    bgColor = Colors::bgColor;
+    fgColor = Colors::cnvTextColor;
+
     dragNum = new PDDragNum(this, this);
+    dragNum->setColors(Colors::outColor, fgColor);
 }
 
 void PDNumber::onNanoDisplay()
@@ -28,12 +32,9 @@ void PDNumber::onNanoDisplay()
 
     if (dragNum != nullptr)
     {
-        if ((uint)dragNum->getWidth() != getWidth() ||
-            (uint)dragNum->getHeight() != getHeight())
-        {
-            dragNum->setAbsolutePos(10.0f * scaleFactor, 1.0f * scaleFactor);
-            dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
-        }
+        dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
+        dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
+        dragNum->setBorder({ (int)(1.0f * scaleFactor), (int)(10.0f * scaleFactor), (int)(3.0f * scaleFactor), (int)(2.0f * scaleFactor) });
     }
 
     // WIP
@@ -110,7 +111,7 @@ void PDNumber::setColors(
     this->fgColor = fgColor;
 
     if (dragNum != nullptr)
-        dragNum->setColors(bgColor, fgColor);
+        dragNum->setColors(Colors::outColor, fgColor);
 }
 
 void PDNumber::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
@@ -132,6 +133,18 @@ void PDNumber::setDefault(float def) {
     if (dragNum != nullptr)
         dragNum->setDefault(def);
 
+}
+
+void PDNumber::setUsingLogScale(bool yesNo)
+{
+    if (dragNum != nullptr)
+        dragNum->setUsingLogScale(yesNo);
+}
+
+void PDNumber::setLogarithmicHeight(double logHeight)
+{
+    if (dragNum != nullptr)
+        dragNum->setLogarithmicHeight(logHeight);
 }
 
 bool PDNumber::setValue(float value, bool sendCallback) noexcept
