@@ -236,6 +236,7 @@ struct PDSliderEventHandler::PrivateData
     bool usingDefault;
     bool usingLog;
     bool steadyOnClick;
+    bool isInteger;
     bool dragging;
     bool inverted;
     bool valueIsSet;
@@ -260,6 +261,7 @@ struct PDSliderEventHandler::PrivateData
           usingDefault(false),
           usingLog(false),
           steadyOnClick(false),
+          isInteger(false),
           dragging(false),
           inverted(false),
           valueIsSet(false),
@@ -286,6 +288,7 @@ struct PDSliderEventHandler::PrivateData
           usingDefault(other->usingDefault),
           usingLog(other->usingLog),
           steadyOnClick(other->steadyOnClick),
+          isInteger(other->isInteger),
           startPos(other->startPos),
           endPos(other->endPos),
           dragging(false),
@@ -309,6 +312,7 @@ struct PDSliderEventHandler::PrivateData
         usingDefault = other->usingDefault;
         usingLog = other->usingLog;
         steadyOnClick = other->steadyOnClick;
+        isInteger = other->isInteger;
     }
 
     inline float logscale(const float v) const
@@ -496,10 +500,24 @@ struct PDSliderEventHandler::PrivateData
 
         minimum = min;
         maximum = max;
+
+        if (isInteger)
+            setValue(value, false);
     }
 
-    bool setValue(const float value2, const bool sendCallback)
+    bool setValue(float value2, const bool sendCallback)
     {
+        if (isInteger)
+        {
+            value2 = std::round(value2);
+            const float minInt = std::ceil(minimum);
+            const float maxInt = std::floor(maximum);
+            if (minInt <= maxInt)
+                value2 = clamp(value2, maxInt, minInt);
+            else
+                value2 = clamp(value2, maximum, minimum);
+        }
+
         if (d_isEqual(value, value2))
             return false;
 
@@ -525,6 +543,20 @@ struct PDSliderEventHandler::PrivateData
 
         inverted = inv;
         widget->repaint();
+    }
+
+    void setInteger(const bool yesNo) noexcept
+    {
+        if (isInteger == yesNo)
+            return;
+
+        isInteger = yesNo;
+
+        if (isInteger)
+        {
+            setValue(value, false);
+            valueDef = std::round(valueDef);
+        }
     }
 };
 
@@ -564,7 +596,7 @@ float PDSliderEventHandler::getNormalizedValue() const noexcept
 
 void PDSliderEventHandler::setDefault(const float def) noexcept
 {
-    pData->valueDef = def;
+    pData->valueDef = pData->isInteger ? std::round(def) : def;
     pData->usingDefault = true;
 }
 
@@ -587,6 +619,11 @@ void PDSliderEventHandler::setUsingLogScale(const bool yesNo) noexcept
 void PDSliderEventHandler::setSteadyOnClick(const bool yesNo) noexcept
 {
     pData->steadyOnClick = yesNo;
+}
+
+void PDSliderEventHandler::setInteger(const bool yesNo) noexcept
+{
+    pData->setInteger(yesNo);
 }
 
 void PDSliderEventHandler::setStartPos(const int x, const int y) noexcept

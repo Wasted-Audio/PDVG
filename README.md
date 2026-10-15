@@ -137,6 +137,7 @@ mySlider->setRange(0.0001f, 10.0f);                 // Set min/max range
 mySlider->setDefault(3.0f);                         // Default value
 mySlider->setUsingLogScale(true);                   // Enable log scale
 mySlider->setSteadyOnClick(true);                   // Enable steady-on-click behavior
+mySlider->setInteger(true);                         // Quantize slider to whole integers
 mySlider->setColors(                                // Configure colors
     <background_color>,
     <slider_color>

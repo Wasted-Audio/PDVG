@@ -83,7 +83,7 @@ inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border bord
     );
 }
 
-static DGL::Rectangle<float> removeFromRight(DGL::Rectangle<float> r, float amount)
+inline DGL::Rectangle<float> removeFromRight(DGL::Rectangle<float> r, float amount)
 {
     float amountRemove = jmin(amount, r.getWidth());
 
@@ -95,7 +95,7 @@ static DGL::Rectangle<float> removeFromRight(DGL::Rectangle<float> r, float amou
     );
 }
 
-static DGL::Rectangle<float> resizeCentered(DGL::Rectangle<float> r, float width, float height)
+inline DGL::Rectangle<float> resizeCentered(DGL::Rectangle<float> r, float width, float height)
 {
     return DGL::Rectangle<float>(
         r.getX() + (r.getWidth() - width) / 2.0f,
@@ -105,7 +105,7 @@ static DGL::Rectangle<float> resizeCentered(DGL::Rectangle<float> r, float width
     );
 }
 
-static DGL::Rectangle<float> translateRectangle(DGL::Rectangle<float> r, float x, float y)
+inline DGL::Rectangle<float> translateRectangle(DGL::Rectangle<float> r, float x, float y)
 {
     return DGL::Rectangle<float>(
         r.getX() + x,
@@ -115,12 +115,12 @@ static DGL::Rectangle<float> translateRectangle(DGL::Rectangle<float> r, float x
     );
 }
 
-static float valToPropOfLen(float const value, float const length)
+inline float valToPropOfLen(float const value, float const length)
 {
     return value / length;
 }
 
-static float getColorBrightness(NVGcolor c)
+inline float getColorBrightness(NVGcolor c)
 {
     float brightness = 0.0f;
 
