@@ -62,8 +62,12 @@ void PDBang::onNanoDisplay()
 
 bool PDBang::onMouse(const MouseEvent &ev)
 {
-    lastTick = d_gettime_ms();
-    return PDBangEventHandler::mouseEvent(ev);
+    const bool fired = PDBangEventHandler::mouseEvent(ev);
+
+    if (fired)
+        lastTick = d_gettime_ms();
+
+    return fired;
 }
 
 void PDBang::setColors(NVGcolor bgColor, NVGcolor fgColor) {
