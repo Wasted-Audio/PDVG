@@ -17,7 +17,13 @@ PDBang::PDBang(NanoSubWidget *const parent, PDBangEventHandler::Callback *const 
       PDBangEventHandler(this)
 {
     PDBangEventHandler::setCallback(cb);
-    getWindow().addIdleCallback(this);
+    hasIdleCallback = getWindow().addIdleCallback(this);
+}
+
+PDBang::~PDBang()
+{
+    if(hasIdleCallback)
+        getWindow().removeIdleCallback(this);
 }
 
 void PDBang::onNanoDisplay()
