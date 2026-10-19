@@ -718,6 +718,22 @@ struct PDRadioEventHandler::PrivateData
         hoverPos = other->hoverPos;
     }
 
+    // Get cell at position
+    uint cellAt(const double localX, const double localY) const noexcept
+    {
+        if (step == 0)
+            return 0;
+
+        const double along = horizontal ? localX : localY;
+        const double extent = horizontal ? widget->getWidth() : widget->getHeight();
+
+        if (extent <= 0.0)
+            return 0;
+
+        const double cell = along / extent * step;
+        return (uint) std::min(std::max(cell, 0.0), (double) (step - 1));
+    }
+
     bool mouseEvent(const Widget::MouseEvent &ev)
     {
 
@@ -728,14 +744,9 @@ struct PDRadioEventHandler::PrivateData
         {
             // Convert screen pos to local widget coords
             const Point<int> screen = widget->getScreenPos();
-            const double localX = ev.pos.getX() - screen.getX();
-            const double localY = ev.pos.getY() - screen.getY();
 
-            if (horizontal)
-                value = (float)localX/(float)widget->getWidth() * (float)step;
-            else
-                value = (float)localY/(float)widget->getHeight() * (float)step;
-            setValue(value, true);
+            setValue(cellAt(ev.pos.getX() - screen.getX(),
+                            ev.pos.getY() - screen.getY()), true);
 
             return true;
         }
@@ -745,24 +756,26 @@ struct PDRadioEventHandler::PrivateData
 
     bool motionEvent(const Widget::MotionEvent &ev)
     {
+        const bool wasHovered = hover;
+        const uint lastHoverPos = hoverPos;
+
         if (widget->contains(ev.pos))
         {
             // Convert screen pos to local widget coords
             const Point<int> screen = widget->getScreenPos();
-            const double localX = ev.pos.getX() - screen.getX();
-            const double localY = ev.pos.getY() - screen.getY();
 
             hover = true;
-            if (horizontal)
-                hoverPos = (float)localX/(float)widget->getWidth() * (float)step;
-            else
-                hoverPos = (float)localY/(float)widget->getHeight() * (float)step;
-
-            widget->repaint();
-        } else {
-            hover = false;
-            hoverPos = -1;
+            hoverPos = cellAt(ev.pos.getX() - screen.getX(),
+                              ev.pos.getY() - screen.getY());
         }
+        else
+        {
+            hover = false;
+            hoverPos = 0;
+        }
+
+        if (hover != wasHovered || hoverPos != lastHoverPos)
+            widget->repaint();
 
         return hover;
     }
