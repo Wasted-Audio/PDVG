@@ -122,20 +122,7 @@ inline float valToPropOfLen(float const value, float const length)
 
 inline float getColorBrightness(NVGcolor c)
 {
-    float brightness = 0.0f;
-
-    auto r = (int) c.r;
-    auto g = (int) c.g;
-    auto b = (int) c.b;
-
-    auto hi = jmax(r, g, b);
-
-    if (hi > 0)
-    {
-        brightness = (float) hi / 255.0f;
-    }
-
-    return brightness;
+    return jmax(c.r, c.g, c.b);
 }
 
 END_NAMESPACE_DISTRHO
