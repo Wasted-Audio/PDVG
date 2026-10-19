@@ -325,6 +325,9 @@ public:
     void setArc(float arcBegin, float arcEnd) noexcept;
     void setCallback(Callback *callback) noexcept;
 
+    float getArcBegin() const noexcept;
+    float getArcEnd() const noexcept;
+
     bool mouseEvent(const Widget::MouseEvent &ev);
     bool motionEvent(const Widget::MotionEvent &ev);
     bool scrollEvent(const Widget::ScrollEvent &ev);

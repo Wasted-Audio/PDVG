@@ -51,8 +51,8 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
     auto const lineThickness = std::max(bounds.getWidth() * 0.09f, 1.5f);
 
     auto const knobNormValue = getNormalizedValue();
-    auto startAngle = arcBegin - NVG_PI * 0.5f;
-    auto const endAngle = arcEnd - NVG_PI * 0.5f;
+    auto startAngle = getArcBegin() - NVG_PI * 0.5f;
+    auto const endAngle = getArcEnd() - NVG_PI * 0.5f;
 
     auto const angle = jmap<float>(knobNormValue, startAngle, endAngle);
     auto const center = jmap<double>(arcStart, startAngle, endAngle);
@@ -216,9 +216,8 @@ void PDKnob::setSteps(int steps) {
 
 void PDKnob::setAngular(int angRange, int angOffset) {
     angOffset -= angRange / 2;
-    this->arcBegin = degreesToRadians<float>(angOffset) + NVG_PI * 2.0;
-    this->arcEnd = degreesToRadians<float>(angRange + angOffset) + NVG_PI * 2.0;
-    this->setArc(arcBegin, arcEnd);
+    this->setArc(degreesToRadians<float>(angOffset) + NVG_PI * 2.0,
+                 degreesToRadians<float>(angRange + angOffset) + NVG_PI * 2.0);
 }
 
 void PDKnob::setArcStart(float arcStart) {

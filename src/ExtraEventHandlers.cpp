@@ -1521,11 +1521,14 @@ struct PDKnobEventHandler::PrivateData
                 const float dx = x - cx;
                 const float dy = y - cy;
 
-                float angle = std::atan2(dx, -dy);
-                while (angle < 0.0f || angle < arcBegin)
-                    angle += PI * 2.0f;
+                const float angle = std::atan2(dx, -dy);
 
-                const float vper = (angle - arcBegin) / (arcEnd - arcBegin);
+                constexpr float twoPi = PI * 2.0f;
+                float fromArcBegin = std::fmod(angle - arcBegin, twoPi);
+                if (fromArcBegin < 0.0f)
+                    fromArcBegin += twoPi;
+
+                const float vper = fromArcBegin / (arcEnd - arcBegin);
                 float linearValue = minimum + std::clamp(vper, 0.0f, 1.0f) * range;
 
                 float newValue;
@@ -1752,9 +1755,16 @@ void PDKnobEventHandler::setDiscrete(const bool yesNo) noexcept
 
 void PDKnobEventHandler::setArc(const float arcBegin, const float arcEnd) noexcept
 {
+    // Ensure the span is valid
+    DISTRHO_SAFE_ASSERT_RETURN(std::isfinite(arcBegin) && std::isfinite(arcEnd), );
+    DISTRHO_SAFE_ASSERT_RETURN(arcEnd > arcBegin, );
+
     pData->arcBegin = arcBegin;
     pData->arcEnd = arcEnd;
 }
+
+float PDKnobEventHandler::getArcBegin() const noexcept { return pData->arcBegin; }
+float PDKnobEventHandler::getArcEnd() const noexcept { return pData->arcEnd; }
 
 void PDKnobEventHandler::setCallback(Callback *const callback) noexcept
 {
