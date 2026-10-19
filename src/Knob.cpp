@@ -194,7 +194,7 @@ void PDKnob::setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor) {
     this->arcColor = arcColor;
 }
 
-void PDKnob::setLabelStyle(int x, int y, int size)
+void PDKnob::setLabelStyle(int x, int y, int size, LabelShow showLabel)
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
 
@@ -203,6 +203,7 @@ void PDKnob::setLabelStyle(int x, int y, int size)
     this->label->setColors(Colors::cnvTextColor);
     this->label->setAbsolutePos((x - 2 * scaleFactor), (y - 4 * scaleFactor));
     this->label->setSize(size, size);
+    this->showLabel = showLabel;
 }
 
 void PDKnob::setSteps(int steps) {
@@ -235,10 +236,6 @@ void PDKnob::setShowTicks(bool showTicks) {
 
 void PDKnob::setShowArc(bool showArc) {
     this->showArc = showArc;
-}
-
-void PDKnob::setShowLabel(LabelShow showLabel) {
-    this->showLabel = showLabel;
 }
 
 

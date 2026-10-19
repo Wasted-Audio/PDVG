@@ -28,7 +28,7 @@ public:
     explicit PDKnob(NanoSubWidget *parent, PDKnobEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor);
-    void setLabelStyle(int x, int y, int size);
+    void setLabelStyle(int x, int y, int size, LabelShow showLabel);
     void setSteps(int steps);
     void setAngular(int angRange, int angOffset);
     void setArcStart(float arcStart);
@@ -36,7 +36,6 @@ public:
     void setDrawSquare(bool drawSquare);
     void setShowTicks(bool showTicks);
     void setShowArc(bool showArc);
-    void setShowLabel(LabelShow showLabel);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
