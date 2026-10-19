@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: ISC
 */
 
+#include <algorithm>
+
 #include "nanovg.h"
 #include "extra/Time.hpp"
 

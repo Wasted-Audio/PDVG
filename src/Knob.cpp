@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: ISC
 */
 
+#include <algorithm>
+#include <cstdio>
+
 #include "nanovg.h"
 
 #include "Common.hpp"
@@ -54,7 +57,7 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
     auto const angle = jmap<float>(knobNormValue, startAngle, endAngle);
     auto const center = jmap<double>(arcStart, startAngle, endAngle);
 
-    startAngle = clamp(startAngle, endAngle + NVG_PI * 2.0f, endAngle - NVG_PI * 2.0f);
+    startAngle = std::clamp(startAngle, endAngle - NVG_PI * 2.0f, endAngle + NVG_PI * 2.0f);
 
     auto boundsCenterX = bounds.getX() + bounds.getWidth() / 2.0f;
     auto boundsCenterY = bounds.getY() + bounds.getHeight() / 2.0f;

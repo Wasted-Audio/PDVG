@@ -4,7 +4,9 @@
  * SPDX-License-Identifier: ISC
 */
 
+#include <algorithm>
 #include <cmath>
+#include <cstdio>
 
 #include "SubWidget.hpp"
 
@@ -511,9 +513,9 @@ struct PDSliderEventHandler::PrivateData
             const float minInt = std::ceil(minimum);
             const float maxInt = std::floor(maximum);
             if (minInt <= maxInt)
-                value2 = clamp(value2, maxInt, minInt);
+                value2 = std::clamp(value2, minInt, maxInt);
             else
-                value2 = clamp(value2, maximum, minimum);
+                value2 = std::clamp(value2, minimum, maximum);
         }
 
         if (d_isEqual(value, value2))
@@ -1444,7 +1446,7 @@ struct PDKnobEventHandler::PrivateData
 
         const float rest = std::fmod(newValue - minimum, scaledStep);
         newValue = newValue - rest + (rest > scaledStep / 2.0f ? scaledStep : 0.0f);
-        newValue = clamp(newValue, maximum, minimum);
+        newValue = std::clamp(newValue, minimum, maximum);
         return newValue;
     }
 
@@ -1506,7 +1508,7 @@ struct PDKnobEventHandler::PrivateData
                     angle += PI * 2.0f;
 
                 const float vper = (angle - arcBegin) / (arcEnd - arcBegin);
-                float linearValue = minimum + clamp(vper, 1.0f, 0.0f) * range;
+                float linearValue = minimum + std::clamp(vper, 0.0f, 1.0f) * range;
 
                 float newValue;
                 if (logMode == LogMode::LOG)

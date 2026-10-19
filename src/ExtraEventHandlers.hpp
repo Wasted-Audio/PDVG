@@ -12,11 +12,6 @@
 
 START_NAMESPACE_DGL
 
-inline float clamp(float x, float upper, float lower)
-{
-    return std::min(upper, std::max(x, lower));
-}
-
 // --------------------------------------------------------------------------------------------------------------------
 
 class PDToggleEventHandler
