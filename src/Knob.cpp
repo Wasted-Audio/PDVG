@@ -96,7 +96,8 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
     nvgLineCap(nvg, NVG_ROUND);
     nvgStroke(nvg);
 
-    drawTicks(nvg, bounds, startAngle, endAngle, lineThickness);
+    if (showTicks)
+        drawTicks(nvg, bounds, startAngle, endAngle, lineThickness);
 }
 
 void PDKnob::onNanoDisplay()
