@@ -27,7 +27,7 @@ public:
     explicit PDToggleEventHandler(PDWidget *self);
     explicit PDToggleEventHandler(PDWidget *self, const PDToggleEventHandler &other);
     PDToggleEventHandler &operator=(const PDToggleEventHandler &other);
-    ~PDToggleEventHandler();
+    virtual ~PDToggleEventHandler();
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
@@ -59,7 +59,7 @@ public:
     explicit PDBangEventHandler(PDWidget *self);
     explicit PDBangEventHandler(PDWidget *self, const PDBangEventHandler &other);
     PDBangEventHandler &operator=(const PDBangEventHandler &other);
-    ~PDBangEventHandler();
+    virtual ~PDBangEventHandler();
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
@@ -91,7 +91,7 @@ public:
     explicit PDSliderEventHandler(PDWidget *self);
     explicit PDSliderEventHandler(PDWidget *self, const PDSliderEventHandler &other);
     PDSliderEventHandler &operator=(const PDSliderEventHandler &other);
-    ~PDSliderEventHandler();
+    virtual ~PDSliderEventHandler();
 
     // returns raw value, is assumed to be scaled if using log
     float getValue() const noexcept;
@@ -146,7 +146,7 @@ public:
     explicit PDRadioEventHandler(PDWidget *self);
     explicit PDRadioEventHandler(PDWidget *self, const PDRadioEventHandler &other);
     PDRadioEventHandler &operator=(const PDRadioEventHandler &other);
-    ~PDRadioEventHandler();
+    virtual ~PDRadioEventHandler();
 
     uint getValue() const noexcept;
 
@@ -188,7 +188,7 @@ public:
     explicit PDDragNumEventHandler(PDWidget *self);
     explicit PDDragNumEventHandler(PDWidget *self, const PDDragNumEventHandler &other);
     PDDragNumEventHandler &operator=(const PDDragNumEventHandler &other);
-    ~PDDragNumEventHandler();
+    virtual ~PDDragNumEventHandler();
 
     float getValue() const noexcept;
     bool isDragging() noexcept;
@@ -236,7 +236,7 @@ public:
     explicit PDNumberEventHandler(PDWidget *self);
     explicit PDNumberEventHandler(PDWidget *self, const PDNumberEventHandler &other);
     PDNumberEventHandler &operator=(const PDNumberEventHandler &other);
-    ~PDNumberEventHandler();
+    virtual ~PDNumberEventHandler();
 
     float getValue() const noexcept;
 
@@ -279,7 +279,7 @@ public:
     explicit PDKnobEventHandler(PDWidget *self);
     explicit PDKnobEventHandler(PDWidget *self, const PDKnobEventHandler &other);
     PDKnobEventHandler &operator=(const PDKnobEventHandler &other);
-    ~PDKnobEventHandler();
+    virtual ~PDKnobEventHandler();
 
     // returns raw value, is assumed to be scaled if using log
     float getValue() const noexcept;
