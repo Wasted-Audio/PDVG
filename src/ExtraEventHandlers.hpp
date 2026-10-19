@@ -81,21 +81,6 @@ private:
 class PDSliderEventHandler
 {
 public:
-    enum Orientation
-    {
-        Horizontal,
-        Vertical
-    };
-
-    // NOTE hover not implemented yet
-    enum State
-    {
-        kSliderStateDefault = 0x0,
-        kSliderStateHover = 0x1,
-        kSliderStateDragging = 0x2,
-        kSliderStateDraggingHover = kSliderStateDragging | kSliderStateHover
-    };
-
     class Callback
     {
     public:
@@ -126,6 +111,9 @@ public:
     void setUsingLogScale(bool yesNo) noexcept;
     void setSteadyOnClick(bool yesNo) noexcept;
     void setInteger(bool yesNo = true) noexcept;
+
+    void setHorizontal() noexcept;
+    bool getHorizontal() const noexcept;
     void setStartPos(const int x, const int y) noexcept;
     void setEndPos(const int x, const int y) noexcept;
     void setCallback(Callback *callback) noexcept;
@@ -135,8 +123,6 @@ public:
     bool scrollEvent(const Widget::ScrollEvent &ev);
 
 protected:
-    // State getState() const noexcept;
-
 private:
     struct PrivateData;
     PrivateData *const pData;
@@ -277,15 +263,6 @@ private:
 class PDKnobEventHandler
 {
 public:
-    // NOTE hover not implemented yet
-    enum State
-    {
-        kKnobStateDefault = 0x0,
-        kKnobStateHover = 0x1,
-        kKnobStateDragging = 0x2,
-        kKnobStateDraggingHover = kKnobStateDragging | kKnobStateHover
-    };
-
     enum LogMode {
         LIN = 0,
         LOG = 1,
@@ -333,8 +310,6 @@ public:
     bool scrollEvent(const Widget::ScrollEvent &ev);
 
 protected:
-    // State getState() const noexcept;
-
 private:
     struct PrivateData;
     PrivateData *const pData;

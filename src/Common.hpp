@@ -83,38 +83,6 @@ inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border bord
     );
 }
 
-inline DGL::Rectangle<float> removeFromRight(DGL::Rectangle<float> r, float amount)
-{
-    float amountRemove = jmin(amount, r.getWidth());
-
-    return DGL::Rectangle<float>(
-        r.getX() + r.getWidth() - amountRemove,
-        r.getY(),
-        amountRemove,
-        r.getHeight()
-    );
-}
-
-inline DGL::Rectangle<float> resizeCentered(DGL::Rectangle<float> r, float width, float height)
-{
-    return DGL::Rectangle<float>(
-        r.getX() + (r.getWidth() - width) / 2.0f,
-        r.getY() + (r.getHeight() - height) / 2.0f,
-        width,
-        height
-    );
-}
-
-inline DGL::Rectangle<float> translateRectangle(DGL::Rectangle<float> r, float x, float y)
-{
-    return DGL::Rectangle<float>(
-        r.getX() + x,
-        r.getY() + y,
-        r.getWidth(),
-        r.getHeight()
-    );
-}
-
 inline float valToPropOfLen(float const value, float const length)
 {
     return value / length;

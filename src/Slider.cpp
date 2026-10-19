@@ -24,7 +24,7 @@ void PDSlider::onNanoDisplay()
     float norm = getNormalizedValue();
     float val;
 
-    if (isHorizontal)
+    if (getHorizontal())
         val = isInverted() ? (b.getWidth() - norm * b.getWidth()) : (norm * b.getWidth());
     else
         val = isInverted() ? (b.getHeight() - norm * b.getHeight()) : (norm * b.getHeight());
@@ -41,7 +41,7 @@ void PDSlider::onNanoDisplay()
     DGL::Rectangle<float> sB;
     auto const bR = reduceRectangle(b, 1.0f);
 
-    if (isHorizontal) {
+    if (getHorizontal()) {
         auto const pos = jmap(valToPropOfLen(val, b.getWidth()), 0.0f, 1.0f, bR.getX(), bR.getWidth() - thumbSize);
         sB.setX(pos);
         sB.setY(bR.getY());
@@ -67,8 +67,6 @@ bool PDSlider::onMotion(const MotionEvent &ev)
 {
     return PDSliderEventHandler::motionEvent(ev);
 }
-
-void PDSlider::setHorizontal() { isHorizontal = true; }
 
 void PDSlider::setColors(NVGcolor bgColor, NVGcolor sliderColor) {
     this->bgColor = bgColor;

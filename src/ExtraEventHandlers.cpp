@@ -6,7 +6,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstdio>
+
+#include "nanovg.h"
 
 #include "SubWidget.hpp"
 
@@ -15,8 +16,6 @@
 START_NAMESPACE_DGL
 
 // --------------------------------------------------------------------------------------------------------------------
-
-#define PI 3.14159265358979323846264338327f
 
 struct PDToggleEventHandler::PrivateData
 {
@@ -241,6 +240,7 @@ struct PDSliderEventHandler::PrivateData
     bool isInteger;
     bool dragging;
     bool inverted;
+    bool horizontal;
     bool valueIsSet;
     double startedX;
     double startedY;
@@ -266,6 +266,7 @@ struct PDSliderEventHandler::PrivateData
           isInteger(false),
           dragging(false),
           inverted(false),
+          horizontal(false),
           valueIsSet(false),
           startedX(0.0),
           startedY(0.0),
@@ -293,6 +294,7 @@ struct PDSliderEventHandler::PrivateData
           isInteger(other->isInteger),
           dragging(false),
           inverted(other->inverted),
+          horizontal(other->horizontal),
           valueIsSet(false),
           startedX(0.0),
           startedY(0.0),
@@ -317,6 +319,7 @@ struct PDSliderEventHandler::PrivateData
         usingLog = other->usingLog;
         steadyOnClick = other->steadyOnClick;
         isInteger = other->isInteger;
+        horizontal = other->horizontal;
     }
 
     inline float logscale(const float v) const
@@ -371,7 +374,7 @@ struct PDSliderEventHandler::PrivateData
             }
             else
             {
-                float vper = startPos.getY() == endPos.getY()
+                float vper = horizontal
                     ? (x - sliderArea.getX()) / sliderArea.getWidth()
                     : (y - sliderArea.getY()) / sliderArea.getHeight();
 
@@ -411,7 +414,6 @@ struct PDSliderEventHandler::PrivateData
         // Convert to local coords - same space as startedX/startedY
         const double x = ev.pos.getX() - screen.getX();
         const double y = ev.pos.getY() - screen.getY();
-        const bool horizontal = startPos.getY() == endPos.getY();
         const float divisor = (ev.mod & kModifierShift) ? 6.0f : 1.0f;
         const float range = maximum - minimum;
 
@@ -475,7 +477,6 @@ struct PDSliderEventHandler::PrivateData
 
     bool scrollEvent(const Widget::ScrollEvent &ev)
     {
-        printf("scroll event\n");
         return false;
     }
 
@@ -626,6 +627,16 @@ void PDSliderEventHandler::setSteadyOnClick(const bool yesNo) noexcept
 void PDSliderEventHandler::setInteger(const bool yesNo) noexcept
 {
     pData->setInteger(yesNo);
+}
+
+void PDSliderEventHandler::setHorizontal() noexcept
+{
+    pData->horizontal = true;
+}
+
+bool PDSliderEventHandler::getHorizontal() const noexcept
+{
+    return pData->horizontal;
 }
 
 void PDSliderEventHandler::setStartPos(const int x, const int y) noexcept
@@ -1523,7 +1534,7 @@ struct PDKnobEventHandler::PrivateData
 
                 const float angle = std::atan2(dx, -dy);
 
-                constexpr float twoPi = PI * 2.0f;
+                constexpr float twoPi = NVG_PI * 2.0f;
                 float fromArcBegin = std::fmod(angle - arcBegin, twoPi);
                 if (fromArcBegin < 0.0f)
                     fromArcBegin += twoPi;
@@ -1619,7 +1630,6 @@ struct PDKnobEventHandler::PrivateData
 
     bool scrollEvent(const Widget::ScrollEvent &ev)
     {
-        printf("scroll event\n");
         return false;
     }
 
