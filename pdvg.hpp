@@ -20,3 +20,4 @@
 #include "src/Slider.hpp"
 #include "src/Subpatch.hpp"
 #include "src/Knob.hpp"
+#include "src/Popmenu.hpp"
