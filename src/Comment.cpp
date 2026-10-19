@@ -39,7 +39,6 @@ std::vector<std::string> PDComment::buildLines(float widgetWidth)
 
 void PDComment::onNanoDisplay()
 {
-    NVGcontext* nvg = getContext();
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const float widgetWidth = getWidth();
 
@@ -64,7 +63,6 @@ void PDComment::onNanoDisplay()
     }
 
     closePath();
-    nvgResetScissor(nvg);
 }
 
 void PDComment::setText(std::string text) {
