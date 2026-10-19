@@ -43,6 +43,9 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
+    PDToggleEventHandler(PDToggleEventHandler& other) = delete;
+    PDToggleEventHandler(const PDToggleEventHandler& other) = delete;
+
     DISTRHO_LEAK_DETECTOR(PDToggleEventHandler)
 };
 
@@ -71,6 +74,9 @@ protected:
 private:
     struct PrivateData;
     PrivateData *const pData;
+
+    PDBangEventHandler(PDBangEventHandler& other) = delete;
+    PDBangEventHandler(const PDBangEventHandler& other) = delete;
 
     DISTRHO_LEAK_DETECTOR(PDBangEventHandler)
 };
@@ -138,6 +144,9 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
+    PDSliderEventHandler(PDSliderEventHandler& other) = delete;
+    PDSliderEventHandler(const PDSliderEventHandler& other) = delete;
+
     DISTRHO_LEAK_DETECTOR(PDSliderEventHandler)
 };
 
@@ -176,6 +185,9 @@ protected:
 private:
     struct PrivateData;
     PrivateData *const pData;
+
+    PDRadioEventHandler(PDRadioEventHandler& other) = delete;
+    PDRadioEventHandler(const PDRadioEventHandler& other) = delete;
 
     DISTRHO_LEAK_DETECTOR(PDRadioEventHandler)
 };
@@ -222,6 +234,9 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
+    PDDragNumEventHandler(PDDragNumEventHandler& other) = delete;
+    PDDragNumEventHandler(const PDDragNumEventHandler& other) = delete;
+
     DISTRHO_LEAK_DETECTOR(PDDragNumEventHandler)
 };
 
@@ -255,6 +270,9 @@ protected:
 private:
     struct PrivateData;
     PrivateData *const pData;
+
+    PDNumberEventHandler(PDNumberEventHandler& other) = delete;
+    PDNumberEventHandler(const PDNumberEventHandler& other) = delete;
 
     DISTRHO_LEAK_DETECTOR(PDNumberEventHandler)
 };
@@ -320,6 +338,9 @@ protected:
 private:
     struct PrivateData;
     PrivateData *const pData;
+
+    PDKnobEventHandler(PDKnobEventHandler& other) = delete;
+    PDKnobEventHandler(const PDKnobEventHandler& other) = delete;
 
     DISTRHO_LEAK_DETECTOR(PDKnobEventHandler)
 };
