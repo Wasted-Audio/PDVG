@@ -34,7 +34,7 @@ void PDNumber::onNanoDisplay()
     }
 
     // WIP
-    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
+    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
     float indent = 9.0f * scaleFactor;
     const DGL::Rectangle<float> iconBounds(

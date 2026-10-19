@@ -101,7 +101,7 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
 
 void PDKnob::onNanoDisplay()
 {
-    // const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
@@ -109,7 +109,7 @@ void PDKnob::onNanoDisplay()
     if (drawSquare) {
         auto const lineThickness = std::max(b.getWidth() * 0.03f, 1.0f);
 
-        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
+        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
         if (!showArc) {
             nvgBeginPath(nvg);
