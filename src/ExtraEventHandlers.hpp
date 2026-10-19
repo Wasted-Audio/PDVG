@@ -8,6 +8,8 @@
 
 #include "Widget.hpp"
 
+#include "PDWidget.hpp"
+
 START_NAMESPACE_DGL
 
 inline float clamp(float x, float upper, float lower)
@@ -27,8 +29,8 @@ public:
         virtual void switchClicked(SubWidget *widget, bool down) = 0;
     };
 
-    explicit PDToggleEventHandler(SubWidget *self);
-    explicit PDToggleEventHandler(SubWidget *self, const PDToggleEventHandler &other);
+    explicit PDToggleEventHandler(PDWidget *self);
+    explicit PDToggleEventHandler(PDWidget *self, const PDToggleEventHandler &other);
     PDToggleEventHandler &operator=(const PDToggleEventHandler &other);
     ~PDToggleEventHandler();
 
@@ -59,8 +61,8 @@ public:
         virtual void bangClicked(SubWidget *widget) = 0;
     };
 
-    explicit PDBangEventHandler(SubWidget *self);
-    explicit PDBangEventHandler(SubWidget *self, const PDBangEventHandler &other);
+    explicit PDBangEventHandler(PDWidget *self);
+    explicit PDBangEventHandler(PDWidget *self, const PDBangEventHandler &other);
     PDBangEventHandler &operator=(const PDBangEventHandler &other);
     ~PDBangEventHandler();
 
@@ -106,8 +108,8 @@ public:
         virtual void sliderValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDSliderEventHandler(SubWidget *self);
-    explicit PDSliderEventHandler(SubWidget *self, const PDSliderEventHandler &other);
+    explicit PDSliderEventHandler(PDWidget *self);
+    explicit PDSliderEventHandler(PDWidget *self, const PDSliderEventHandler &other);
     PDSliderEventHandler &operator=(const PDSliderEventHandler &other);
     ~PDSliderEventHandler();
 
@@ -160,8 +162,8 @@ public:
         virtual void radioValueChanged(SubWidget *widget, uint value) = 0;
     };
 
-    explicit PDRadioEventHandler(SubWidget *self);
-    explicit PDRadioEventHandler(SubWidget *self, const PDRadioEventHandler &other);
+    explicit PDRadioEventHandler(PDWidget *self);
+    explicit PDRadioEventHandler(PDWidget *self, const PDRadioEventHandler &other);
     PDRadioEventHandler &operator=(const PDRadioEventHandler &other);
     ~PDRadioEventHandler();
 
@@ -202,8 +204,8 @@ public:
         virtual void numberValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDDragNumEventHandler(SubWidget *self);
-    explicit PDDragNumEventHandler(SubWidget *self, const PDDragNumEventHandler &other);
+    explicit PDDragNumEventHandler(PDWidget *self);
+    explicit PDDragNumEventHandler(PDWidget *self, const PDDragNumEventHandler &other);
     PDDragNumEventHandler &operator=(const PDDragNumEventHandler &other);
     ~PDDragNumEventHandler();
 
@@ -250,8 +252,8 @@ public:
         virtual void numberValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDNumberEventHandler(SubWidget *self);
-    explicit PDNumberEventHandler(SubWidget *self, const PDNumberEventHandler &other);
+    explicit PDNumberEventHandler(PDWidget *self);
+    explicit PDNumberEventHandler(PDWidget *self, const PDNumberEventHandler &other);
     PDNumberEventHandler &operator=(const PDNumberEventHandler &other);
     ~PDNumberEventHandler();
 
@@ -302,8 +304,8 @@ public:
         virtual void knobValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDKnobEventHandler(SubWidget *self);
-    explicit PDKnobEventHandler(SubWidget *self, const PDKnobEventHandler &other);
+    explicit PDKnobEventHandler(PDWidget *self);
+    explicit PDKnobEventHandler(PDWidget *self, const PDKnobEventHandler &other);
     PDKnobEventHandler &operator=(const PDKnobEventHandler &other);
     ~PDKnobEventHandler();
 
