@@ -29,8 +29,8 @@ struct PDToggleEventHandler::PrivateData
     PrivateData(PDToggleEventHandler *const s, PDWidget *const w)
         : self(s),
           widget(w),
-          isDown(false),
-          callback(nullptr)
+          callback(nullptr),
+          isDown(false)
     {
     }
 
@@ -132,8 +132,8 @@ struct PDBangEventHandler::PrivateData
     PrivateData(PDBangEventHandler *const s, PDWidget *const w)
         : self(s),
           widget(w),
-          isDown(false),
-          callback(nullptr)
+          callback(nullptr),
+          isDown(false)
     {
     }
 
@@ -291,11 +291,13 @@ struct PDSliderEventHandler::PrivateData
           usingLog(other->usingLog),
           steadyOnClick(other->steadyOnClick),
           isInteger(other->isInteger),
-          startPos(other->startPos),
-          endPos(other->endPos),
           dragging(false),
           inverted(other->inverted),
           valueIsSet(false),
+          startedX(0.0),
+          startedY(0.0),
+          startPos(other->startPos),
+          endPos(other->endPos),
           sliderArea(other->sliderArea),
           lastClickTime(0),
           lastMod(0)
@@ -901,6 +903,7 @@ struct PDDragNumEventHandler::PrivateData
           valueAtDragStart(other->valueAtDragStart),
           usingLog(other->usingLog),
           dragging(false),
+          startedY(0.0),
           decimalDrag(other->decimalDrag),
           logarithmicHeight(other->logarithmicHeight),
           lastLogarithmicDragPosition(0.0),
@@ -1386,10 +1389,12 @@ struct PDKnobEventHandler::PrivateData
           expFact(other->expFact),
           jumpOnClick(other->jumpOnClick),
           discrete(other->discrete),
-          arcBegin(other->arcBegin),
-          arcEnd(other->arcEnd),
           dragging(false),
           valueIsSet(false),
+          startedX(0.0),
+          startedY(0.0),
+          arcBegin(other->arcBegin),
+          arcEnd(other->arcEnd),
           knobArea(other->knobArea),
           lastClickTime(0),
           lastMod(0)
