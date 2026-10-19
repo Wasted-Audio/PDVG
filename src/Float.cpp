@@ -21,18 +21,21 @@ PDFloat::PDFloat(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb
 
 void PDFloat::drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<float> sb, NVGcolor cornerColor)
 {
-    float width = sb.getHeight() * 0.4f;
-    float x = sb.getWidth() - width;
-    float right = b.getWidth() - 1.0f;
+    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+    const float width = sb.getHeight() * 0.4f;
+    const float radius = jmin(Corners::objectCornerRadius * scaleFactor, width);
+    const float top = b.getY();
+    const float right = b.getX() + b.getWidth();
 
+    // straight top edge, arc matching the object's rounded corner, straight right edge
     nvgBeginPath(nvg);
-    nvgMoveTo(nvg, x, b.getY());
-    nvgLineTo(nvg, right, sb.getY());
-    nvgLineTo(nvg, right, width);
-    nvgLineTo(nvg, x, sb.getY());
+    nvgMoveTo(nvg, right - width, top);
+    nvgLineTo(nvg, right - radius, top);
+    nvgArcTo(nvg, right, top, right, top + radius, radius);
+    nvgLineTo(nvg, right, top + width);
+    nvgClosePath(nvg);
     nvgFillColor(nvg, cornerColor);
     nvgFill(nvg);
-    nvgClosePath(nvg);
 }
 
 void PDFloat::onNanoDisplay()
