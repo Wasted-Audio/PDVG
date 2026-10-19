@@ -17,6 +17,7 @@ PDFloat::PDFloat(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb
     PDNumberEventHandler::setCallback(cb);
 
     dragNum = new PDDragNum(this, this);
+    dragNum->setColors(Colors::outColor, Colors::cnvTextColor);
 }
 
 void PDFloat::drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<float> sb, NVGcolor cornerColor)
