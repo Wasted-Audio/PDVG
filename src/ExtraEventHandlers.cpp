@@ -374,24 +374,11 @@ struct PDSliderEventHandler::PrivateData
             else
             {
                 // jump to the clicked position
-                float vper = startPos.getY() == endPos.getY()
+                const float vper = startPos.getY() == endPos.getY()
                     ? (x - sliderArea.getX()) / sliderArea.getWidth()
                     : (y - sliderArea.getY()) / sliderArea.getHeight();
 
-                float linearValue = inverted
-                    ? maximum - vper * (maximum - minimum)
-                    : minimum + vper * (maximum - minimum);
-
-                float newValue = usingLog
-                    ? logscale(linearValue)
-                    : linearValue;
-
-                if (newValue < minimum)
-                    newValue = minimum;
-                else if (newValue > maximum)
-                    newValue = maximum;
-
-                setValue(newValue, true);
+                setValue(normalizedToValue(vper), true);
             }
 
             // capture the drag baseline for both steady and jump scenarios
