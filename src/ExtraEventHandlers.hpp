@@ -294,7 +294,9 @@ public:
     void setDefault(float def) noexcept;
     void setKnobArea(const double x, const double y, const double w, const double h) noexcept;
     void setRange(float min, float max) noexcept;
-    void setStep(float step) noexcept;
+
+    void setStep(uint step) noexcept;
+    uint getStep() const noexcept;
     void setUsingLogScale(LogMode mode) noexcept;
     void setExpFactor(float expFact) noexcept;
     void setJumpOnClick(bool yesNo) noexcept;

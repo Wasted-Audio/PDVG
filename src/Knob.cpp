@@ -26,12 +26,16 @@ void PDKnob::drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float sta
     auto const centerY = pBounds.getY() + pBounds.getHeight() / 2.0f;
     auto const radius = pBounds.getWidth() * 0.5f * 1.05f;
 
+    const uint steps = getStep();
+    if (steps == 0)
+        return;
+
     // Calculate the angle between each tick
-    float const angleIncrement = (endAngle - startAngle) / static_cast<float>(std::max(steps - 1, 1));
+    float const angleIncrement = (endAngle - startAngle) / static_cast<float>(std::max(steps - 1u, 1u));
 
     // Position each tick around the larger circle
     float const tickRadius = tickWidth * 0.33f;
-    for (int i = 0; i < steps; ++i) {
+    for (uint i = 0; i < steps; ++i) {
         float const angle = startAngle + i * angleIncrement;
         float const x = centerX + radius * std::cos(angle);
         float const y = centerY + radius * std::sin(angle);
@@ -211,8 +215,7 @@ void PDKnob::setLabelStyle(int x, int y, int size, LabelShow showLabel)
 }
 
 void PDKnob::setSteps(int steps) {
-    this->steps = steps;
-    this->setStep(steps);
+    this->setStep(steps > 0 ? static_cast<uint>(steps) : 0u);
 }
 
 void PDKnob::setAngular(int angRange, int angOffset) {

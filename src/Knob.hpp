@@ -49,7 +49,6 @@ private:
     NVGcolor bgColor;
     NVGcolor fgColor;
     NVGcolor arcColor;
-    int steps = 0;
     float arcStart = 0.0f;
     bool circularDrag = false;
     bool drawSquare = true;

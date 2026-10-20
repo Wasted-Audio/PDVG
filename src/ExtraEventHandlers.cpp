@@ -1349,7 +1349,7 @@ struct PDKnobEventHandler::PrivateData
 
     float minimum;
     float maximum;
-    int step;
+    uint step;
     float value;
     float valueDef;
     float valueTmp;
@@ -1468,15 +1468,16 @@ struct PDKnobEventHandler::PrivateData
         return minimum + std::pow(t, 1.0f / expFact) * (maximum - minimum);
     }
 
-    inline float quantValue(int step, float newValue, float range, float minimum, float maximum) const
+    inline float quantValue(float newValue) const
     {
-        const int numSteps = std::round(range / step);
-        const float scaledStep = range / numSteps;
+        if (step < 2)
+            return std::clamp(newValue, minimum, maximum);
+
+        const float scaledStep = (maximum - minimum) / static_cast<float>(step - 1);
 
         const float rest = std::fmod(newValue - minimum, scaledStep);
         newValue = newValue - rest + (rest > scaledStep / 2.0f ? scaledStep : 0.0f);
-        newValue = std::clamp(newValue, minimum, maximum);
-        return newValue;
+        return std::clamp(newValue, minimum, maximum);
     }
 
     bool mouseEvent(const Widget::MouseEvent &ev)
@@ -1503,7 +1504,7 @@ struct PDKnobEventHandler::PrivateData
                 lastClickTime = 0;
 
                 if (step > 0 && discrete)
-                    valueDef = quantValue(step, valueDef, range, minimum, maximum);
+                    valueDef = quantValue(valueDef);
 
                 setValue(valueDef, true);
                 valueTmp = value;
@@ -1556,7 +1557,7 @@ struct PDKnobEventHandler::PrivateData
                     valueTmp = newValue = maximum;
                 else if (step > 0 && discrete)
                 {
-                    newValue = quantValue(step, newValue, range, minimum, maximum);
+                    newValue = quantValue(newValue);
                 }
 
                 setValue(newValue, true);
@@ -1620,7 +1621,7 @@ struct PDKnobEventHandler::PrivateData
 
         if (step > 0 && discrete)
         {
-            newValue = quantValue(step, newValue, range, minimum, maximum);
+            newValue = quantValue(newValue);
         }
 
         setValue(newValue, true);
@@ -1738,9 +1739,14 @@ void PDKnobEventHandler::setRange(const float min, const float max) noexcept
     pData->setRange(min, max);
 }
 
-void PDKnobEventHandler::setStep(const float step) noexcept
+void PDKnobEventHandler::setStep(const uint step) noexcept
 {
     pData->step = step;
+}
+
+uint PDKnobEventHandler::getStep() const noexcept
+{
+    return pData->step;
 }
 
 void PDKnobEventHandler::setUsingLogScale(const LogMode mode) noexcept
