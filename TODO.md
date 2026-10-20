@@ -24,7 +24,7 @@
   * ~~discrete~~
   * ~~ticks~~
   * ~~steps~~
-  * ~~circular~~
+  * circular
   * ~~jump~~
   * ~~square~~
   * ~~arc_start~~

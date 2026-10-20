@@ -1,0 +1,58 @@
+# Describes the style already in src/ rather than imposing a new one, so
+# running clang-format over the tree should be close to a no-op.
+Language: Cpp
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# Braces go on their own line, for functions and control statements alike --
+# except that an empty body stays as `{}` on the line it is already on.
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: true
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+# Lines are left where the author put them. Plenty already run well past 120
+# columns -- mostly drawRoundedRect calls that read better unwrapped than
+# folded across five lines.
+ColumnLimit: 0
+
+# `T* x` and `T& x` -- the star and ampersand belong to the type. The widgets
+# written here already lean this way; ExtraEventHandlers.* came from DPF and
+# writes `T *x`, so it is the file this will move. Pinned off explicitly
+# because per-file inference would silently override the choice.
+DerivePointerAlignment: false
+PointerAlignment: Left
+
+AccessModifierOffset: -4
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakTemplateDeclarations: Yes
+BreakConstructorInitializers: BeforeColon
+Cpp11BracedListStyle: false
+IndentCaseLabels: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+NamespaceIndentation: None
+PackConstructorInitializers: Never
+SpaceAfterCStyleCast: true
+
+# Include order is grouped by hand (standard headers, then DPF, then local).
+SortIncludes: false
+
+# Leave comments alone, including the license header block.
+ReflowComments: false

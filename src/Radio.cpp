@@ -28,20 +28,30 @@ void PDRadio::onNanoDisplay()
 
     auto isHorizontal = this->getHorizontal();
     bool isVertical = !isHorizontal;
-    auto const numItems = this->getStep();
+    auto const numItems = std::max(this->getStep(), 1u);
 
-    float const size = isVertical ? static_cast<float>(b.getHeight()) / numItems : static_cast<float>(b.getWidth()) / numItems;
+    float const size = (isVertical ? b.getHeight() : b.getWidth()) / numItems;
+    float const across = isVertical ? b.getWidth() : b.getHeight();
+
+    auto const cellRect = [isVertical, size, across](uint index)
+    {
+        return isVertical ? DGL::Rectangle<float>(0.0f, index * size, across, size)
+                          : DGL::Rectangle<float>(index * size, 0.0f, size, across);
+    };
+
+    float const inset = std::min<float>(std::min(size, across) * 0.25f, 5.0f) * scaleFactor;
+
     nvgStrokeColor(nvg, radioColor);
     nvgStrokeWidth(nvg, 1.0f * scaleFactor);
 
     nvgBeginPath(nvg);
-    for (int i = 1; i < int(numItems); i++) {
+    for (uint i = 1; i < numItems; i++) {
         if (isVertical) {
             nvgMoveTo(nvg, 1 * scaleFactor, i * size);
-            nvgLineTo(nvg, size - 0.5 * scaleFactor, i * size);
+            nvgLineTo(nvg, across - 0.5f * scaleFactor, i * size);
         } else {
             nvgMoveTo(nvg, i * size, 1 * scaleFactor);
-            nvgLineTo(nvg, i * size, size - 0.5 * scaleFactor);
+            nvgLineTo(nvg, i * size, across - 0.5f * scaleFactor);
         }
     }
     nvgStroke(nvg);
@@ -52,30 +62,11 @@ void PDRadio::onNanoDisplay()
         auto const brightness = getColorBrightness(bgColor) > 0.5f ? 0.03f : 0.05f;
         auto const hoverColor = interpolateColors(bgColor, nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF), brightness);
 
-        auto const hoverIdx = getHover();
-        float const hoverX = isVertical ? 0 : hoverIdx * size;
-        float const hoverY = isVertical ? hoverIdx * size : 0;
-        const DGL::Rectangle<float> hoverRect(
-            hoverX,
-            hoverY,
-            size,
-            size
-        );
-
-        auto const hoverBounds = reduceRectangle(hoverRect, jmin<float>(size * 0.25f, 5) * scaleFactor);
+        auto const hoverBounds = reduceRectangle(cellRect(getHover()), inset);
         drawRoundedRect(nvg, hoverBounds.getX(), hoverBounds.getY(), hoverBounds.getWidth(), hoverBounds.getHeight(), hoverColor, bgColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
     }
 
-    auto const selected = getValue();
-
-    const DGL::Rectangle<float> selection(
-        isVertical ? 0 : selected * size,
-        isVertical ? selected * size : 0,
-        size,
-        isVertical ? b.getWidth() : b.getHeight()
-    );
-
-    auto const selectBounds = reduceRectangle(selection, jmin<float>(size * 0.25f, 5) * scaleFactor);
+    auto const selectBounds = reduceRectangle(cellRect(getValue()), inset);
 
     drawRoundedRect(nvg, selectBounds.getX(), selectBounds.getY(), selectBounds.getWidth(), selectBounds.getHeight(), radioColor, radioColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
 }

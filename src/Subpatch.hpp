@@ -19,8 +19,6 @@ class PDSubpatch : public PDWidget
 public:
     explicit PDSubpatch(NanoSubWidget* parent);
 
-    void setSubpatches(std::vector<Rectangle<float>> subpatches);
-
     void addManagedChild(PDWidget* child)
     {
         managedChildren.push_back(child);

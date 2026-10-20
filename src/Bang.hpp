@@ -20,11 +20,12 @@ class PDBang : public PDWidget,
 {
 public:
     explicit PDBang(NanoSubWidget* parent, PDBangEventHandler::Callback* cb);
-
+    ~PDBang() override;
+    
     void setColors( NVGcolor bgColor, NVGcolor fgColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setInterval(uint32_t intervalMs);
-    void idleCallback();
+    void idleCallback() override;
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
@@ -37,6 +38,8 @@ private:
 
     uint32_t lastTick = 0;
     uint32_t intervalMs = 250;
+
+    bool hasIdleCallback = false;
 
     DISTRHO_LEAK_DETECTOR(PDBang)
 };

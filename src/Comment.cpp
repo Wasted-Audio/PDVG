@@ -15,8 +15,7 @@ START_NAMESPACE_DISTRHO
 PDComment::PDComment(NanoSubWidget* parent) : NanoWidget(parent)
 {
     using namespace InterRegular;
-    NanoVG::FontId interId = createFontFromMemory("inter", (const uchar *)InterRegularData, InterRegularDataSize, 0);
-    fFontId = interId;
+    fFontId = loadFont(*this, "inter", (const uchar *)InterRegularData, InterRegularDataSize);
 }
 
 std::vector<std::string> PDComment::buildLines(float widgetWidth)
@@ -39,7 +38,6 @@ std::vector<std::string> PDComment::buildLines(float widgetWidth)
 
 void PDComment::onNanoDisplay()
 {
-    NVGcontext* nvg = getContext();
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const float widgetWidth = getWidth();
 
@@ -64,7 +62,6 @@ void PDComment::onNanoDisplay()
     }
 
     closePath();
-    nvgResetScissor(nvg);
 }
 
 void PDComment::setText(std::string text) {
