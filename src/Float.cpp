@@ -10,7 +10,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDFloat::PDFloat(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb)
+PDFloat::PDFloat(NanoSubWidget* parent, PDNumberEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDNumberEventHandler(this)
 {
@@ -51,14 +51,17 @@ void PDFloat::onNanoDisplay()
     {
         dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
         dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
-        dragNum->setBorder({ (int)(1.0f * scaleFactor), (int)(2.0f * scaleFactor), (int)(1.0f * scaleFactor), (int)(2.0f * scaleFactor) });
+        dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (2.0f * scaleFactor), (int) (1.0f * scaleFactor), (int) (2.0f * scaleFactor) });
     }
 
-    if (isActive){
+    if (isActive)
+    {
         outEdgeColor = Colors::selColor;
         inEdgeColor = Colors::selColor;
         cornerColor = Colors::selColor;
-    } else {
+    }
+    else
+    {
         outEdgeColor = Colors::outColor;
         inEdgeColor = Colors::bgColor;
         cornerColor = Colors::ioColor;
@@ -70,7 +73,7 @@ void PDFloat::onNanoDisplay()
     drawFlag(nvg, b, sb, cornerColor);
 }
 
-bool PDFloat::onMouse(const MouseEvent &ev)
+bool PDFloat::onMouse(const MouseEvent& ev)
 {
     if (ev.press && ev.button == 1)
     {
@@ -95,14 +98,14 @@ bool PDFloat::onMouse(const MouseEvent &ev)
     return false;
 }
 
-bool PDFloat::onMotion(const MotionEvent &ev)
+bool PDFloat::onMotion(const MotionEvent& ev)
 {
     if (dragNum != nullptr)
         return dragNum->onMotion(ev);
     return false;
 }
 
-bool PDFloat::onKeyboard(const KeyboardEvent &ev)
+bool PDFloat::onKeyboard(const KeyboardEvent& ev)
 {
     if (dragNum != nullptr)
         return dragNum->onKeyboard(ev);
@@ -121,14 +124,14 @@ void PDFloat::setLabel(std::string text, int size, LabelPos labelPos)
     float x = 0.0f;
     float y = 0.0f;
 
-    switch(labelPos)
+    switch (labelPos)
     {
         case LabelPos::Left:
-            x = - (float) this->label->getWidth() - 2.0f * scaleFactor;
+            x = -(float) this->label->getWidth() - 2.0f * scaleFactor;
             y = (float) this->getHeight() / 2.0f - (float) this->label->getHeight() / 2.0f;
             break;
         case LabelPos::Top:
-            y = - (float) this->label->getHeight() - 2.0f * scaleFactor;
+            y = -(float) this->label->getHeight() - 2.0f * scaleFactor;
             break;
         case LabelPos::Right:
             x = (float) this->getWidth() + 2.0f * scaleFactor;
@@ -148,10 +151,10 @@ void PDFloat::setRange(float min, float max)
         dragNum->setRange(min, max);
 }
 
-void PDFloat::setDefault(float def) {
+void PDFloat::setDefault(float def)
+{
     if (dragNum != nullptr)
         dragNum->setDefault(def);
-
 }
 
 bool PDFloat::setValue(float value, bool sendCallback) noexcept
@@ -165,7 +168,7 @@ bool PDFloat::setValue(float value, bool sendCallback) noexcept
     return false;
 }
 
-void PDFloat::numberValueChanged(SubWidget *widget, float value)
+void PDFloat::numberValueChanged(SubWidget* widget, float value)
 {
     if (widget == dragNum)
     {

@@ -10,7 +10,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDNumber::PDNumber(NanoSubWidget *parent, PDNumberEventHandler::Callback *const cb)
+PDNumber::PDNumber(NanoSubWidget* parent, PDNumberEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDNumberEventHandler(this)
 {
@@ -30,7 +30,7 @@ void PDNumber::onNanoDisplay()
     {
         dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
         dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
-        dragNum->setBorder({ (int)(1.0f * scaleFactor), (int)(10.0f * scaleFactor), (int)(3.0f * scaleFactor), (int)(2.0f * scaleFactor) });
+        dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (10.0f * scaleFactor), (int) (3.0f * scaleFactor), (int) (2.0f * scaleFactor) });
     }
 
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
@@ -40,8 +40,7 @@ void PDNumber::onNanoDisplay()
         (b.getX() + 4.0f * scaleFactor),
         (b.getY() + 4.0f * scaleFactor),
         (indent - 4.0f * scaleFactor),
-        (b.getHeight() - 8.0f * scaleFactor)
-    );
+        (b.getHeight() - 8.0f * scaleFactor));
 
     auto const centreY = iconBounds.getY() + iconBounds.getHeight() / 2.0f;
     auto const leftX = iconBounds.getX();
@@ -58,7 +57,7 @@ void PDNumber::onNanoDisplay()
     nvgFill(nvg);
 }
 
-bool PDNumber::onMouse(const MouseEvent &ev)
+bool PDNumber::onMouse(const MouseEvent& ev)
 {
     if (ev.press && ev.button == 1)
     {
@@ -83,14 +82,14 @@ bool PDNumber::onMouse(const MouseEvent &ev)
     return false;
 }
 
-bool PDNumber::onMotion(const MotionEvent &ev)
+bool PDNumber::onMotion(const MotionEvent& ev)
 {
     if (dragNum != nullptr)
         return dragNum->onMotion(ev);
     return false;
 }
 
-bool PDNumber::onKeyboard(const KeyboardEvent &ev)
+bool PDNumber::onKeyboard(const KeyboardEvent& ev)
 {
     if (dragNum != nullptr)
         return dragNum->onKeyboard(ev);
@@ -99,8 +98,8 @@ bool PDNumber::onKeyboard(const KeyboardEvent &ev)
 
 void PDNumber::setColors(
     NVGcolor bgColor,
-    NVGcolor fgColor
-) {
+    NVGcolor fgColor)
+{
     this->bgColor = bgColor;
     this->fgColor = fgColor;
 
@@ -123,10 +122,10 @@ void PDNumber::setRange(float min, float max)
         dragNum->setRange(min, max);
 }
 
-void PDNumber::setDefault(float def) {
+void PDNumber::setDefault(float def)
+{
     if (dragNum != nullptr)
         dragNum->setDefault(def);
-
 }
 
 void PDNumber::setUsingLogScale(bool yesNo)
@@ -152,8 +151,7 @@ bool PDNumber::setValue(float value, bool sendCallback) noexcept
     return false;
 }
 
-
-void PDNumber::numberValueChanged(SubWidget *widget, float value)
+void PDNumber::numberValueChanged(SubWidget* widget, float value)
 {
     if (widget == dragNum)
     {

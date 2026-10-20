@@ -14,7 +14,6 @@ START_NAMESPACE_DISTRHO
 PDCanvas::PDCanvas(NanoSubWidget* parent)
     : NanoWidget(parent)
 {
-
 }
 
 void PDCanvas::onNanoDisplay()

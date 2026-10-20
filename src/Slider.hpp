@@ -15,17 +15,17 @@
 START_NAMESPACE_DISTRHO
 
 class PDSlider : public PDWidget,
-               public PDSliderEventHandler
+                 public PDSliderEventHandler
 {
 public:
-    explicit PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback* cb);
+    explicit PDSlider(NanoSubWidget* parent, PDSliderEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor sliderColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
 
 protected:
-    bool onMouse(const MouseEvent &ev) override;
-    bool onMotion(const MotionEvent &ev) override;
+    bool onMouse(const MouseEvent& ev) override;
+    bool onMotion(const MotionEvent& ev) override;
 
     void onNanoDisplay() override;
 

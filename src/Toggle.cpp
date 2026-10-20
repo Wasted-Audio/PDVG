@@ -12,7 +12,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDToggle::PDToggle(NanoSubWidget *const parent, PDToggleEventHandler::Callback *const cb)
+PDToggle::PDToggle(NanoSubWidget* const parent, PDToggleEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDToggleEventHandler(this)
 {
@@ -49,12 +49,13 @@ void PDToggle::onNanoDisplay()
     nvgStroke(nvg);
 }
 
-bool PDToggle::onMouse(const MouseEvent &ev)
+bool PDToggle::onMouse(const MouseEvent& ev)
 {
     return PDToggleEventHandler::mouseEvent(ev);
 }
 
-void PDToggle::setColors(NVGcolor bgColor, NVGcolor toggledColor) {
+void PDToggle::setColors(NVGcolor bgColor, NVGcolor toggledColor)
+{
     this->bgColor = bgColor;
     this->toggledColor = toggledColor;
 }

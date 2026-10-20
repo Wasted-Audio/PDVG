@@ -20,13 +20,13 @@ START_NAMESPACE_DGL
 
 struct PDToggleEventHandler::PrivateData
 {
-    PDToggleEventHandler *const self;
-    PDWidget *const widget;
-    PDToggleEventHandler::Callback *callback;
+    PDToggleEventHandler* const self;
+    PDWidget* const widget;
+    PDToggleEventHandler::Callback* callback;
 
     bool isDown;
 
-    PrivateData(PDToggleEventHandler *const s, PDWidget *const w)
+    PrivateData(PDToggleEventHandler* const s, PDWidget* const w)
         : self(s),
           widget(w),
           callback(nullptr),
@@ -34,7 +34,7 @@ struct PDToggleEventHandler::PrivateData
     {
     }
 
-    PrivateData(PDToggleEventHandler *const s, PDWidget *const w, PrivateData *const other)
+    PrivateData(PDToggleEventHandler* const s, PDWidget* const w, PrivateData* const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -43,13 +43,13 @@ struct PDToggleEventHandler::PrivateData
     {
     }
 
-    void assignFrom(PrivateData *const other)
+    void assignFrom(PrivateData* const other)
     {
         callback = other->callback;
         isDown = other->isDown;
     }
 
-    bool mouseEvent(const Widget::MouseEvent &ev)
+    bool mouseEvent(const Widget::MouseEvent& ev)
     {
         if (ev.press && widget->contains(ev.pos))
         {
@@ -80,13 +80,15 @@ struct PDToggleEventHandler::PrivateData
 
 // --------------------------------------------------------------------------------------------------------------------
 
-PDToggleEventHandler::PDToggleEventHandler(PDWidget *const self)
-    : pData(new PrivateData(this, self)) {}
+PDToggleEventHandler::PDToggleEventHandler(PDWidget* const self)
+    : pData(new PrivateData(this, self))
+{}
 
-PDToggleEventHandler::PDToggleEventHandler(PDWidget *const self, const PDToggleEventHandler &other)
-    : pData(new PrivateData(this, self, other.pData)) {}
+PDToggleEventHandler::PDToggleEventHandler(PDWidget* const self, const PDToggleEventHandler& other)
+    : pData(new PrivateData(this, self, other.pData))
+{}
 
-PDToggleEventHandler &PDToggleEventHandler::operator=(const PDToggleEventHandler &other)
+PDToggleEventHandler& PDToggleEventHandler::operator=(const PDToggleEventHandler& other)
 {
     pData->assignFrom(other.pData);
     return *this;
@@ -97,12 +99,12 @@ PDToggleEventHandler::~PDToggleEventHandler()
     delete pData;
 }
 
-void PDToggleEventHandler::setCallback(Callback *const callback) noexcept
+void PDToggleEventHandler::setCallback(Callback* const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool PDToggleEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDToggleEventHandler::mouseEvent(const Widget::MouseEvent& ev)
 {
     return pData->mouseEvent(ev);
 }
@@ -123,13 +125,13 @@ void PDToggleEventHandler::setDown(const bool down) noexcept
 
 struct PDBangEventHandler::PrivateData
 {
-    PDBangEventHandler *const self;
-    PDWidget *const widget;
-    PDBangEventHandler::Callback *callback;
+    PDBangEventHandler* const self;
+    PDWidget* const widget;
+    PDBangEventHandler::Callback* callback;
 
     bool isDown;
 
-    PrivateData(PDBangEventHandler *const s, PDWidget *const w)
+    PrivateData(PDBangEventHandler* const s, PDWidget* const w)
         : self(s),
           widget(w),
           callback(nullptr),
@@ -137,7 +139,7 @@ struct PDBangEventHandler::PrivateData
     {
     }
 
-    PrivateData(PDBangEventHandler *const s, PDWidget *const w, PrivateData *const other)
+    PrivateData(PDBangEventHandler* const s, PDWidget* const w, PrivateData* const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -146,13 +148,13 @@ struct PDBangEventHandler::PrivateData
     {
     }
 
-    void assignFrom(PrivateData *const other)
+    void assignFrom(PrivateData* const other)
     {
         callback = other->callback;
         isDown = other->isDown;
     }
 
-    bool mouseEvent(const Widget::MouseEvent &ev)
+    bool mouseEvent(const Widget::MouseEvent& ev)
     {
         if (ev.press && widget->contains(ev.pos))
         {
@@ -183,13 +185,15 @@ struct PDBangEventHandler::PrivateData
 
 // --------------------------------------------------------------------------------------------------------------------
 
-PDBangEventHandler::PDBangEventHandler(PDWidget *const self)
-    : pData(new PrivateData(this, self)) {}
+PDBangEventHandler::PDBangEventHandler(PDWidget* const self)
+    : pData(new PrivateData(this, self))
+{}
 
-PDBangEventHandler::PDBangEventHandler(PDWidget *const self, const PDBangEventHandler &other)
-    : pData(new PrivateData(this, self, other.pData)) {}
+PDBangEventHandler::PDBangEventHandler(PDWidget* const self, const PDBangEventHandler& other)
+    : pData(new PrivateData(this, self, other.pData))
+{}
 
-PDBangEventHandler &PDBangEventHandler::operator=(const PDBangEventHandler &other)
+PDBangEventHandler& PDBangEventHandler::operator=(const PDBangEventHandler& other)
 {
     pData->assignFrom(other.pData);
     return *this;
@@ -200,12 +204,12 @@ PDBangEventHandler::~PDBangEventHandler()
     delete pData;
 }
 
-void PDBangEventHandler::setCallback(Callback *const callback) noexcept
+void PDBangEventHandler::setCallback(Callback* const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool PDBangEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDBangEventHandler::mouseEvent(const Widget::MouseEvent& ev)
 {
     return pData->mouseEvent(ev);
 }
@@ -225,9 +229,9 @@ void PDBangEventHandler::setDown(const bool down) noexcept
 // begin slider
 struct PDSliderEventHandler::PrivateData
 {
-    PDSliderEventHandler *const self;
-    PDWidget *const widget;
-    PDSliderEventHandler::Callback *callback;
+    PDSliderEventHandler* const self;
+    PDWidget* const widget;
+    PDSliderEventHandler::Callback* callback;
 
     float minimum;
     float maximum;
@@ -250,7 +254,7 @@ struct PDSliderEventHandler::PrivateData
     uint lastClickTime;
     uint8_t lastMod;
 
-    PrivateData(PDSliderEventHandler *const s, PDWidget *const w)
+    PrivateData(PDSliderEventHandler* const s, PDWidget* const w)
         : self(s),
           widget(w),
           callback(nullptr),
@@ -277,7 +281,7 @@ struct PDSliderEventHandler::PrivateData
     {
     }
 
-    PrivateData(PDSliderEventHandler *const s, PDWidget *const w, PrivateData *const other)
+    PrivateData(PDSliderEventHandler* const s, PDWidget* const w, PrivateData* const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -304,7 +308,7 @@ struct PDSliderEventHandler::PrivateData
     {
     }
 
-    void assignFrom(PrivateData *const other)
+    void assignFrom(PrivateData* const other)
     {
         callback = other->callback;
         minimum = other->minimum;
@@ -342,7 +346,7 @@ struct PDSliderEventHandler::PrivateData
         return newValue;
     }
 
-    bool mouseEvent(const Widget::MouseEvent &ev)
+    bool mouseEvent(const Widget::MouseEvent& ev)
     {
         if (ev.button != 1)
             return false;
@@ -374,8 +378,8 @@ struct PDSliderEventHandler::PrivateData
             {
                 // jump to the clicked position
                 const float vper = startPos.getY() == endPos.getY()
-                    ? (x - sliderArea.getX()) / sliderArea.getWidth()
-                    : (y - sliderArea.getY()) / sliderArea.getHeight();
+                                       ? (x - sliderArea.getX()) / sliderArea.getWidth()
+                                       : (y - sliderArea.getY()) / sliderArea.getHeight();
 
                 setValue(normalizedToValue(vper), true);
             }
@@ -396,7 +400,7 @@ struct PDSliderEventHandler::PrivateData
         return false;
     }
 
-    bool motionEvent(const Widget::MotionEvent &ev)
+    bool motionEvent(const Widget::MotionEvent& ev)
     {
         if (!dragging)
             return false;
@@ -424,8 +428,8 @@ struct PDSliderEventHandler::PrivateData
         if (relative)
         {
             const float normalizedBase = usingLog
-                ? (invlogscale(valueAtDragStart) - minimum) / range
-                : (valueAtDragStart - minimum) / range;
+                                             ? (invlogscale(valueAtDragStart) - minimum) / range
+                                             : (valueAtDragStart - minimum) / range;
             screenBase = inverted ? 1.0f - normalizedBase : normalizedBase;
         }
 
@@ -433,8 +437,8 @@ struct PDSliderEventHandler::PrivateData
         if (relative)
         {
             const float normalizedDelta = horizontal
-                ? (x - startedX) / sliderArea.getWidth() / divisor
-                : (y - startedY) / sliderArea.getHeight() / divisor;
+                                              ? (x - startedX) / sliderArea.getWidth() / divisor
+                                              : (y - startedY) / sliderArea.getHeight() / divisor;
 
             setValue(normalizedToValue(screenBase + normalizedDelta), true);
         }
@@ -443,8 +447,8 @@ struct PDSliderEventHandler::PrivateData
             if ((horizontal && sliderArea.containsX(x)) || (!horizontal && sliderArea.containsY(y)))
             {
                 const float vper = horizontal
-                    ? (x - sliderArea.getX()) / sliderArea.getWidth()
-                    : (y - sliderArea.getY()) / sliderArea.getHeight();
+                                       ? (x - sliderArea.getX()) / sliderArea.getWidth()
+                                       : (y - sliderArea.getY()) / sliderArea.getHeight();
 
                 setValue(normalizedToValue(vper), true);
             }
@@ -453,7 +457,7 @@ struct PDSliderEventHandler::PrivateData
         return true;
     }
 
-    bool scrollEvent(const Widget::ScrollEvent &ev)
+    bool scrollEvent(const Widget::ScrollEvent& ev)
     {
         return false;
     }
@@ -543,13 +547,15 @@ struct PDSliderEventHandler::PrivateData
 
 // --------------------------------------------------------------------------------------------------------------------
 
-PDSliderEventHandler::PDSliderEventHandler(PDWidget *const self)
-    : pData(new PrivateData(this, self)) {}
+PDSliderEventHandler::PDSliderEventHandler(PDWidget* const self)
+    : pData(new PrivateData(this, self))
+{}
 
-PDSliderEventHandler::PDSliderEventHandler(PDWidget *const self, const PDSliderEventHandler &other)
-    : pData(new PrivateData(this, self, other.pData)) {}
+PDSliderEventHandler::PDSliderEventHandler(PDWidget* const self, const PDSliderEventHandler& other)
+    : pData(new PrivateData(this, self, other.pData))
+{}
 
-PDSliderEventHandler &PDSliderEventHandler::operator=(const PDSliderEventHandler &other)
+PDSliderEventHandler& PDSliderEventHandler::operator=(const PDSliderEventHandler& other)
 {
     pData->assignFrom(other.pData);
     return *this;
@@ -582,7 +588,7 @@ void PDSliderEventHandler::setDefault(const float def) noexcept
 }
 
 void PDSliderEventHandler::setSliderArea(const double x, const double y,
-                                       const double w, const double h) noexcept
+                                         const double w, const double h) noexcept
 {
     pData->sliderArea = DGL::Rectangle<double>(x, y, w, h);
 }
@@ -637,22 +643,22 @@ bool PDSliderEventHandler::isInverted() noexcept
     return pData->inverted;
 }
 
-void PDSliderEventHandler::setCallback(Callback *const callback) noexcept
+void PDSliderEventHandler::setCallback(Callback* const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool PDSliderEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDSliderEventHandler::mouseEvent(const Widget::MouseEvent& ev)
 {
     return pData->mouseEvent(ev);
 }
 
-bool PDSliderEventHandler::motionEvent(const Widget::MotionEvent &ev)
+bool PDSliderEventHandler::motionEvent(const Widget::MotionEvent& ev)
 {
     return pData->motionEvent(ev);
 }
 
-bool PDSliderEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
+bool PDSliderEventHandler::scrollEvent(const Widget::ScrollEvent& ev)
 {
     return pData->scrollEvent(ev);
 }
@@ -663,9 +669,9 @@ bool PDSliderEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
 
 struct PDRadioEventHandler::PrivateData
 {
-    PDRadioEventHandler *const self;
-    PDWidget *const widget;
-    PDRadioEventHandler::Callback *callback;
+    PDRadioEventHandler* const self;
+    PDWidget* const widget;
+    PDRadioEventHandler::Callback* callback;
 
     uint step;
     uint value;
@@ -673,7 +679,7 @@ struct PDRadioEventHandler::PrivateData
     bool hover;
     uint hoverPos;
 
-    PrivateData(PDRadioEventHandler *const s, PDWidget *const w)
+    PrivateData(PDRadioEventHandler* const s, PDWidget* const w)
         : self(s),
           widget(w),
           callback(nullptr),
@@ -685,7 +691,7 @@ struct PDRadioEventHandler::PrivateData
     {
     }
 
-    PrivateData(PDRadioEventHandler *const s, PDWidget *const w, PrivateData *const other)
+    PrivateData(PDRadioEventHandler* const s, PDWidget* const w, PrivateData* const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -697,7 +703,7 @@ struct PDRadioEventHandler::PrivateData
     {
     }
 
-    void assignFrom(PrivateData *const other)
+    void assignFrom(PrivateData* const other)
     {
         callback = other->callback;
         step = other->step;
@@ -723,9 +729,8 @@ struct PDRadioEventHandler::PrivateData
         return (uint) std::min(std::max(cell, 0.0), (double) (step - 1));
     }
 
-    bool mouseEvent(const Widget::MouseEvent &ev)
+    bool mouseEvent(const Widget::MouseEvent& ev)
     {
-
         if (ev.button != 1)
             return false;
 
@@ -735,7 +740,8 @@ struct PDRadioEventHandler::PrivateData
             const Point<int> screen = widget->getScreenPos();
 
             setValue(cellAt(ev.pos.getX() - screen.getX(),
-                            ev.pos.getY() - screen.getY()), true);
+                            ev.pos.getY() - screen.getY()),
+                     true);
 
             return true;
         }
@@ -743,7 +749,7 @@ struct PDRadioEventHandler::PrivateData
         return false;
     }
 
-    bool motionEvent(const Widget::MotionEvent &ev)
+    bool motionEvent(const Widget::MotionEvent& ev)
     {
         const bool wasHovered = hover;
         const uint lastHoverPos = hoverPos;
@@ -789,13 +795,15 @@ struct PDRadioEventHandler::PrivateData
 
 // --------------------------------------------------------------------------------------------------------------------
 
-PDRadioEventHandler::PDRadioEventHandler(PDWidget *const self)
-    : pData(new PrivateData(this, self)) {}
+PDRadioEventHandler::PDRadioEventHandler(PDWidget* const self)
+    : pData(new PrivateData(this, self))
+{}
 
-PDRadioEventHandler::PDRadioEventHandler(PDWidget *const self, const PDRadioEventHandler &other)
-    : pData(new PrivateData(this, self, other.pData)) {}
+PDRadioEventHandler::PDRadioEventHandler(PDWidget* const self, const PDRadioEventHandler& other)
+    : pData(new PrivateData(this, self, other.pData))
+{}
 
-PDRadioEventHandler &PDRadioEventHandler::operator=(const PDRadioEventHandler &other)
+PDRadioEventHandler& PDRadioEventHandler::operator=(const PDRadioEventHandler& other)
 {
     pData->assignFrom(other.pData);
     return *this;
@@ -826,17 +834,17 @@ void PDRadioEventHandler::setHorizontal() noexcept
     pData->horizontal = true;
 }
 
-void PDRadioEventHandler::setCallback(Callback *const callback) noexcept
+void PDRadioEventHandler::setCallback(Callback* const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool PDRadioEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDRadioEventHandler::mouseEvent(const Widget::MouseEvent& ev)
 {
     return pData->mouseEvent(ev);
 }
 
-bool PDRadioEventHandler::motionEvent(const Widget::MotionEvent &ev)
+bool PDRadioEventHandler::motionEvent(const Widget::MotionEvent& ev)
 {
     return pData->motionEvent(ev);
 }
@@ -853,9 +861,9 @@ uint PDRadioEventHandler::getHover() const noexcept { return pData->hoverPos; }
 
 struct PDDragNumEventHandler::PrivateData
 {
-    PDDragNumEventHandler *const self;
-    PDWidget *const widget;
-    PDDragNumEventHandler::Callback *callback;
+    PDDragNumEventHandler* const self;
+    PDWidget* const widget;
+    PDDragNumEventHandler::Callback* callback;
 
     float minimum;
     float maximum;
@@ -872,7 +880,7 @@ struct PDDragNumEventHandler::PrivateData
     uint lastClickTime;
     uint8_t lastMod;
 
-    PrivateData(PDDragNumEventHandler *const s, PDWidget *const w)
+    PrivateData(PDDragNumEventHandler* const s, PDWidget* const w)
         : self(s),
           widget(w),
           callback(nullptr),
@@ -893,7 +901,7 @@ struct PDDragNumEventHandler::PrivateData
     {
     }
 
-    PrivateData(PDDragNumEventHandler *const s, PDWidget *const w, PrivateData *const other)
+    PrivateData(PDDragNumEventHandler* const s, PDWidget* const w, PrivateData* const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -914,7 +922,7 @@ struct PDDragNumEventHandler::PrivateData
     {
     }
 
-    void assignFrom(PrivateData *const other)
+    void assignFrom(PrivateData* const other)
     {
         callback = other->callback;
         minimum = other->minimum;
@@ -932,10 +940,10 @@ struct PDDragNumEventHandler::PrivateData
     {
         if (minimum == 0.0f && maximum == 0.0f)
             return v;
-        return std::max((double)minimum, std::min((double)maximum, v));
+        return std::max((double) minimum, std::min((double) maximum, v));
     }
 
-    bool mouseEvent(const Widget::MouseEvent &ev)
+    bool mouseEvent(const Widget::MouseEvent& ev)
     {
         if (ev.button != 1)
             return false;
@@ -989,7 +997,7 @@ struct PDDragNumEventHandler::PrivateData
         return decimalDrag + ((lastMod & kModifierShift) ? 1 : 0);
     }
 
-    bool motionEvent(const Widget::MotionEvent &ev)
+    bool motionEvent(const Widget::MotionEvent& ev)
     {
         if (!dragging || decimalDrag < 0)
             return false;
@@ -1028,7 +1036,7 @@ struct PDDragNumEventHandler::PrivateData
         {
             const double dy = lastLogarithmicDragPosition - y;
             const double k = std::exp(std::log(logMax / logMin) / std::max(logarithmicHeight, 10.0));
-            const double clamped = std::max(logMin, std::min(logMax, (double)value));
+            const double clamped = std::max(logMin, std::min(logMax, (double) value));
 
             lastLogarithmicDragPosition = y;
 
@@ -1047,12 +1055,12 @@ struct PDDragNumEventHandler::PrivateData
         return true;
     }
 
-    bool scrollEvent(const Widget::ScrollEvent &ev)
+    bool scrollEvent(const Widget::ScrollEvent& ev)
     {
         return false;
     }
 
-    bool keyboardEvent(const Widget::KeyboardEvent &ev)
+    bool keyboardEvent(const Widget::KeyboardEvent& ev)
     {
         return false;
     }
@@ -1078,13 +1086,15 @@ struct PDDragNumEventHandler::PrivateData
     }
 };
 
-PDDragNumEventHandler::PDDragNumEventHandler(PDWidget *const self)
-    : pData(new PrivateData(this, self)) {}
+PDDragNumEventHandler::PDDragNumEventHandler(PDWidget* const self)
+    : pData(new PrivateData(this, self))
+{}
 
-PDDragNumEventHandler::PDDragNumEventHandler(PDWidget *const self, const PDDragNumEventHandler &other)
-    : pData(new PrivateData(this, self, other.pData)) {}
+PDDragNumEventHandler::PDDragNumEventHandler(PDWidget* const self, const PDDragNumEventHandler& other)
+    : pData(new PrivateData(this, self, other.pData))
+{}
 
-PDDragNumEventHandler &PDDragNumEventHandler::operator=(const PDDragNumEventHandler &other)
+PDDragNumEventHandler& PDDragNumEventHandler::operator=(const PDDragNumEventHandler& other)
 {
     pData->assignFrom(other.pData);
     return *this;
@@ -1146,27 +1156,27 @@ void PDDragNumEventHandler::setLogarithmicHeight(const double logHeight) noexcep
     pData->logarithmicHeight = logHeight;
 }
 
-void PDDragNumEventHandler::setCallback(Callback *const callback) noexcept
+void PDDragNumEventHandler::setCallback(Callback* const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool PDDragNumEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDDragNumEventHandler::mouseEvent(const Widget::MouseEvent& ev)
 {
     return pData->mouseEvent(ev);
 }
 
-bool PDDragNumEventHandler::motionEvent(const Widget::MotionEvent &ev)
+bool PDDragNumEventHandler::motionEvent(const Widget::MotionEvent& ev)
 {
     return pData->motionEvent(ev);
 }
 
-bool PDDragNumEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
+bool PDDragNumEventHandler::scrollEvent(const Widget::ScrollEvent& ev)
 {
     return pData->scrollEvent(ev);
 }
 
-bool PDDragNumEventHandler::keyboardEvent(const Widget::KeyboardEvent &ev)
+bool PDDragNumEventHandler::keyboardEvent(const Widget::KeyboardEvent& ev)
 {
     return pData->keyboardEvent(ev);
 }
@@ -1176,9 +1186,9 @@ bool PDDragNumEventHandler::keyboardEvent(const Widget::KeyboardEvent &ev)
 
 struct PDNumberEventHandler::PrivateData
 {
-    PDNumberEventHandler *const self;
-    PDWidget *const widget;
-    PDNumberEventHandler::Callback *callback;
+    PDNumberEventHandler* const self;
+    PDWidget* const widget;
+    PDNumberEventHandler::Callback* callback;
 
     float minimum;
     float maximum;
@@ -1189,7 +1199,7 @@ struct PDNumberEventHandler::PrivateData
     bool usingLog;
     bool dragging;
 
-    PrivateData(PDNumberEventHandler *const s, PDWidget *const w)
+    PrivateData(PDNumberEventHandler* const s, PDWidget* const w)
         : self(s),
           widget(w),
           callback(nullptr),
@@ -1204,7 +1214,7 @@ struct PDNumberEventHandler::PrivateData
     {
     }
 
-    PrivateData(PDNumberEventHandler *const s, PDWidget *const w, PrivateData *const other)
+    PrivateData(PDNumberEventHandler* const s, PDWidget* const w, PrivateData* const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -1219,7 +1229,7 @@ struct PDNumberEventHandler::PrivateData
     {
     }
 
-    void assignFrom(PrivateData *const other)
+    void assignFrom(PrivateData* const other)
     {
         callback = other->callback;
         minimum = other->minimum;
@@ -1231,15 +1241,15 @@ struct PDNumberEventHandler::PrivateData
         usingLog = other->usingLog;
     }
 
-    bool mouseEvent(const Widget::MouseEvent &ev)
+    bool mouseEvent(const Widget::MouseEvent& ev)
     {
         return false;
     }
-    bool motionEvent(const Widget::MotionEvent &ev)
+    bool motionEvent(const Widget::MotionEvent& ev)
     {
         return false;
     }
-    bool scrollEvent(const Widget::ScrollEvent &ev)
+    bool scrollEvent(const Widget::ScrollEvent& ev)
     {
         return false;
     }
@@ -1262,13 +1272,15 @@ struct PDNumberEventHandler::PrivateData
     }
 };
 
-PDNumberEventHandler::PDNumberEventHandler(PDWidget *const self)
-    : pData(new PrivateData(this, self)) {}
+PDNumberEventHandler::PDNumberEventHandler(PDWidget* const self)
+    : pData(new PrivateData(this, self))
+{}
 
-PDNumberEventHandler::PDNumberEventHandler(PDWidget *const self, const PDNumberEventHandler &other)
-    : pData(new PrivateData(this, self, other.pData)) {}
+PDNumberEventHandler::PDNumberEventHandler(PDWidget* const self, const PDNumberEventHandler& other)
+    : pData(new PrivateData(this, self, other.pData))
+{}
 
-PDNumberEventHandler &PDNumberEventHandler::operator=(const PDNumberEventHandler &other)
+PDNumberEventHandler& PDNumberEventHandler::operator=(const PDNumberEventHandler& other)
 {
     pData->assignFrom(other.pData);
     return *this;
@@ -1295,22 +1307,22 @@ void PDNumberEventHandler::setRange(float min, float max) noexcept
     pData->maximum = max;
 }
 
-void PDNumberEventHandler::setCallback(Callback *const callback) noexcept
+void PDNumberEventHandler::setCallback(Callback* const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool PDNumberEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDNumberEventHandler::mouseEvent(const Widget::MouseEvent& ev)
 {
     return pData->mouseEvent(ev);
 }
 
-bool PDNumberEventHandler::motionEvent(const Widget::MotionEvent &ev)
+bool PDNumberEventHandler::motionEvent(const Widget::MotionEvent& ev)
 {
     return pData->motionEvent(ev);
 }
 
-bool PDNumberEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
+bool PDNumberEventHandler::scrollEvent(const Widget::ScrollEvent& ev)
 {
     return pData->scrollEvent(ev);
 }
@@ -1321,9 +1333,9 @@ bool PDNumberEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
 // begin knob
 struct PDKnobEventHandler::PrivateData
 {
-    PDKnobEventHandler *const self;
-    PDWidget *const widget;
-    PDKnobEventHandler::Callback *callback;
+    PDKnobEventHandler* const self;
+    PDWidget* const widget;
+    PDKnobEventHandler::Callback* callback;
 
     float minimum;
     float maximum;
@@ -1347,7 +1359,7 @@ struct PDKnobEventHandler::PrivateData
     uint lastClickTime;
     uint8_t lastMod;
 
-    PrivateData(PDKnobEventHandler *const s, PDWidget *const w)
+    PrivateData(PDKnobEventHandler* const s, PDWidget* const w)
         : self(s),
           widget(w),
           callback(nullptr),
@@ -1375,7 +1387,7 @@ struct PDKnobEventHandler::PrivateData
     {
     }
 
-    PrivateData(PDKnobEventHandler *const s, PDWidget *const w, PrivateData *const other)
+    PrivateData(PDKnobEventHandler* const s, PDWidget* const w, PrivateData* const other)
         : self(s),
           widget(w),
           callback(other->callback),
@@ -1403,7 +1415,7 @@ struct PDKnobEventHandler::PrivateData
     {
     }
 
-    void assignFrom(PrivateData *const other)
+    void assignFrom(PrivateData* const other)
     {
         callback = other->callback;
         minimum = other->minimum;
@@ -1458,7 +1470,7 @@ struct PDKnobEventHandler::PrivateData
         return std::clamp(newValue, minimum, maximum);
     }
 
-    bool mouseEvent(const Widget::MouseEvent &ev)
+    bool mouseEvent(const Widget::MouseEvent& ev)
     {
         if (ev.button != 1)
             return false;
@@ -1551,7 +1563,7 @@ struct PDKnobEventHandler::PrivateData
         return false;
     }
 
-    bool motionEvent(const Widget::MotionEvent &ev)
+    bool motionEvent(const Widget::MotionEvent& ev)
     {
         if (!dragging)
             return false;
@@ -1607,7 +1619,7 @@ struct PDKnobEventHandler::PrivateData
         return true;
     }
 
-    bool scrollEvent(const Widget::ScrollEvent &ev)
+    bool scrollEvent(const Widget::ScrollEvent& ev)
     {
         return false;
     }
@@ -1668,13 +1680,15 @@ struct PDKnobEventHandler::PrivateData
 
 // --------------------------------------------------------------------------------------------------------------------
 
-PDKnobEventHandler::PDKnobEventHandler(PDWidget *const self)
-    : pData(new PrivateData(this, self)) {}
+PDKnobEventHandler::PDKnobEventHandler(PDWidget* const self)
+    : pData(new PrivateData(this, self))
+{}
 
-PDKnobEventHandler::PDKnobEventHandler(PDWidget *const self, const PDKnobEventHandler &other)
-    : pData(new PrivateData(this, self, other.pData)) {}
+PDKnobEventHandler::PDKnobEventHandler(PDWidget* const self, const PDKnobEventHandler& other)
+    : pData(new PrivateData(this, self, other.pData))
+{}
 
-PDKnobEventHandler &PDKnobEventHandler::operator=(const PDKnobEventHandler &other)
+PDKnobEventHandler& PDKnobEventHandler::operator=(const PDKnobEventHandler& other)
 {
     pData->assignFrom(other.pData);
     return *this;
@@ -1707,7 +1721,7 @@ void PDKnobEventHandler::setDefault(const float def) noexcept
 }
 
 void PDKnobEventHandler::setKnobArea(const double x, const double y,
-                                       const double w, const double h) noexcept
+                                     const double w, const double h) noexcept
 {
     pData->knobArea = DGL::Rectangle<double>(x, y, w, h);
 }
@@ -1760,22 +1774,22 @@ void PDKnobEventHandler::setArc(const float arcBegin, const float arcEnd) noexce
 float PDKnobEventHandler::getArcBegin() const noexcept { return pData->arcBegin; }
 float PDKnobEventHandler::getArcEnd() const noexcept { return pData->arcEnd; }
 
-void PDKnobEventHandler::setCallback(Callback *const callback) noexcept
+void PDKnobEventHandler::setCallback(Callback* const callback) noexcept
 {
     pData->callback = callback;
 }
 
-bool PDKnobEventHandler::mouseEvent(const Widget::MouseEvent &ev)
+bool PDKnobEventHandler::mouseEvent(const Widget::MouseEvent& ev)
 {
     return pData->mouseEvent(ev);
 }
 
-bool PDKnobEventHandler::motionEvent(const Widget::MotionEvent &ev)
+bool PDKnobEventHandler::motionEvent(const Widget::MotionEvent& ev)
 {
     return pData->motionEvent(ev);
 }
 
-bool PDKnobEventHandler::scrollEvent(const Widget::ScrollEvent &ev)
+bool PDKnobEventHandler::scrollEvent(const Widget::ScrollEvent& ev)
 {
     return pData->scrollEvent(ev);
 }

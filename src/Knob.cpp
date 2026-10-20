@@ -13,7 +13,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDKnob::PDKnob(NanoSubWidget *parent, PDKnobEventHandler::Callback *const cb)
+PDKnob::PDKnob(NanoSubWidget* parent, PDKnobEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDKnobEventHandler(this)
 {
@@ -35,7 +35,8 @@ void PDKnob::drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float sta
 
     // Position each tick around the larger circle
     float const tickRadius = tickWidth * 0.33f;
-    for (uint i = 0; i < steps; ++i) {
+    for (uint i = 0; i < steps; ++i)
+    {
         float const angle = startAngle + i * angleIncrement;
         float const x = centerX + radius * std::cos(angle);
         float const y = centerY + radius * std::sin(angle);
@@ -66,7 +67,8 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
     auto boundsCenterX = bounds.getX() + bounds.getWidth() / 2.0f;
     auto boundsCenterY = bounds.getY() + bounds.getHeight() / 2.0f;
 
-    if (showArc) {
+    if (showArc)
+    {
         auto const arcBounds = reduceRectangle(bounds, lineThickness);
         auto const arcRadius = arcBounds.getWidth() * 0.5;
         auto const arcWidth = (arcRadius - lineThickness) / arcRadius;
@@ -78,9 +80,12 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
         nvgStroke(nvg);
 
         nvgBeginPath(nvg);
-        if (center < angle) {
+        if (center < angle)
+        {
             nvgArc(nvg, boundsCenterX, boundsCenterY, arcRadius, center, angle, NVG_HOLE);
-        } else {
+        }
+        else
+        {
             nvgArc(nvg, boundsCenterX, boundsCenterY, arcRadius, angle, center, NVG_HOLE);
         }
         nvgStrokeColor(nvg, fgColor);
@@ -111,12 +116,14 @@ void PDKnob::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
-    if (drawSquare) {
+    if (drawSquare)
+    {
         auto const lineThickness = std::max(b.getWidth() * 0.03f, 1.0f);
 
         drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
-        if (!showArc) {
+        if (!showArc)
+        {
             nvgBeginPath(nvg);
             nvgStrokeWidth(nvg, lineThickness);
             nvgStrokeColor(nvg, arcColor);
@@ -125,7 +132,9 @@ void PDKnob::onNanoDisplay()
         }
 
         drawKnob(nvg, b);
-    } else {
+    }
+    else
+    {
         auto circleBounds = reduceRectangle(b, b.getWidth() * 0.13f);
         auto const lineThickness = std::max(circleBounds.getWidth() * 0.07f, 1.5f);
         circleBounds = reduceRectangle(circleBounds, lineThickness - 0.5f);
@@ -154,7 +163,6 @@ void PDKnob::onNanoDisplay()
         nvgRestore(nvg);
     }
 
-
     if (showLabel == ALWAYS || (showLabel == ACTIVE && isActive))
     {
         char buffer[32];
@@ -168,7 +176,7 @@ void PDKnob::onNanoDisplay()
     }
 }
 
-bool PDKnob::onMouse(const MouseEvent &ev)
+bool PDKnob::onMouse(const MouseEvent& ev)
 {
     if (ev.press && ev.button == 1)
     {
@@ -191,12 +199,13 @@ bool PDKnob::onMouse(const MouseEvent &ev)
     return PDKnobEventHandler::mouseEvent(ev);
 }
 
-bool PDKnob::onMotion(const MotionEvent &ev)
+bool PDKnob::onMotion(const MotionEvent& ev)
 {
     return PDKnobEventHandler::motionEvent(ev);
 }
 
-void PDKnob::setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor) {
+void PDKnob::setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor)
+{
     this->bgColor = bgColor;
     this->fgColor = fgColor;
     this->arcColor = arcColor;
@@ -214,35 +223,41 @@ void PDKnob::setLabelStyle(int x, int y, int size, LabelShow showLabel)
     this->showLabel = showLabel;
 }
 
-void PDKnob::setSteps(int steps) {
+void PDKnob::setSteps(int steps)
+{
     this->setStep(steps > 0 ? static_cast<uint>(steps) : 0u);
 }
 
-void PDKnob::setAngular(int angRange, int angOffset) {
+void PDKnob::setAngular(int angRange, int angOffset)
+{
     angOffset -= angRange / 2;
     this->setArc(degreesToRadians(angOffset) + NVG_PI * 2.0,
                  degreesToRadians(angRange + angOffset) + NVG_PI * 2.0);
 }
 
-void PDKnob::setArcStart(float arcStart) {
+void PDKnob::setArcStart(float arcStart)
+{
     this->arcStart = arcStart;
 }
 
-void PDKnob::setCircularDrag(bool circularDrag) {
+void PDKnob::setCircularDrag(bool circularDrag)
+{
     this->circularDrag = circularDrag;
 }
 
-void PDKnob::setDrawSquare(bool drawSquare) {
+void PDKnob::setDrawSquare(bool drawSquare)
+{
     this->drawSquare = drawSquare;
 }
 
-void PDKnob::setShowTicks(bool showTicks) {
+void PDKnob::setShowTicks(bool showTicks)
+{
     this->showTicks = showTicks;
 }
 
-void PDKnob::setShowArc(bool showArc) {
+void PDKnob::setShowArc(bool showArc)
+{
     this->showArc = showArc;
 }
-
 
 END_NAMESPACE_DISTRHO

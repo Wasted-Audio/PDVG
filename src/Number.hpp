@@ -30,12 +30,12 @@ public:
     void setLogarithmicHeight(double logHeight);
     bool setValue(float value, bool sendCallback = false) noexcept override;
 
-    void numberValueChanged(SubWidget *widget, float value) override;
+    void numberValueChanged(SubWidget* widget, float value) override;
 
 protected:
-    bool onMouse(const MouseEvent &ev) override;
-    bool onMotion(const MotionEvent &ev) override;
-    bool onKeyboard(const KeyboardEvent &ev) override;
+    bool onMouse(const MouseEvent& ev) override;
+    bool onMotion(const MotionEvent& ev) override;
+    bool onKeyboard(const KeyboardEvent& ev) override;
 
     void onNanoDisplay() override;
 
