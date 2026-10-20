@@ -369,13 +369,11 @@ struct PDSliderEventHandler::PrivateData
 
             if (steadyOnClick)
             {
-                // Don't jump - capture current value as the drag baseline
-                valueAtDragStart = value;
-                startedX = x;
-                startedY = y;
+                // Don't jump. value stays where it is
             }
             else
             {
+                // jump to the clicked position
                 float vper = startPos.getY() == endPos.getY()
                     ? (x - sliderArea.getX()) / sliderArea.getWidth()
                     : (y - sliderArea.getY()) / sliderArea.getHeight();
@@ -394,12 +392,13 @@ struct PDSliderEventHandler::PrivateData
                     newValue = maximum;
 
                 setValue(newValue, true);
-
-                // jump happened: the drag baseline is now the value we jumped to
-                valueAtDragStart = value;
-                startedX = x;
-                startedY = y;
             }
+
+            // capture the drag baseline for both steady and jump scenarios
+            valueAtDragStart = value;
+            startedX = x;
+            startedY = y;
+            lastMod = ev.mod;
 
             return true;
         }
