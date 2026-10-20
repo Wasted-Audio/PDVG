@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: ISC
 */
 
+#include <algorithm>
+#include <cstdio>
+
 #include "nanovg.h"
 
 #include "Common.hpp"
@@ -23,12 +26,16 @@ void PDKnob::drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float sta
     auto const centerY = pBounds.getY() + pBounds.getHeight() / 2.0f;
     auto const radius = pBounds.getWidth() * 0.5f * 1.05f;
 
+    const uint steps = getStep();
+    if (steps == 0)
+        return;
+
     // Calculate the angle between each tick
-    float const angleIncrement = (endAngle - startAngle) / static_cast<float>(jmax(steps - 1, 1));
+    float const angleIncrement = (endAngle - startAngle) / static_cast<float>(std::max(steps - 1u, 1u));
 
     // Position each tick around the larger circle
     float const tickRadius = tickWidth * 0.33f;
-    for (int i = 0; i < steps; ++i) {
+    for (uint i = 0; i < steps; ++i) {
         float const angle = startAngle + i * angleIncrement;
         float const x = centerX + radius * std::cos(angle);
         float const y = centerY + radius * std::sin(angle);
@@ -48,13 +55,13 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
     auto const lineThickness = std::max(bounds.getWidth() * 0.09f, 1.5f);
 
     auto const knobNormValue = getNormalizedValue();
-    auto startAngle = arcBegin - NVG_PI * 0.5f;
-    auto const endAngle = arcEnd - NVG_PI * 0.5f;
+    auto startAngle = getArcBegin() - NVG_PI * 0.5f;
+    auto const endAngle = getArcEnd() - NVG_PI * 0.5f;
 
-    auto const angle = jmap<float>(knobNormValue, startAngle, endAngle);
-    auto const center = jmap<double>(arcStart, startAngle, endAngle);
+    auto const angle = mapRange(knobNormValue, startAngle, endAngle);
+    auto const center = mapRange(arcStart, startAngle, endAngle);
 
-    startAngle = clamp(startAngle, endAngle + NVG_PI * 2.0f, endAngle - NVG_PI * 2.0f);
+    startAngle = std::clamp(startAngle, endAngle - NVG_PI * 2.0f, endAngle + NVG_PI * 2.0f);
 
     auto boundsCenterX = bounds.getX() + bounds.getWidth() / 2.0f;
     auto boundsCenterY = bounds.getY() + bounds.getHeight() / 2.0f;
@@ -93,12 +100,13 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
     nvgLineCap(nvg, NVG_ROUND);
     nvgStroke(nvg);
 
-    drawTicks(nvg, bounds, startAngle, endAngle, lineThickness);
+    if (showTicks)
+        drawTicks(nvg, bounds, startAngle, endAngle, lineThickness);
 }
 
 void PDKnob::onNanoDisplay()
 {
-    // const float scaleFactor = getTopLevelWidget()->getScaleFactor();
+    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
 
     NVGcontext* nvg = getContext();
@@ -106,7 +114,7 @@ void PDKnob::onNanoDisplay()
     if (drawSquare) {
         auto const lineThickness = std::max(b.getWidth() * 0.03f, 1.0f);
 
-        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius);
+        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
         if (!showArc) {
             nvgBeginPath(nvg);
@@ -194,7 +202,7 @@ void PDKnob::setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor) {
     this->arcColor = arcColor;
 }
 
-void PDKnob::setLabelStyle(int x, int y, int size)
+void PDKnob::setLabelStyle(int x, int y, int size, LabelShow showLabel)
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
 
@@ -203,18 +211,17 @@ void PDKnob::setLabelStyle(int x, int y, int size)
     this->label->setColors(Colors::cnvTextColor);
     this->label->setAbsolutePos((x - 2 * scaleFactor), (y - 4 * scaleFactor));
     this->label->setSize(size, size);
+    this->showLabel = showLabel;
 }
 
 void PDKnob::setSteps(int steps) {
-    this->steps = steps;
-    this->setStep(steps);
+    this->setStep(steps > 0 ? static_cast<uint>(steps) : 0u);
 }
 
 void PDKnob::setAngular(int angRange, int angOffset) {
     angOffset -= angRange / 2;
-    this->arcBegin = degreesToRadians<float>(angOffset) + NVG_PI * 2.0;
-    this->arcEnd = degreesToRadians<float>(angRange + angOffset) + NVG_PI * 2.0;
-    this->setArc(arcBegin, arcEnd);
+    this->setArc(degreesToRadians(angOffset) + NVG_PI * 2.0,
+                 degreesToRadians(angRange + angOffset) + NVG_PI * 2.0);
 }
 
 void PDKnob::setArcStart(float arcStart) {
@@ -235,10 +242,6 @@ void PDKnob::setShowTicks(bool showTicks) {
 
 void PDKnob::setShowArc(bool showArc) {
     this->showArc = showArc;
-}
-
-void PDKnob::setShowLabel(LabelShow showLabel) {
-    this->showLabel = showLabel;
 }
 
 

@@ -8,12 +8,9 @@
 
 #include "Widget.hpp"
 
-START_NAMESPACE_DGL
+#include "PDWidget.hpp"
 
-inline float clamp(float x, float upper, float lower)
-{
-    return std::min(upper, std::max(x, lower));
-}
+START_NAMESPACE_DGL
 
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -27,10 +24,10 @@ public:
         virtual void switchClicked(SubWidget *widget, bool down) = 0;
     };
 
-    explicit PDToggleEventHandler(SubWidget *self);
-    explicit PDToggleEventHandler(SubWidget *self, const PDToggleEventHandler &other);
+    explicit PDToggleEventHandler(PDWidget *self);
+    explicit PDToggleEventHandler(PDWidget *self, const PDToggleEventHandler &other);
     PDToggleEventHandler &operator=(const PDToggleEventHandler &other);
-    ~PDToggleEventHandler();
+    virtual ~PDToggleEventHandler();
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
@@ -42,6 +39,9 @@ protected:
 private:
     struct PrivateData;
     PrivateData *const pData;
+
+    PDToggleEventHandler(PDToggleEventHandler& other) = delete;
+    PDToggleEventHandler(const PDToggleEventHandler& other) = delete;
 
     DISTRHO_LEAK_DETECTOR(PDToggleEventHandler)
 };
@@ -56,10 +56,10 @@ public:
         virtual void bangClicked(SubWidget *widget) = 0;
     };
 
-    explicit PDBangEventHandler(SubWidget *self);
-    explicit PDBangEventHandler(SubWidget *self, const PDBangEventHandler &other);
+    explicit PDBangEventHandler(PDWidget *self);
+    explicit PDBangEventHandler(PDWidget *self, const PDBangEventHandler &other);
     PDBangEventHandler &operator=(const PDBangEventHandler &other);
-    ~PDBangEventHandler();
+    virtual ~PDBangEventHandler();
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
@@ -72,27 +72,15 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
+    PDBangEventHandler(PDBangEventHandler& other) = delete;
+    PDBangEventHandler(const PDBangEventHandler& other) = delete;
+
     DISTRHO_LEAK_DETECTOR(PDBangEventHandler)
 };
 
 class PDSliderEventHandler
 {
 public:
-    enum Orientation
-    {
-        Horizontal,
-        Vertical
-    };
-
-    // NOTE hover not implemented yet
-    enum State
-    {
-        kSliderStateDefault = 0x0,
-        kSliderStateHover = 0x1,
-        kSliderStateDragging = 0x2,
-        kSliderStateDraggingHover = kSliderStateDragging | kSliderStateHover
-    };
-
     class Callback
     {
     public:
@@ -100,10 +88,10 @@ public:
         virtual void sliderValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDSliderEventHandler(SubWidget *self);
-    explicit PDSliderEventHandler(SubWidget *self, const PDSliderEventHandler &other);
+    explicit PDSliderEventHandler(PDWidget *self);
+    explicit PDSliderEventHandler(PDWidget *self, const PDSliderEventHandler &other);
     PDSliderEventHandler &operator=(const PDSliderEventHandler &other);
-    ~PDSliderEventHandler();
+    virtual ~PDSliderEventHandler();
 
     // returns raw value, is assumed to be scaled if using log
     float getValue() const noexcept;
@@ -123,6 +111,9 @@ public:
     void setUsingLogScale(bool yesNo) noexcept;
     void setSteadyOnClick(bool yesNo) noexcept;
     void setInteger(bool yesNo = true) noexcept;
+
+    void setHorizontal() noexcept;
+    bool getHorizontal() const noexcept;
     void setStartPos(const int x, const int y) noexcept;
     void setEndPos(const int x, const int y) noexcept;
     void setCallback(Callback *callback) noexcept;
@@ -132,11 +123,12 @@ public:
     bool scrollEvent(const Widget::ScrollEvent &ev);
 
 protected:
-    // State getState() const noexcept;
-
 private:
     struct PrivateData;
     PrivateData *const pData;
+
+    PDSliderEventHandler(PDSliderEventHandler& other) = delete;
+    PDSliderEventHandler(const PDSliderEventHandler& other) = delete;
 
     DISTRHO_LEAK_DETECTOR(PDSliderEventHandler)
 };
@@ -151,10 +143,10 @@ public:
         virtual void radioValueChanged(SubWidget *widget, uint value) = 0;
     };
 
-    explicit PDRadioEventHandler(SubWidget *self);
-    explicit PDRadioEventHandler(SubWidget *self, const PDRadioEventHandler &other);
+    explicit PDRadioEventHandler(PDWidget *self);
+    explicit PDRadioEventHandler(PDWidget *self, const PDRadioEventHandler &other);
     PDRadioEventHandler &operator=(const PDRadioEventHandler &other);
-    ~PDRadioEventHandler();
+    virtual ~PDRadioEventHandler();
 
     uint getValue() const noexcept;
 
@@ -177,6 +169,9 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
+    PDRadioEventHandler(PDRadioEventHandler& other) = delete;
+    PDRadioEventHandler(const PDRadioEventHandler& other) = delete;
+
     DISTRHO_LEAK_DETECTOR(PDRadioEventHandler)
 };
 
@@ -190,10 +185,10 @@ public:
         virtual void numberValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDDragNumEventHandler(SubWidget *self);
-    explicit PDDragNumEventHandler(SubWidget *self, const PDDragNumEventHandler &other);
+    explicit PDDragNumEventHandler(PDWidget *self);
+    explicit PDDragNumEventHandler(PDWidget *self, const PDDragNumEventHandler &other);
     PDDragNumEventHandler &operator=(const PDDragNumEventHandler &other);
-    ~PDDragNumEventHandler();
+    virtual ~PDDragNumEventHandler();
 
     float getValue() const noexcept;
     bool isDragging() noexcept;
@@ -222,6 +217,9 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
+    PDDragNumEventHandler(PDDragNumEventHandler& other) = delete;
+    PDDragNumEventHandler(const PDDragNumEventHandler& other) = delete;
+
     DISTRHO_LEAK_DETECTOR(PDDragNumEventHandler)
 };
 
@@ -235,10 +233,10 @@ public:
         virtual void numberValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDNumberEventHandler(SubWidget *self);
-    explicit PDNumberEventHandler(SubWidget *self, const PDNumberEventHandler &other);
+    explicit PDNumberEventHandler(PDWidget *self);
+    explicit PDNumberEventHandler(PDWidget *self, const PDNumberEventHandler &other);
     PDNumberEventHandler &operator=(const PDNumberEventHandler &other);
-    ~PDNumberEventHandler();
+    virtual ~PDNumberEventHandler();
 
     float getValue() const noexcept;
 
@@ -256,21 +254,15 @@ private:
     struct PrivateData;
     PrivateData *const pData;
 
+    PDNumberEventHandler(PDNumberEventHandler& other) = delete;
+    PDNumberEventHandler(const PDNumberEventHandler& other) = delete;
+
     DISTRHO_LEAK_DETECTOR(PDNumberEventHandler)
 };
 
 class PDKnobEventHandler
 {
 public:
-    // NOTE hover not implemented yet
-    enum State
-    {
-        kKnobStateDefault = 0x0,
-        kKnobStateHover = 0x1,
-        kKnobStateDragging = 0x2,
-        kKnobStateDraggingHover = kKnobStateDragging | kKnobStateHover
-    };
-
     enum LogMode {
         LIN = 0,
         LOG = 1,
@@ -284,10 +276,10 @@ public:
         virtual void knobValueChanged(SubWidget *widget, float value) = 0;
     };
 
-    explicit PDKnobEventHandler(SubWidget *self);
-    explicit PDKnobEventHandler(SubWidget *self, const PDKnobEventHandler &other);
+    explicit PDKnobEventHandler(PDWidget *self);
+    explicit PDKnobEventHandler(PDWidget *self, const PDKnobEventHandler &other);
     PDKnobEventHandler &operator=(const PDKnobEventHandler &other);
-    ~PDKnobEventHandler();
+    virtual ~PDKnobEventHandler();
 
     // returns raw value, is assumed to be scaled if using log
     float getValue() const noexcept;
@@ -302,7 +294,9 @@ public:
     void setDefault(float def) noexcept;
     void setKnobArea(const double x, const double y, const double w, const double h) noexcept;
     void setRange(float min, float max) noexcept;
-    void setStep(float step) noexcept;
+
+    void setStep(uint step) noexcept;
+    uint getStep() const noexcept;
     void setUsingLogScale(LogMode mode) noexcept;
     void setExpFactor(float expFact) noexcept;
     void setJumpOnClick(bool yesNo) noexcept;
@@ -310,16 +304,20 @@ public:
     void setArc(float arcBegin, float arcEnd) noexcept;
     void setCallback(Callback *callback) noexcept;
 
+    float getArcBegin() const noexcept;
+    float getArcEnd() const noexcept;
+
     bool mouseEvent(const Widget::MouseEvent &ev);
     bool motionEvent(const Widget::MotionEvent &ev);
     bool scrollEvent(const Widget::ScrollEvent &ev);
 
 protected:
-    // State getState() const noexcept;
-
 private:
     struct PrivateData;
     PrivateData *const pData;
+
+    PDKnobEventHandler(PDKnobEventHandler& other) = delete;
+    PDKnobEventHandler(const PDKnobEventHandler& other) = delete;
 
     DISTRHO_LEAK_DETECTOR(PDKnobEventHandler)
 };

@@ -6,6 +6,7 @@
 #include "NanoVG.hpp"
 #include "nanovg.h"
 
+#include "Common.hpp"
 #include "Label.hpp"
 #include "Fonts/InterRegular.hpp"
 
@@ -14,8 +15,7 @@ START_NAMESPACE_DISTRHO
 PDLabel::PDLabel(NanoSubWidget* parent) : NanoWidget(parent)
 {
     using namespace InterRegular;
-    NanoVG::FontId interId = createFontFromMemory("inter", (const uchar *)InterRegularData, InterRegularDataSize, 0);
-    fFontId = interId;
+    fFontId = loadFont(*this, "inter", (const uchar *)InterRegularData, InterRegularDataSize);
 }
 
 void PDLabel::onNanoDisplay()

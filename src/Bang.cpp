@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: ISC
 */
 
+#include <algorithm>
+
 #include "nanovg.h"
 #include "extra/Time.hpp"
 
@@ -17,7 +19,13 @@ PDBang::PDBang(NanoSubWidget *const parent, PDBangEventHandler::Callback *const 
       PDBangEventHandler(this)
 {
     PDBangEventHandler::setCallback(cb);
-    getWindow().addIdleCallback(this);
+    hasIdleCallback = getWindow().addIdleCallback(this);
+}
+
+PDBang::~PDBang()
+{
+    if(hasIdleCallback)
+        getWindow().removeIdleCallback(this);
 }
 
 void PDBang::onNanoDisplay()
@@ -54,8 +62,12 @@ void PDBang::onNanoDisplay()
 
 bool PDBang::onMouse(const MouseEvent &ev)
 {
-    lastTick = d_gettime_ms();
-    return PDBangEventHandler::mouseEvent(ev);
+    const bool fired = PDBangEventHandler::mouseEvent(ev);
+
+    if (fired)
+        lastTick = d_gettime_ms();
+
+    return fired;
 }
 
 void PDBang::setColors(NVGcolor bgColor, NVGcolor fgColor) {

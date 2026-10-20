@@ -8,10 +8,21 @@
 #include <algorithm>
 #include <cstring>
 #include "nanovg.h"
+#include "NanoVG.hpp"
 #include "Widget.hpp"
-#include "Jutils.hpp"
 
 START_NAMESPACE_DISTRHO
+
+inline NanoVG::FontId loadFont(NanoVG& nvg, const char* const name, const uchar* const data, const uint dataSize)
+{
+    // First check if the font was already loaded
+    const NanoVG::FontId existing = nvg.findFont(name);
+
+    if (existing >= 0)
+        return existing;
+
+    return nvg.createFontFromMemory(name, data, dataSize, false);
+}
 
 struct Corners {
     static inline float objectCornerRadius = 2.75f;
@@ -83,59 +94,33 @@ inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border bord
     );
 }
 
-inline DGL::Rectangle<float> removeFromRight(DGL::Rectangle<float> r, float amount)
-{
-    float amountRemove = jmin(amount, r.getWidth());
-
-    return DGL::Rectangle<float>(
-        r.getX() + r.getWidth() - amountRemove,
-        r.getY(),
-        amountRemove,
-        r.getHeight()
-    );
-}
-
-inline DGL::Rectangle<float> resizeCentered(DGL::Rectangle<float> r, float width, float height)
-{
-    return DGL::Rectangle<float>(
-        r.getX() + (r.getWidth() - width) / 2.0f,
-        r.getY() + (r.getHeight() - height) / 2.0f,
-        width,
-        height
-    );
-}
-
-inline DGL::Rectangle<float> translateRectangle(DGL::Rectangle<float> r, float x, float y)
-{
-    return DGL::Rectangle<float>(
-        r.getX() + x,
-        r.getY() + y,
-        r.getWidth(),
-        r.getHeight()
-    );
-}
-
-inline float valToPropOfLen(float const value, float const length)
+inline float valToPropOfLen(float value, float length)
 {
     return value / length;
 }
 
 inline float getColorBrightness(NVGcolor c)
 {
-    float brightness = 0.0f;
-
-    auto r = (int) c.r;
-    auto g = (int) c.g;
-    auto b = (int) c.b;
-
-    auto hi = jmax(r, g, b);
-
-    if (hi > 0)
-    {
-        brightness = (float) hi / 255.0f;
-    }
-
-    return brightness;
+    return std::max({c.r, c.g, c.b});
 }
+
+// Remaps a normalised value (between 0 and 1) to a target range.
+inline float mapRange(float value0To1, float targetRangeMin, float targetRangeMax)
+{
+   return targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin);
+}
+
+// Remaps a value from a source range to a target range.
+inline float mapRange(float sourceValue, float sourceRangeMin, float sourceRangeMax, float targetRangeMin, float targetRangeMax)
+{
+   return targetRangeMin + ((targetRangeMax - targetRangeMin) * (sourceValue - sourceRangeMin)) / (sourceRangeMax - sourceRangeMin);
+}
+
+// Converts an angle in degrees to radians.
+inline float degreesToRadians (float degrees) noexcept
+{
+    return degrees * (NVG_PI / (float)180);
+}
+
 
 END_NAMESPACE_DISTRHO

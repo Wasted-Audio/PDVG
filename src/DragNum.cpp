@@ -23,8 +23,7 @@ PDDragNum::PDDragNum(NanoSubWidget *parent, PDDragNumEventHandler::Callback *con
 
     // Inter with fixed-width digits, so numbers don't shift while dragging
     using namespace InterTabular;
-    NanoVG::FontId interId = createFontFromMemory("inter-tabular", (const uchar *)InterTabularData, InterTabularDataSize, 0);
-    fFontId = interId;
+    fFontId = loadFont(*this, "inter-tabular", (const uchar *)InterTabularData, InterTabularDataSize);
 }
 
 std::string PDDragNum::formatNumber(float value, int precision) const
