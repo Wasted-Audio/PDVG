@@ -54,7 +54,6 @@ void PDFloat::onNanoDisplay()
         dragNum->setBorder({ (int)(1.0f * scaleFactor), (int)(2.0f * scaleFactor), (int)(1.0f * scaleFactor), (int)(2.0f * scaleFactor) });
     }
 
-    // WIP
     if (isActive){
         outEdgeColor = Colors::selColor;
         inEdgeColor = Colors::selColor;
@@ -69,7 +68,6 @@ void PDFloat::onNanoDisplay()
     drawRoundedRect(nvg, sb.getX(), sb.getY(), sb.getWidth(), sb.getHeight(), Colors::bgColor, inEdgeColor, Corners::objectCornerRadius * scaleFactor);
 
     drawFlag(nvg, b, sb, cornerColor);
-    // WIP
 }
 
 bool PDFloat::onMouse(const MouseEvent &ev)
