@@ -11,6 +11,7 @@
 
 #include "SubWidget.hpp"
 
+#include "Common.hpp"
 #include "ExtraEventHandlers.hpp"
 
 START_NAMESPACE_DGL
@@ -335,8 +336,7 @@ struct PDSliderEventHandler::PrivateData
     inline float normalizedToValue(float normalized) const
     {
         normalized = std::clamp(normalized, 0.0f, 1.0f);
-        const float linear = inverted ? maximum - normalized * (maximum - minimum)
-                                      : minimum + normalized * (maximum - minimum);
+        const float linear = mapRange(inverted ? 1.0f - normalized : normalized, minimum, maximum);
         const float newValue = usingLog ? logscale(linear) : linear;
 
         return newValue;
