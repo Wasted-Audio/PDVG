@@ -27,7 +27,7 @@ void PDKnob::drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float sta
     auto const radius = pBounds.getWidth() * 0.5f * 1.05f;
 
     // Calculate the angle between each tick
-    float const angleIncrement = (endAngle - startAngle) / static_cast<float>(jmax(steps - 1, 1));
+    float const angleIncrement = (endAngle - startAngle) / static_cast<float>(std::max(steps - 1, 1));
 
     // Position each tick around the larger circle
     float const tickRadius = tickWidth * 0.33f;
@@ -54,8 +54,8 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
     auto startAngle = getArcBegin() - NVG_PI * 0.5f;
     auto const endAngle = getArcEnd() - NVG_PI * 0.5f;
 
-    auto const angle = jmap<float>(knobNormValue, startAngle, endAngle);
-    auto const center = jmap<double>(arcStart, startAngle, endAngle);
+    auto const angle = mapRange(knobNormValue, startAngle, endAngle);
+    auto const center = mapRange(arcStart, startAngle, endAngle);
 
     startAngle = std::clamp(startAngle, endAngle - NVG_PI * 2.0f, endAngle + NVG_PI * 2.0f);
 
@@ -217,8 +217,8 @@ void PDKnob::setSteps(int steps) {
 
 void PDKnob::setAngular(int angRange, int angOffset) {
     angOffset -= angRange / 2;
-    this->setArc(degreesToRadians<float>(angOffset) + NVG_PI * 2.0,
-                 degreesToRadians<float>(angRange + angOffset) + NVG_PI * 2.0);
+    this->setArc(degreesToRadians(angOffset) + NVG_PI * 2.0,
+                 degreesToRadians(angRange + angOffset) + NVG_PI * 2.0);
 }
 
 void PDKnob::setArcStart(float arcStart) {

@@ -24,7 +24,7 @@ void PDFloat::drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
     const float width = sb.getHeight() * 0.4f;
-    const float radius = jmin(Corners::objectCornerRadius * scaleFactor, width);
+    const float radius = std::min(Corners::objectCornerRadius * scaleFactor, width);
     const float top = b.getY();
     const float right = b.getX() + b.getWidth();
 

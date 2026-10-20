@@ -9,7 +9,6 @@
 #include <cstring>
 #include "nanovg.h"
 #include "Widget.hpp"
-#include "Jutils.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -83,14 +82,33 @@ inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border bord
     );
 }
 
-inline float valToPropOfLen(float const value, float const length)
+inline float valToPropOfLen(float value, float length)
 {
     return value / length;
 }
 
 inline float getColorBrightness(NVGcolor c)
 {
-    return jmax(c.r, c.g, c.b);
+    return std::max({c.r, c.g, c.b});
 }
+
+// Remaps a normalised value (between 0 and 1) to a target range.
+inline float mapRange(float value0To1, float targetRangeMin, float targetRangeMax)
+{
+   return targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin);
+}
+
+// Remaps a value from a source range to a target range.
+inline float mapRange(float sourceValue, float sourceRangeMin, float sourceRangeMax, float targetRangeMin, float targetRangeMax)
+{
+   return targetRangeMin + ((targetRangeMax - targetRangeMin) * (sourceValue - sourceRangeMin)) / (sourceRangeMax - sourceRangeMin);
+}
+
+// Converts an angle in degrees to radians.
+inline float degreesToRadians (float degrees) noexcept
+{
+    return degrees * (NVG_PI / (float)180);
+}
+
 
 END_NAMESPACE_DISTRHO

@@ -43,14 +43,14 @@ void PDSlider::onNanoDisplay()
 
     if (getHorizontal()) {
         auto const prop = valToPropOfLen(val, b.getWidth());
-        sB.setX(jmap(prop, 0.0f, 1.0f, bR.getX(), bR.getX() + bR.getWidth() - thumbSize));
+        sB.setX(mapRange(prop, 0.0f, 1.0f, bR.getX(), bR.getX() + bR.getWidth() - thumbSize));
         sB.setY(bR.getY());
         sB.setWidth(thumbSize);
         sB.setHeight(bR.getHeight());
     } else {
         auto const prop = valToPropOfLen(val, b.getHeight());
         sB.setX(bR.getX());
-        sB.setY(jmap(prop, 0.0f, 1.0f, bR.getY(), bR.getY() + bR.getHeight() - thumbSize));
+        sB.setY(mapRange(prop, 0.0f, 1.0f, bR.getY(), bR.getY() + bR.getHeight() - thumbSize));
         sB.setWidth(bR.getWidth());
         sB.setHeight(thumbSize);
     }

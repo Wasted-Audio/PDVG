@@ -28,7 +28,7 @@ void PDRadio::onNanoDisplay()
 
     auto isHorizontal = this->getHorizontal();
     bool isVertical = !isHorizontal;
-    auto const numItems = jmax(this->getStep(), 1u);
+    auto const numItems = std::max(this->getStep(), 1u);
 
     float const size = (isVertical ? b.getHeight() : b.getWidth()) / numItems;
     float const across = isVertical ? b.getWidth() : b.getHeight();
@@ -39,7 +39,7 @@ void PDRadio::onNanoDisplay()
                           : DGL::Rectangle<float>(index * size, 0.0f, size, across);
     };
 
-    float const inset = jmin<float>(jmin(size, across) * 0.25f, 5.0f) * scaleFactor;
+    float const inset = std::min<float>(std::min(size, across) * 0.25f, 5.0f) * scaleFactor;
 
     nvgStrokeColor(nvg, radioColor);
     nvgStrokeWidth(nvg, 1.0f * scaleFactor);
