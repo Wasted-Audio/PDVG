@@ -15,8 +15,7 @@ START_NAMESPACE_DISTRHO
 PDComment::PDComment(NanoSubWidget* parent) : NanoWidget(parent)
 {
     using namespace InterRegular;
-    NanoVG::FontId interId = createFontFromMemory("inter", (const uchar *)InterRegularData, InterRegularDataSize, 0);
-    fFontId = interId;
+    fFontId = loadFont(*this, "inter", (const uchar *)InterRegularData, InterRegularDataSize);
 }
 
 std::vector<std::string> PDComment::buildLines(float widgetWidth)

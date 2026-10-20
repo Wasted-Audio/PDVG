@@ -8,9 +8,21 @@
 #include <algorithm>
 #include <cstring>
 #include "nanovg.h"
+#include "NanoVG.hpp"
 #include "Widget.hpp"
 
 START_NAMESPACE_DISTRHO
+
+inline NanoVG::FontId loadFont(NanoVG& nvg, const char* const name, const uchar* const data, const uint dataSize)
+{
+    // First check if the font was already loaded
+    const NanoVG::FontId existing = nvg.findFont(name);
+
+    if (existing >= 0)
+        return existing;
+
+    return nvg.createFontFromMemory(name, data, dataSize, false);
+}
 
 struct Corners {
     static inline float objectCornerRadius = 2.75f;
