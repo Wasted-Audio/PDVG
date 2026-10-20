@@ -33,7 +33,6 @@ void PDNumber::onNanoDisplay()
         dragNum->setBorder({ (int)(1.0f * scaleFactor), (int)(10.0f * scaleFactor), (int)(3.0f * scaleFactor), (int)(2.0f * scaleFactor) });
     }
 
-    // WIP
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
 
     float indent = 9.0f * scaleFactor;
@@ -57,7 +56,6 @@ void PDNumber::onNanoDisplay()
     else
         nvgFillColor(nvg, Colors::ioColor);
     nvgFill(nvg);
-    // WIP
 }
 
 bool PDNumber::onMouse(const MouseEvent &ev)
