@@ -230,6 +230,5 @@ myKnob->setColors(                                              // Configure col
     <foreground_color>,
     <arc_color>
 );
-myKnob->setLabelStyle(<x>, <y>, <size>);                        // Configure label
-myKnob->setShowLabel(LabelShow::ALWAYS);                        // Optional - defaults to `NEVER`, other values: `ALWAYS`, `ACTIVE`, `TYPING` (not implemented)
+myKnob->setLabelStyle(<x>, <y>, <size> <label_show>); // Configure label. <label_show> must be `NEVER`, `ALWAYS`, `ACTIVE` or `TYPING` (not implemented)
 ```
