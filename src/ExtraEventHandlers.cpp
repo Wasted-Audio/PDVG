@@ -234,7 +234,6 @@ struct PDSliderEventHandler::PrivateData
     float maximum;
     float value;
     float valueDef;
-    float valueTmp;
     float valueAtDragStart;
     bool usingDefault;
     bool usingLog;
@@ -259,7 +258,6 @@ struct PDSliderEventHandler::PrivateData
           maximum(1.0f),
           value(0.5f),
           valueDef(value),
-          valueTmp(value),
           valueAtDragStart(0.0f),
           usingDefault(false),
           usingLog(false),
@@ -286,7 +284,6 @@ struct PDSliderEventHandler::PrivateData
           maximum(other->maximum),
           value(other->value),
           valueDef(other->valueDef),
-          valueTmp(value),
           valueAtDragStart(other->valueAtDragStart),
           usingDefault(other->usingDefault),
           usingLog(other->usingLog),
@@ -310,7 +307,6 @@ struct PDSliderEventHandler::PrivateData
         maximum = other->maximum;
         value = other->value;
         valueDef = other->valueDef;
-        valueTmp = value;
         valueAtDragStart = other->valueAtDragStart;
         usingDefault = other->usingDefault;
         usingLog = other->usingLog;
@@ -330,6 +326,16 @@ struct PDSliderEventHandler::PrivateData
         const float b = std::log(maximum / minimum) / (maximum - minimum);
         const float a = maximum / std::exp(maximum * b);
         return std::log(v / a) / b;
+    }
+
+    inline float normalizedToValue(float normalized) const
+    {
+        normalized = std::clamp(normalized, 0.0f, 1.0f);
+        const float linear = inverted ? maximum - normalized * (maximum - minimum)
+                                      : minimum + normalized * (maximum - minimum);
+        const float newValue = usingLog ? logscale(linear) : linear;
+
+        return newValue;
     }
 
     bool mouseEvent(const Widget::MouseEvent &ev)
@@ -355,7 +361,6 @@ struct PDSliderEventHandler::PrivateData
                 lastClickTime = 0;
 
                 setValue(valueDef, true);
-                valueTmp = value;
                 return true;
             }
 
@@ -384,11 +389,16 @@ struct PDSliderEventHandler::PrivateData
                     : linearValue;
 
                 if (newValue < minimum)
-                    valueTmp = newValue = minimum;
+                    newValue = minimum;
                 else if (newValue > maximum)
-                    valueTmp = newValue = maximum;
+                    newValue = maximum;
 
                 setValue(newValue, true);
+
+                // jump happened: the drag baseline is now the value we jumped to
+                valueAtDragStart = value;
+                startedX = x;
+                startedY = y;
             }
 
             return true;
@@ -416,58 +426,44 @@ struct PDSliderEventHandler::PrivateData
         const float divisor = (ev.mod & kModifierShift) ? 6.0f : 1.0f;
         const float range = maximum - minimum;
 
-        if (steadyOnClick)
+        if (ev.mod != lastMod)
         {
-            if (ev.mod != lastMod)
-            {
-                startedX = x;
-                startedY = y;
-                valueAtDragStart = value;
-                lastMod = ev.mod;
-            }
+            startedX = x;
+            startedY = y;
+            valueAtDragStart = value;
+            lastMod = ev.mod;
+        }
 
-            // Normalized value at drag start
-            float normalizedBase = usingLog
+        const bool relative = steadyOnClick || (ev.mod & kModifierShift);
+
+        // Screen-space value at drag start, only needed by the relative path
+        float screenBase = 0.0f;
+        if (relative)
+        {
+            const float normalizedBase = usingLog
                 ? (invlogscale(valueAtDragStart) - minimum) / range
                 : (valueAtDragStart - minimum) / range;
+            screenBase = inverted ? 1.0f - normalizedBase : normalizedBase;
+        }
 
-            // Normalized delta from click origin
+        // Input mapping: where on the slider does the cursor correspond to?
+        if (relative)
+        {
             const float normalizedDelta = horizontal
                 ? (x - startedX) / sliderArea.getWidth() / divisor
                 : (y - startedY) / sliderArea.getHeight() / divisor;
 
-            float normalizedNew = inverted
-                ? normalizedBase - normalizedDelta
-                : normalizedBase + normalizedDelta;
-
-            normalizedNew = std::max(0.0f, std::min(1.0f, normalizedNew));
-
-            // Convert back to value space, applying log scale if needed
-            float newValue = usingLog
-                ? logscale(minimum + normalizedNew * range)
-                : minimum + normalizedNew * range;
-
-            setValue(newValue, true);
+            setValue(normalizedToValue(screenBase + normalizedDelta), true);
         }
         else
         {
             if ((horizontal && sliderArea.containsX(x)) || (!horizontal && sliderArea.containsY(y)))
             {
-                float vper = horizontal
+                const float vper = horizontal
                     ? (x - sliderArea.getX()) / sliderArea.getWidth()
                     : (y - sliderArea.getY()) / sliderArea.getHeight();
 
-                float linearValue = inverted ? maximum - vper * range
-                                             : minimum + vper * range;
-
-                float newValue = usingLog ? logscale(linearValue) : linearValue;
-
-                if (newValue < minimum)
-                    valueTmp = newValue = minimum;
-                else if (newValue > maximum)
-                    valueTmp = newValue = maximum;
-
-                setValue(newValue, true);
+                setValue(normalizedToValue(vper), true);
             }
         }
 
@@ -492,12 +488,12 @@ struct PDSliderEventHandler::PrivateData
 
         if (value < min)
         {
-            valueTmp = value = min;
+            value = min;
             widget->repaint();
         }
         else if (value > max)
         {
-            valueTmp = value = max;
+            value = max;
             widget->repaint();
         }
 
@@ -524,7 +520,7 @@ struct PDSliderEventHandler::PrivateData
         if (d_isEqual(value, value2))
             return false;
 
-        valueTmp = value = value2;
+        value = value2;
         widget->repaint();
 
         if (sendCallback && callback != nullptr)
