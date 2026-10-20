@@ -370,11 +370,7 @@ struct PDSliderEventHandler::PrivateData
             lastClickTime = ev.time;
             dragging = true;
 
-            if (steadyOnClick)
-            {
-                // Don't jump. value stays where it is
-            }
-            else
+            if (!steadyOnClick)
             {
                 // jump to the clicked position
                 const float vper = startPos.getY() == endPos.getY()
@@ -384,7 +380,7 @@ struct PDSliderEventHandler::PrivateData
                 setValue(normalizedToValue(vper), true);
             }
 
-            // capture the drag baseline for both steady and jump scenarios
+            // capture the drag baseline
             valueAtDragStart = value;
             startedX = x;
             startedY = y;
