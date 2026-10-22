@@ -25,6 +25,7 @@ public:
     void setColors(NVGcolor bgColor, NVGcolor fgColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setInterval(uint32_t intervalMs);
+    void trigger();
     void setSend(bool isSend);
     void idleCallback() override;
 

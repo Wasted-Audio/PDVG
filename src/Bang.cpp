@@ -96,6 +96,12 @@ void PDBang::setInterval(uint32_t intervalMs)
     this->intervalMs = intervalMs;
 }
 
+void PDBang::trigger()
+{
+    this->setDown(true);
+    this->lastTick = d_gettime_ms();
+}
+
 void PDBang::setSend(bool isSend)
 {
     this->isSend = isSend;
