@@ -265,7 +265,8 @@ void PDKnob::setShowArc(bool showArc)
     this->showArc = showArc;
 }
 
-void PDKnob::setSend(bool isSend) {
+void PDKnob::setSend(bool isSend)
+{
     this->isSend = isSend;
 }
 

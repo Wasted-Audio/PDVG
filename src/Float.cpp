@@ -185,7 +185,6 @@ void PDFloat::setSend(bool isSend)
     this->isSend = isSend;
 }
 
-
 void PDFloat::numberValueChanged(SubWidget* widget, float value)
 {
     if (widget == dragNum)
