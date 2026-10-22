@@ -11,10 +11,9 @@
 #include "Common.hpp"
 #include "Bang.hpp"
 
-
 START_NAMESPACE_DISTRHO
 
-PDBang::PDBang(NanoSubWidget *const parent, PDBangEventHandler::Callback *const cb)
+PDBang::PDBang(NanoSubWidget* const parent, PDBangEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDBangEventHandler(this)
 {
@@ -24,7 +23,7 @@ PDBang::PDBang(NanoSubWidget *const parent, PDBangEventHandler::Callback *const 
 
 PDBang::~PDBang()
 {
-    if(hasIdleCallback)
+    if (hasIdleCallback)
         getWindow().removeIdleCallback(this);
 }
 
@@ -45,7 +44,7 @@ void PDBang::onNanoDisplay()
     float const circleOuter = 80.f * (width * 0.01f);
     float const circleThickness = std::max(width * 0.06f, 1.5f) * sizeReduction;
 
-    auto const outerCircleBounds = reduceRectangle(bs,(width - circleOuter) * sizeReduction);
+    auto const outerCircleBounds = reduceRectangle(bs, (width - circleOuter) * sizeReduction);
 
     nvgBeginPath(nvg);
     nvgCircle(nvg, bs.getX() + bs.getWidth() / 2.0f, bs.getY() + bs.getHeight() / 2.0f, outerCircleBounds.getWidth() / 2.0f);
@@ -54,13 +53,14 @@ void PDBang::onNanoDisplay()
     nvgStroke(nvg);
 
     // Fill ellipse if bangState is true
-    if (isDown()) {
+    if (isDown())
+    {
         auto const iCB = reduceRectangle(bs, (width - circleOuter + circleThickness) * sizeReduction);
         drawRoundedRect(nvg, iCB.getX(), iCB.getY(), iCB.getWidth(), iCB.getHeight(), fgColor, fgColor, iCB.getWidth() * 0.5f);
     }
 }
 
-bool PDBang::onMouse(const MouseEvent &ev)
+bool PDBang::onMouse(const MouseEvent& ev)
 {
     if (this->isSend)
         return true;
@@ -73,7 +73,8 @@ bool PDBang::onMouse(const MouseEvent &ev)
     return fired;
 }
 
-void PDBang::setColors(NVGcolor bgColor, NVGcolor fgColor) {
+void PDBang::setColors(NVGcolor bgColor, NVGcolor fgColor)
+{
     this->bgColor = bgColor;
     this->fgColor = fgColor;
 }
@@ -90,7 +91,8 @@ void PDBang::setLabel(std::string text, NVGcolor textColor, int x, int y, int si
     this->label->setSize(size * text.length(), size);
 }
 
-void PDBang::setInterval(uint32_t intervalMs) {
+void PDBang::setInterval(uint32_t intervalMs)
+{
     this->intervalMs = intervalMs;
 }
 
@@ -106,7 +108,8 @@ void PDBang::idleCallback()
     if (now - lastTick < intervalMs)
         return;
 
-    if (isDown()){
+    if (isDown())
+    {
         setDown(false);
         repaint();
     }

@@ -24,11 +24,13 @@ inline NanoVG::FontId loadFont(NanoVG& nvg, const char* const name, const uchar*
     return nvg.createFontFromMemory(name, data, dataSize, false);
 }
 
-struct Corners {
+struct Corners
+{
     static inline float objectCornerRadius = 2.75f;
 };
 
-struct Colors {
+struct Colors
+{
     static inline NVGcolor cnvColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
     static inline NVGcolor cnvTextColor = nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF);
     static inline NVGcolor ioColor = nvgRGBA(0x62, 0x62, 0x62, 0xFF);
@@ -38,14 +40,16 @@ struct Colors {
     static inline NVGcolor outColor = nvgRGBA(0x38, 0x38, 0x38, 0xFF);
 };
 
-struct Border {
+struct Border
+{
     int top;
     int left;
     int bottom;
     int right;
 };
 
-enum LabelPos {
+enum LabelPos
+{
     Left,
     Right,
     Top,
@@ -80,8 +84,7 @@ inline DGL::Rectangle<float> reduceRectangle(DGL::Rectangle<float> r, float amou
         r.getX() + amount,
         r.getY() + amount,
         r.getWidth() - amount * 2,
-        r.getHeight() - amount * 2
-    );
+        r.getHeight() - amount * 2);
 }
 
 inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border border)
@@ -90,8 +93,7 @@ inline DGL::Rectangle<float> subtractBorder(DGL::Rectangle<float> r, Border bord
         r.getX() + border.left,
         r.getY() + border.top,
         r.getWidth() - (border.left + border.right),
-        r.getHeight() - (border.top + border.bottom)
-    );
+        r.getHeight() - (border.top + border.bottom));
 }
 
 inline float valToPropOfLen(float value, float length)
@@ -101,26 +103,25 @@ inline float valToPropOfLen(float value, float length)
 
 inline float getColorBrightness(NVGcolor c)
 {
-    return std::max({c.r, c.g, c.b});
+    return std::max({ c.r, c.g, c.b });
 }
 
 // Remaps a normalised value (between 0 and 1) to a target range.
 inline float mapRange(float value0To1, float targetRangeMin, float targetRangeMax)
 {
-   return targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin);
+    return targetRangeMin + value0To1 * (targetRangeMax - targetRangeMin);
 }
 
 // Remaps a value from a source range to a target range.
 inline float mapRange(float sourceValue, float sourceRangeMin, float sourceRangeMax, float targetRangeMin, float targetRangeMax)
 {
-   return targetRangeMin + ((targetRangeMax - targetRangeMin) * (sourceValue - sourceRangeMin)) / (sourceRangeMax - sourceRangeMin);
+    return targetRangeMin + ((targetRangeMax - targetRangeMin) * (sourceValue - sourceRangeMin)) / (sourceRangeMax - sourceRangeMin);
 }
 
 // Converts an angle in degrees to radians.
-inline float degreesToRadians (float degrees) noexcept
+inline float degreesToRadians(float degrees) noexcept
 {
-    return degrees * (NVG_PI / (float)180);
+    return degrees * (NVG_PI / (float) 180);
 }
-
 
 END_NAMESPACE_DISTRHO

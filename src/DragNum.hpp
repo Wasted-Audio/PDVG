@@ -15,7 +15,6 @@
 #include "PDWidget.hpp"
 #include "Common.hpp"
 
-
 START_NAMESPACE_DISTRHO
 
 class PDDragNum : public PDWidget,
@@ -27,9 +26,9 @@ public:
     void setColors(NVGcolor outlineColor, NVGcolor textColor);
     void setBorder(Border border);
 
-    bool onMouse(const MouseEvent &ev) override;
-    bool onMotion(const MotionEvent &ev) override;
-    bool onKeyboard(const KeyboardEvent &ev) override;
+    bool onMouse(const MouseEvent& ev) override;
+    bool onMotion(const MotionEvent& ev) override;
+    bool onKeyboard(const KeyboardEvent& ev) override;
 
 protected:
     void onNanoDisplay() override;
@@ -37,7 +36,7 @@ protected:
 private:
     static constexpr int maxPrecision = 6;
     int hoveredDecimal = -1;
-    Border border { 1, 5, 1, 5 };
+    Border border{ 1, 5, 1, 5 };
     NVGcolor outlineColor;
     NVGcolor textColor;
     NanoVG::FontId fFontId;

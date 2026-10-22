@@ -14,7 +14,8 @@
 
 START_NAMESPACE_DISTRHO
 
-enum LabelShow{
+enum LabelShow
+{
     NEVER = 0,
     ALWAYS = 1,
     ACTIVE = 2,
@@ -25,7 +26,7 @@ class PDKnob : public PDWidget,
                public PDKnobEventHandler
 {
 public:
-    explicit PDKnob(NanoSubWidget *parent, PDKnobEventHandler::Callback* cb);
+    explicit PDKnob(NanoSubWidget* parent, PDKnobEventHandler::Callback* cb);
 
     void setColors(NVGcolor bgColor, NVGcolor fgColor, NVGcolor arcColor);
     void setLabelStyle(int x, int y, int size, LabelShow showLabel);
@@ -39,8 +40,8 @@ public:
     void setSend(bool isSend);
 
 protected:
-    bool onMouse(const MouseEvent &ev) override;
-    bool onMotion(const MotionEvent &ev) override;
+    bool onMouse(const MouseEvent& ev) override;
+    bool onMotion(const MotionEvent& ev) override;
 
     void drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds);
     void drawTicks(NVGcontext* nvg, DGL::Rectangle<float> pBounds, float startAngle, float endAngle, float tickWidth);

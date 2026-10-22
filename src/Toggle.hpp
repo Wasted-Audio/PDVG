@@ -15,7 +15,7 @@
 START_NAMESPACE_DISTRHO
 
 class PDToggle : public PDWidget,
-               public PDToggleEventHandler
+                 public PDToggleEventHandler
 {
 public:
     explicit PDToggle(NanoSubWidget* parent, PDToggleEventHandler::Callback* cb);
@@ -25,7 +25,7 @@ public:
     void setSend(bool isSend);
 
 protected:
-    bool onMouse(const MouseEvent &ev) override;
+    bool onMouse(const MouseEvent& ev) override;
     void onNanoDisplay() override;
 
 private:

@@ -10,7 +10,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDRadio::PDRadio(NanoSubWidget *const parent, PDRadioEventHandler::Callback *const cb)
+PDRadio::PDRadio(NanoSubWidget* const parent, PDRadioEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDRadioEventHandler(this)
 {
@@ -33,8 +33,7 @@ void PDRadio::onNanoDisplay()
     float const size = (isVertical ? b.getHeight() : b.getWidth()) / numItems;
     float const across = isVertical ? b.getWidth() : b.getHeight();
 
-    auto const cellRect = [isVertical, size, across](uint index)
-    {
+    auto const cellRect = [isVertical, size, across](uint index) {
         return isVertical ? DGL::Rectangle<float>(0.0f, index * size, across, size)
                           : DGL::Rectangle<float>(index * size, 0.0f, size, across);
     };
@@ -45,11 +44,15 @@ void PDRadio::onNanoDisplay()
     nvgStrokeWidth(nvg, 1.0f * scaleFactor);
 
     nvgBeginPath(nvg);
-    for (uint i = 1; i < numItems; i++) {
-        if (isVertical) {
+    for (uint i = 1; i < numItems; i++)
+    {
+        if (isVertical)
+        {
             nvgMoveTo(nvg, 1 * scaleFactor, i * size);
             nvgLineTo(nvg, across - 0.5f * scaleFactor, i * size);
-        } else {
+        }
+        else
+        {
             nvgMoveTo(nvg, i * size, 1 * scaleFactor);
             nvgLineTo(nvg, i * size, across - 0.5f * scaleFactor);
         }
@@ -58,7 +61,8 @@ void PDRadio::onNanoDisplay()
 
     nvgStrokeColor(nvg, bgColor);
 
-    if (isHovered()) {
+    if (isHovered())
+    {
         auto const brightness = getColorBrightness(bgColor) > 0.5f ? 0.03f : 0.05f;
         auto const hoverColor = interpolateColors(bgColor, nvgRGBA(0xFF, 0xFF, 0xFF, 0xFF), brightness);
 
@@ -71,21 +75,22 @@ void PDRadio::onNanoDisplay()
     drawRoundedRect(nvg, selectBounds.getX(), selectBounds.getY(), selectBounds.getWidth(), selectBounds.getHeight(), radioColor, radioColor, (Corners::objectCornerRadius * scaleFactor) / 2.0f);
 }
 
-bool PDRadio::onMouse(const MouseEvent &ev)
+bool PDRadio::onMouse(const MouseEvent& ev)
 {
     if (this->isSend)
         return true;
     return PDRadioEventHandler::mouseEvent(ev);
 }
 
-bool PDRadio::onMotion(const MotionEvent &ev)
+bool PDRadio::onMotion(const MotionEvent& ev)
 {
     if (this->isSend)
         return true;
     return PDRadioEventHandler::motionEvent(ev);
 }
 
-void PDRadio::setColors(NVGcolor bgColor, NVGcolor radioColor) {
+void PDRadio::setColors(NVGcolor bgColor, NVGcolor radioColor)
+{
     this->bgColor = bgColor;
     this->radioColor = radioColor;
 }

@@ -12,10 +12,11 @@
 
 START_NAMESPACE_DISTRHO
 
-PDComment::PDComment(NanoSubWidget* parent) : NanoWidget(parent)
+PDComment::PDComment(NanoSubWidget* parent)
+    : NanoWidget(parent)
 {
     using namespace InterRegular;
-    fFontId = loadFont(*this, "inter", (const uchar *)InterRegularData, InterRegularDataSize);
+    fFontId = loadFont(*this, "inter", (const uchar*) InterRegularData, InterRegularDataSize);
 }
 
 std::vector<std::string> PDComment::buildLines(float widgetWidth)
@@ -65,11 +66,13 @@ void PDComment::onNanoDisplay()
     closePath();
 }
 
-void PDComment::setText(std::string text) {
+void PDComment::setText(std::string text)
+{
     this->lText = text;
 }
 
-void PDComment::setFontSize(float size) {
+void PDComment::setFontSize(float size)
+{
     fFontSize = size;
 }
 

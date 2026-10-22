@@ -28,12 +28,12 @@ public:
     bool setValue(float value, bool sendCallback = false) noexcept override;
     void setSend(bool isSend);
 
-    void numberValueChanged(SubWidget *widget, float value) override;
+    void numberValueChanged(SubWidget* widget, float value) override;
 
 protected:
-    bool onMouse(const MouseEvent &ev) override;
-    bool onMotion(const MotionEvent &ev) override;
-    bool onKeyboard(const KeyboardEvent &ev) override;
+    bool onMouse(const MouseEvent& ev) override;
+    bool onMotion(const MotionEvent& ev) override;
+    bool onKeyboard(const KeyboardEvent& ev) override;
 
     void drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<float> sb, NVGcolor cornerColor);
     void onNanoDisplay() override;

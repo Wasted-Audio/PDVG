@@ -10,7 +10,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDSlider::PDSlider(NanoSubWidget *parent, PDSliderEventHandler::Callback *const cb)
+PDSlider::PDSlider(NanoSubWidget* parent, PDSliderEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDSliderEventHandler(this)
 {
@@ -41,13 +41,16 @@ void PDSlider::onNanoDisplay()
     DGL::Rectangle<float> sB;
     auto const bR = reduceRectangle(b, 1.0f);
 
-    if (getHorizontal()) {
+    if (getHorizontal())
+    {
         auto const prop = valToPropOfLen(val, b.getWidth());
         sB.setX(mapRange(prop, 0.0f, 1.0f, bR.getX(), bR.getX() + bR.getWidth() - thumbSize));
         sB.setY(bR.getY());
         sB.setWidth(thumbSize);
         sB.setHeight(bR.getHeight());
-    } else {
+    }
+    else
+    {
         auto const prop = valToPropOfLen(val, b.getHeight());
         sB.setX(bR.getX());
         sB.setY(mapRange(prop, 0.0f, 1.0f, bR.getY(), bR.getY() + bR.getHeight() - thumbSize));
@@ -58,21 +61,22 @@ void PDSlider::onNanoDisplay()
     drawRoundedRect(nvg, sB.getX(), sB.getY(), sB.getWidth(), sB.getHeight(), sliderColor, sliderColor, cornerSize);
 }
 
-bool PDSlider::onMouse(const MouseEvent &ev)
+bool PDSlider::onMouse(const MouseEvent& ev)
 {
     if (this->isSend)
         return true;
     return PDSliderEventHandler::mouseEvent(ev);
 }
 
-bool PDSlider::onMotion(const MotionEvent &ev)
+bool PDSlider::onMotion(const MotionEvent& ev)
 {
     if (this->isSend)
         return true;
     return PDSliderEventHandler::motionEvent(ev);
 }
 
-void PDSlider::setColors(NVGcolor bgColor, NVGcolor sliderColor) {
+void PDSlider::setColors(NVGcolor bgColor, NVGcolor sliderColor)
+{
     this->bgColor = bgColor;
     this->sliderColor = sliderColor;
 }

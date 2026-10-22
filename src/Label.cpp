@@ -12,10 +12,11 @@
 
 START_NAMESPACE_DISTRHO
 
-PDLabel::PDLabel(NanoSubWidget* parent) : NanoWidget(parent)
+PDLabel::PDLabel(NanoSubWidget* parent)
+    : NanoWidget(parent)
 {
     using namespace InterRegular;
-    fFontId = loadFont(*this, "inter", (const uchar *)InterRegularData, InterRegularDataSize);
+    fFontId = loadFont(*this, "inter", (const uchar*) InterRegularData, InterRegularDataSize);
 }
 
 void PDLabel::onNanoDisplay()
@@ -37,11 +38,13 @@ void PDLabel::onNanoDisplay()
     closePath();
 }
 
-void PDLabel::setText(std::string text) {
+void PDLabel::setText(std::string text)
+{
     this->lText = text;
 }
 
-void PDLabel::setColors(NVGcolor textColor) {
+void PDLabel::setColors(NVGcolor textColor)
+{
     this->textColor = textColor;
 }
 

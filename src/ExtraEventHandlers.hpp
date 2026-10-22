@@ -21,24 +21,24 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void switchClicked(SubWidget *widget, bool down) = 0;
+        virtual void switchClicked(SubWidget* widget, bool down) = 0;
     };
 
-    explicit PDToggleEventHandler(PDWidget *self);
-    explicit PDToggleEventHandler(PDWidget *self, const PDToggleEventHandler &other);
-    PDToggleEventHandler &operator=(const PDToggleEventHandler &other);
+    explicit PDToggleEventHandler(PDWidget* self);
+    explicit PDToggleEventHandler(PDWidget* self, const PDToggleEventHandler& other);
+    PDToggleEventHandler& operator=(const PDToggleEventHandler& other);
     virtual ~PDToggleEventHandler();
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
 
-    void setCallback(Callback *callback) noexcept;
-    bool mouseEvent(const Widget::MouseEvent &ev);
+    void setCallback(Callback* callback) noexcept;
+    bool mouseEvent(const Widget::MouseEvent& ev);
 
 protected:
 private:
     struct PrivateData;
-    PrivateData *const pData;
+    PrivateData* const pData;
 
     PDToggleEventHandler(PDToggleEventHandler& other) = delete;
     PDToggleEventHandler(const PDToggleEventHandler& other) = delete;
@@ -53,24 +53,24 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void bangClicked(SubWidget *widget) = 0;
+        virtual void bangClicked(SubWidget* widget) = 0;
     };
 
-    explicit PDBangEventHandler(PDWidget *self);
-    explicit PDBangEventHandler(PDWidget *self, const PDBangEventHandler &other);
-    PDBangEventHandler &operator=(const PDBangEventHandler &other);
+    explicit PDBangEventHandler(PDWidget* self);
+    explicit PDBangEventHandler(PDWidget* self, const PDBangEventHandler& other);
+    PDBangEventHandler& operator=(const PDBangEventHandler& other);
     virtual ~PDBangEventHandler();
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
 
-    void setCallback(Callback *callback) noexcept;
-    bool mouseEvent(const Widget::MouseEvent &ev);
+    void setCallback(Callback* callback) noexcept;
+    bool mouseEvent(const Widget::MouseEvent& ev);
 
 protected:
 private:
     struct PrivateData;
-    PrivateData *const pData;
+    PrivateData* const pData;
 
     PDBangEventHandler(PDBangEventHandler& other) = delete;
     PDBangEventHandler(const PDBangEventHandler& other) = delete;
@@ -85,12 +85,12 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void sliderValueChanged(SubWidget *widget, float value) = 0;
+        virtual void sliderValueChanged(SubWidget* widget, float value) = 0;
     };
 
-    explicit PDSliderEventHandler(PDWidget *self);
-    explicit PDSliderEventHandler(PDWidget *self, const PDSliderEventHandler &other);
-    PDSliderEventHandler &operator=(const PDSliderEventHandler &other);
+    explicit PDSliderEventHandler(PDWidget* self);
+    explicit PDSliderEventHandler(PDWidget* self, const PDSliderEventHandler& other);
+    PDSliderEventHandler& operator=(const PDSliderEventHandler& other);
     virtual ~PDSliderEventHandler();
 
     // returns raw value, is assumed to be scaled if using log
@@ -116,16 +116,16 @@ public:
     bool getHorizontal() const noexcept;
     void setStartPos(const int x, const int y) noexcept;
     void setEndPos(const int x, const int y) noexcept;
-    void setCallback(Callback *callback) noexcept;
+    void setCallback(Callback* callback) noexcept;
 
-    bool mouseEvent(const Widget::MouseEvent &ev);
-    bool motionEvent(const Widget::MotionEvent &ev);
-    bool scrollEvent(const Widget::ScrollEvent &ev);
+    bool mouseEvent(const Widget::MouseEvent& ev);
+    bool motionEvent(const Widget::MotionEvent& ev);
+    bool scrollEvent(const Widget::ScrollEvent& ev);
 
 protected:
 private:
     struct PrivateData;
-    PrivateData *const pData;
+    PrivateData* const pData;
 
     PDSliderEventHandler(PDSliderEventHandler& other) = delete;
     PDSliderEventHandler(const PDSliderEventHandler& other) = delete;
@@ -140,12 +140,12 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void radioValueChanged(SubWidget *widget, uint value) = 0;
+        virtual void radioValueChanged(SubWidget* widget, uint value) = 0;
     };
 
-    explicit PDRadioEventHandler(PDWidget *self);
-    explicit PDRadioEventHandler(PDWidget *self, const PDRadioEventHandler &other);
-    PDRadioEventHandler &operator=(const PDRadioEventHandler &other);
+    explicit PDRadioEventHandler(PDWidget* self);
+    explicit PDRadioEventHandler(PDWidget* self, const PDRadioEventHandler& other);
+    PDRadioEventHandler& operator=(const PDRadioEventHandler& other);
     virtual ~PDRadioEventHandler();
 
     uint getValue() const noexcept;
@@ -154,20 +154,20 @@ public:
 
     void setStep(uint step) noexcept;
     void setHorizontal() noexcept;
-    void setCallback(Callback *callback) noexcept;
+    void setCallback(Callback* callback) noexcept;
 
     uint getStep() const noexcept;
     bool getHorizontal() const noexcept;
     bool isHovered() const noexcept;
     uint getHover() const noexcept;
 
-    bool mouseEvent(const Widget::MouseEvent &ev);
-    bool motionEvent(const Widget::MotionEvent &ev);
+    bool mouseEvent(const Widget::MouseEvent& ev);
+    bool motionEvent(const Widget::MotionEvent& ev);
 
 protected:
 private:
     struct PrivateData;
-    PrivateData *const pData;
+    PrivateData* const pData;
 
     PDRadioEventHandler(PDRadioEventHandler& other) = delete;
     PDRadioEventHandler(const PDRadioEventHandler& other) = delete;
@@ -182,12 +182,12 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void numberValueChanged(SubWidget *widget, float value) = 0;
+        virtual void numberValueChanged(SubWidget* widget, float value) = 0;
     };
 
-    explicit PDDragNumEventHandler(PDWidget *self);
-    explicit PDDragNumEventHandler(PDWidget *self, const PDDragNumEventHandler &other);
-    PDDragNumEventHandler &operator=(const PDDragNumEventHandler &other);
+    explicit PDDragNumEventHandler(PDWidget* self);
+    explicit PDDragNumEventHandler(PDWidget* self, const PDDragNumEventHandler& other);
+    PDDragNumEventHandler& operator=(const PDDragNumEventHandler& other);
     virtual ~PDDragNumEventHandler();
 
     float getValue() const noexcept;
@@ -205,17 +205,17 @@ public:
     bool isUsingLogScale() const noexcept;
     void setLogarithmicHeight(double logHeight) noexcept;
 
-    void setCallback(Callback *callback) noexcept;
+    void setCallback(Callback* callback) noexcept;
 
-    bool mouseEvent(const Widget::MouseEvent &ev);
-    bool motionEvent(const Widget::MotionEvent &ev);
-    bool scrollEvent(const Widget::ScrollEvent &ev);
-    bool keyboardEvent(const Widget::KeyboardEvent &ev);
+    bool mouseEvent(const Widget::MouseEvent& ev);
+    bool motionEvent(const Widget::MotionEvent& ev);
+    bool scrollEvent(const Widget::ScrollEvent& ev);
+    bool keyboardEvent(const Widget::KeyboardEvent& ev);
 
 protected:
 private:
     struct PrivateData;
-    PrivateData *const pData;
+    PrivateData* const pData;
 
     PDDragNumEventHandler(PDDragNumEventHandler& other) = delete;
     PDDragNumEventHandler(const PDDragNumEventHandler& other) = delete;
@@ -230,12 +230,12 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void numberValueChanged(SubWidget *widget, float value) = 0;
+        virtual void numberValueChanged(SubWidget* widget, float value) = 0;
     };
 
-    explicit PDNumberEventHandler(PDWidget *self);
-    explicit PDNumberEventHandler(PDWidget *self, const PDNumberEventHandler &other);
-    PDNumberEventHandler &operator=(const PDNumberEventHandler &other);
+    explicit PDNumberEventHandler(PDWidget* self);
+    explicit PDNumberEventHandler(PDWidget* self, const PDNumberEventHandler& other);
+    PDNumberEventHandler& operator=(const PDNumberEventHandler& other);
     virtual ~PDNumberEventHandler();
 
     float getValue() const noexcept;
@@ -243,16 +243,16 @@ public:
     virtual bool setValue(float value, bool sendCallback = false) noexcept;
 
     void setRange(float min, float max) noexcept;
-    void setCallback(Callback *callback) noexcept;
+    void setCallback(Callback* callback) noexcept;
 
-    bool mouseEvent(const Widget::MouseEvent &ev);
-    bool motionEvent(const Widget::MotionEvent &ev);
-    bool scrollEvent(const Widget::ScrollEvent &ev);
+    bool mouseEvent(const Widget::MouseEvent& ev);
+    bool motionEvent(const Widget::MotionEvent& ev);
+    bool scrollEvent(const Widget::ScrollEvent& ev);
 
 protected:
 private:
     struct PrivateData;
-    PrivateData *const pData;
+    PrivateData* const pData;
 
     PDNumberEventHandler(PDNumberEventHandler& other) = delete;
     PDNumberEventHandler(const PDNumberEventHandler& other) = delete;
@@ -263,7 +263,8 @@ private:
 class PDKnobEventHandler
 {
 public:
-    enum LogMode {
+    enum LogMode
+    {
         LIN = 0,
         LOG = 1,
         EXP = 2
@@ -273,12 +274,12 @@ public:
     {
     public:
         virtual ~Callback() {}
-        virtual void knobValueChanged(SubWidget *widget, float value) = 0;
+        virtual void knobValueChanged(SubWidget* widget, float value) = 0;
     };
 
-    explicit PDKnobEventHandler(PDWidget *self);
-    explicit PDKnobEventHandler(PDWidget *self, const PDKnobEventHandler &other);
-    PDKnobEventHandler &operator=(const PDKnobEventHandler &other);
+    explicit PDKnobEventHandler(PDWidget* self);
+    explicit PDKnobEventHandler(PDWidget* self, const PDKnobEventHandler& other);
+    PDKnobEventHandler& operator=(const PDKnobEventHandler& other);
     virtual ~PDKnobEventHandler();
 
     // returns raw value, is assumed to be scaled if using log
@@ -302,19 +303,19 @@ public:
     void setJumpOnClick(bool yesNo) noexcept;
     void setDiscrete(bool yesNo) noexcept;
     void setArc(float arcBegin, float arcEnd) noexcept;
-    void setCallback(Callback *callback) noexcept;
+    void setCallback(Callback* callback) noexcept;
 
     float getArcBegin() const noexcept;
     float getArcEnd() const noexcept;
 
-    bool mouseEvent(const Widget::MouseEvent &ev);
-    bool motionEvent(const Widget::MotionEvent &ev);
-    bool scrollEvent(const Widget::ScrollEvent &ev);
+    bool mouseEvent(const Widget::MouseEvent& ev);
+    bool motionEvent(const Widget::MotionEvent& ev);
+    bool scrollEvent(const Widget::ScrollEvent& ev);
 
 protected:
 private:
     struct PrivateData;
-    PrivateData *const pData;
+    PrivateData* const pData;
 
     PDKnobEventHandler(PDKnobEventHandler& other) = delete;
     PDKnobEventHandler(const PDKnobEventHandler& other) = delete;

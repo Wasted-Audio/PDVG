@@ -15,7 +15,7 @@
 
 START_NAMESPACE_DISTRHO
 
-PDDragNum::PDDragNum(NanoSubWidget *parent, PDDragNumEventHandler::Callback *const cb)
+PDDragNum::PDDragNum(NanoSubWidget* parent, PDDragNumEventHandler::Callback* const cb)
     : PDWidget(parent),
       PDDragNumEventHandler(this)
 {
@@ -23,7 +23,7 @@ PDDragNum::PDDragNum(NanoSubWidget *parent, PDDragNumEventHandler::Callback *con
 
     // Inter with fixed-width digits, so numbers don't shift while dragging
     using namespace InterTabular;
-    fFontId = loadFont(*this, "inter-tabular", (const uchar *)InterTabularData, InterTabularDataSize);
+    fFontId = loadFont(*this, "inter-tabular", (const uchar*) InterTabularData, InterTabularDataSize);
 }
 
 std::string PDDragNum::formatNumber(float value, int precision) const
@@ -81,12 +81,12 @@ void PDDragNum::onNanoDisplay()
             text += '.';
         }
 
-        numDecimals = (int)(text.size() - decimalPointIndex - 1);
+        numDecimals = (int) (text.size() - decimalPointIndex - 1);
         text.append(maxPrecision - numDecimals, '0');
     }
 
     glyphs.resize(text.size());
-    const int count = nvgTextGlyphPositions(nvg, textX, textY, text.c_str(), nullptr, glyphs.data(), (int)glyphs.size());
+    const int count = nvgTextGlyphPositions(nvg, textX, textY, text.c_str(), nullptr, glyphs.data(), (int) glyphs.size());
     glyphs.resize(count);
 
     // Highlight what would get dragged: the whole number in log mode, otherwise the integer part or a single decimal
@@ -132,7 +132,7 @@ int PDDragNum::getDecimalAtScreenPos(const Point<double>& pos) const
     if (glyphs.empty() || !contains(pos))
         return -1;
 
-    const float x = (float)(pos.getX() - getScreenPos().getX());
+    const float x = (float) (pos.getX() - getScreenPos().getX());
 
     if (isUsingLogScale())
         return (x <= glyphs.back().maxx && glyphs.back().maxx < getWidth()) ? 0 : -1;
@@ -147,13 +147,13 @@ int PDDragNum::getDecimalAtScreenPos(const Point<double>& pos) const
 
         // The whole integer part counts as decimal 0
         if (x <= right)
-            return i <= decimalPointIndex ? 0 : (int)(i - decimalPointIndex);
+            return i <= decimalPointIndex ? 0 : (int) (i - decimalPointIndex);
     }
 
     return -1;
 }
 
-bool PDDragNum::onMouse(const MouseEvent &ev)
+bool PDDragNum::onMouse(const MouseEvent& ev)
 {
     if (ev.button == 1 && ev.press && contains(ev.pos))
     {
@@ -172,7 +172,7 @@ bool PDDragNum::onMouse(const MouseEvent &ev)
     return handled;
 }
 
-bool PDDragNum::onMotion(const MotionEvent &ev)
+bool PDDragNum::onMotion(const MotionEvent& ev)
 {
     if (PDDragNumEventHandler::motionEvent(ev))
         return true;
@@ -191,17 +191,19 @@ void PDDragNum::setHoveredDecimal(const int decimal)
     repaint();
 }
 
-bool PDDragNum::onKeyboard(const KeyboardEvent &ev)
+bool PDDragNum::onKeyboard(const KeyboardEvent& ev)
 {
     return PDDragNumEventHandler::keyboardEvent(ev);
 }
 
-void PDDragNum::setColors(NVGcolor outlineColor, NVGcolor textColor) {
+void PDDragNum::setColors(NVGcolor outlineColor, NVGcolor textColor)
+{
     this->outlineColor = outlineColor;
     this->textColor = textColor;
 }
 
-void PDDragNum::setBorder(Border border) {
+void PDDragNum::setBorder(Border border)
+{
     this->border = border;
 }
 

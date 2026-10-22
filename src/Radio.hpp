@@ -15,7 +15,7 @@
 START_NAMESPACE_DISTRHO
 
 class PDRadio : public PDWidget,
-               public PDRadioEventHandler
+                public PDRadioEventHandler
 {
 public:
     explicit PDRadio(NanoSubWidget* parent, PDRadioEventHandler::Callback* cb);
@@ -25,8 +25,8 @@ public:
     void setSend(bool isSend);
 
 protected:
-    bool onMouse(const MouseEvent &ev) override;
-    bool onMotion(const MotionEvent &ev) override;
+    bool onMouse(const MouseEvent& ev) override;
+    bool onMotion(const MotionEvent& ev) override;
     void onNanoDisplay() override;
 
 private:
