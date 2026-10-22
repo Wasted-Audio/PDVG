@@ -83,9 +83,6 @@ void PDSlider::setColors(NVGcolor bgColor, NVGcolor sliderColor)
 
 void PDSlider::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
 {
-    if (text.empty())
-        return;
-
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);

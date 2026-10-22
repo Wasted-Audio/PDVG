@@ -123,9 +123,6 @@ bool PDFloat::onKeyboard(const KeyboardEvent& ev)
 
 void PDFloat::setLabel(std::string text, int size, LabelPos labelPos)
 {
-    if (text.empty())
-        return;
-
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
 
     this->label = new PDLabel(this);
