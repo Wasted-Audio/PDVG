@@ -62,6 +62,9 @@ void PDBang::onNanoDisplay()
 
 bool PDBang::onMouse(const MouseEvent &ev)
 {
+    if (this->isSend)
+        return true;
+
     const bool fired = PDBangEventHandler::mouseEvent(ev);
 
     if (fired)
@@ -77,6 +80,9 @@ void PDBang::setColors(NVGcolor bgColor, NVGcolor fgColor) {
 
 void PDBang::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
 {
+    if (text.empty())
+        return;
+
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);
@@ -86,6 +92,11 @@ void PDBang::setLabel(std::string text, NVGcolor textColor, int x, int y, int si
 
 void PDBang::setInterval(uint32_t intervalMs) {
     this->intervalMs = intervalMs;
+}
+
+void PDBang::setSend(bool isSend)
+{
+    this->isSend = isSend;
 }
 
 void PDBang::idleCallback()

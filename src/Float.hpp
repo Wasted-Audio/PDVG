@@ -26,6 +26,7 @@ public:
     void setRange(float min, float max);
     void setDefault(float def);
     bool setValue(float value, bool sendCallback = false) noexcept override;
+    void setSend(bool isSend);
 
     void numberValueChanged(SubWidget *widget, float value) override;
 
@@ -39,6 +40,7 @@ protected:
 
 private:
     bool isActive = false;
+    bool isSend = false;
     NVGcolor outEdgeColor;
     NVGcolor inEdgeColor;
     NVGcolor cornerColor;

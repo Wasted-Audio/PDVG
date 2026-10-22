@@ -57,7 +57,8 @@ void PDComment::onNanoDisplay()
     float y = 0.0f;
     for (const auto& line : lines)
     {
-        text(2.0f * scaleFactor, y, line.c_str(), nullptr);
+        if (!line.empty())
+            text(2.0f * scaleFactor, y, line.c_str(), nullptr);
         y += fFontSize;
     }
 

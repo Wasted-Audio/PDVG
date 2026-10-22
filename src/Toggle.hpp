@@ -22,6 +22,7 @@ public:
 
     void setColors(NVGcolor bgColor, NVGcolor toggledColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
+    void setSend(bool isSend);
 
 protected:
     bool onMouse(const MouseEvent &ev) override;
@@ -31,6 +32,7 @@ private:
     NVGcolor bgColor;
     NVGcolor toggledColor;
     ScopedPointer<PDLabel> label;
+    bool isSend = false;
 
     DISTRHO_LEAK_DETECTOR(PDToggle)
 };

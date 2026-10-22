@@ -72,6 +72,9 @@ void PDFloat::onNanoDisplay()
 
 bool PDFloat::onMouse(const MouseEvent &ev)
 {
+    if (this->isSend)
+        return true;
+
     if (ev.press && ev.button == 1)
     {
         const Point<int> screen = getScreenPos();
@@ -97,6 +100,9 @@ bool PDFloat::onMouse(const MouseEvent &ev)
 
 bool PDFloat::onMotion(const MotionEvent &ev)
 {
+    if (this->isSend)
+        return true;
+
     if (dragNum != nullptr)
         return dragNum->onMotion(ev);
     return false;
@@ -104,6 +110,9 @@ bool PDFloat::onMotion(const MotionEvent &ev)
 
 bool PDFloat::onKeyboard(const KeyboardEvent &ev)
 {
+    if (this->isSend)
+        return true;
+
     if (dragNum != nullptr)
         return dragNum->onKeyboard(ev);
     return false;
@@ -111,6 +120,9 @@ bool PDFloat::onKeyboard(const KeyboardEvent &ev)
 
 void PDFloat::setLabel(std::string text, int size, LabelPos labelPos)
 {
+    if (text.empty())
+        return;
+
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
 
     this->label = new PDLabel(this);
@@ -164,6 +176,12 @@ bool PDFloat::setValue(float value, bool sendCallback) noexcept
     }
     return false;
 }
+
+void PDFloat::setSend(bool isSend)
+{
+    this->isSend = isSend;
+}
+
 
 void PDFloat::numberValueChanged(SubWidget *widget, float value)
 {
