@@ -81,9 +81,6 @@ void PDBang::setColors(NVGcolor bgColor, NVGcolor fgColor)
 
 void PDBang::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
 {
-    if (text.empty())
-        return;
-
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);

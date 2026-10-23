@@ -97,9 +97,6 @@ void PDRadio::setColors(NVGcolor bgColor, NVGcolor radioColor)
 
 void PDRadio::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)
 {
-    if (text.empty())
-        return;
-
     this->label = new PDLabel(this);
     this->label->setText(text);
     this->label->setColors(textColor);
