@@ -75,6 +75,9 @@ void PDFloat::onNanoDisplay()
 
 bool PDFloat::onMouse(const MouseEvent& ev)
 {
+    if (isReadOnly())
+        return true;
+
     if (ev.press && ev.button == 1)
     {
         const Point<int> screen = getScreenPos();
@@ -100,6 +103,9 @@ bool PDFloat::onMouse(const MouseEvent& ev)
 
 bool PDFloat::onMotion(const MotionEvent& ev)
 {
+    if (isReadOnly())
+        return true;
+
     if (dragNum != nullptr)
         return dragNum->onMotion(ev);
     return false;
@@ -107,6 +113,9 @@ bool PDFloat::onMotion(const MotionEvent& ev)
 
 bool PDFloat::onKeyboard(const KeyboardEvent& ev)
 {
+    if (isReadOnly())
+        return true;
+
     if (dragNum != nullptr)
         return dragNum->onKeyboard(ev);
     return false;

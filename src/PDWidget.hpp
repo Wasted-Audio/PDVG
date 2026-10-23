@@ -40,8 +40,11 @@ public:
     void forwardMouseEvent(const MouseEvent& ev) { onMouse(ev); }
     void forwardMotionEvent(const MotionEvent& ev) { onMotion(ev); }
     void forwardScrollEvent(const ScrollEvent& ev) { onScroll(ev); }
+    void setReadOnly(bool isReadOnly) noexcept { isReadOnlyFlag = isReadOnly; }
+    bool isReadOnly() const noexcept { return isReadOnlyFlag; }
 
 protected:
+    bool isReadOnlyFlag = false;
     void onNanoDisplay() override {}
 
     DISTRHO_LEAK_DETECTOR(PDWidget)

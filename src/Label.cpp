@@ -21,8 +21,8 @@ PDLabel::PDLabel(NanoSubWidget* parent)
 
 void PDLabel::onNanoDisplay()
 {
-    // const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    // NVGcontext* nvg = getContext();
+    if (lText.empty())
+        return;
 
     beginPath();
 

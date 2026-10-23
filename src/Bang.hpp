@@ -25,6 +25,7 @@ public:
     void setColors(NVGcolor bgColor, NVGcolor fgColor);
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setInterval(uint32_t intervalMs);
+    void trigger();
     void idleCallback() override;
 
 protected:
@@ -36,7 +37,7 @@ private:
     NVGcolor fgColor;
     ScopedPointer<PDLabel> label;
 
-    uint32_t lastTick = 0;
+    uint32_t downStart = 0;
     uint32_t intervalMs = 250;
 
     bool hasIdleCallback = false;

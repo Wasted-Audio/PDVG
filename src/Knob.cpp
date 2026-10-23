@@ -178,6 +178,9 @@ void PDKnob::onNanoDisplay()
 
 bool PDKnob::onMouse(const MouseEvent& ev)
 {
+    if (isReadOnly())
+        return true;
+
     if (ev.press && ev.button == 1)
     {
         const Point<int> screen = getScreenPos();
@@ -201,6 +204,8 @@ bool PDKnob::onMouse(const MouseEvent& ev)
 
 bool PDKnob::onMotion(const MotionEvent& ev)
 {
+    if (isReadOnly())
+        return true;
     return PDKnobEventHandler::motionEvent(ev);
 }
 

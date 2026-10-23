@@ -63,11 +63,15 @@ void PDSlider::onNanoDisplay()
 
 bool PDSlider::onMouse(const MouseEvent& ev)
 {
+    if (isReadOnly())
+        return true;
     return PDSliderEventHandler::mouseEvent(ev);
 }
 
 bool PDSlider::onMotion(const MotionEvent& ev)
 {
+    if (isReadOnly())
+        return true;
     return PDSliderEventHandler::motionEvent(ev);
 }
 
