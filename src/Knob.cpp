@@ -178,7 +178,7 @@ void PDKnob::onNanoDisplay()
 
 bool PDKnob::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
 
     if (ev.press && ev.button == 1)
@@ -204,7 +204,7 @@ bool PDKnob::onMouse(const MouseEvent& ev)
 
 bool PDKnob::onMotion(const MotionEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
     return PDKnobEventHandler::motionEvent(ev);
 }
@@ -263,11 +263,6 @@ void PDKnob::setShowTicks(bool showTicks)
 void PDKnob::setShowArc(bool showArc)
 {
     this->showArc = showArc;
-}
-
-void PDKnob::setSend(bool isSend)
-{
-    this->isSend = isSend;
 }
 
 END_NAMESPACE_DISTRHO

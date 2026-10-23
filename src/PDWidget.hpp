@@ -40,8 +40,11 @@ public:
     void forwardMouseEvent(const MouseEvent& ev) { onMouse(ev); }
     void forwardMotionEvent(const MotionEvent& ev) { onMotion(ev); }
     void forwardScrollEvent(const ScrollEvent& ev) { onScroll(ev); }
+    void setSend(bool isSend) noexcept { isSendFlag = isSend; }
+    bool isSend() const noexcept { return isSendFlag; }
 
 protected:
+    bool isSendFlag = false;
     void onNanoDisplay() override {}
 
     DISTRHO_LEAK_DETECTOR(PDWidget)

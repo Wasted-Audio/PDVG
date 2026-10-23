@@ -26,7 +26,6 @@ public:
     void setLabel(std::string text, NVGcolor textColor, int x, int y, int size);
     void setInterval(uint32_t intervalMs);
     void trigger();
-    void setSend(bool isSend);
     void idleCallback() override;
 
 protected:
@@ -40,7 +39,6 @@ private:
 
     uint32_t lastTick = 0;
     uint32_t intervalMs = 250;
-    bool isSend = false;
 
     bool hasIdleCallback = false;
 

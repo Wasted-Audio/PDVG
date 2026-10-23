@@ -59,7 +59,7 @@ void PDNumber::onNanoDisplay()
 
 bool PDNumber::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
 
     if (ev.press && ev.button == 1)
@@ -87,7 +87,7 @@ bool PDNumber::onMouse(const MouseEvent& ev)
 
 bool PDNumber::onMotion(const MotionEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
 
     if (dragNum != nullptr)
@@ -97,7 +97,7 @@ bool PDNumber::onMotion(const MotionEvent& ev)
 
 bool PDNumber::onKeyboard(const KeyboardEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
 
     if (dragNum != nullptr)
@@ -158,11 +158,6 @@ bool PDNumber::setValue(float value, bool sendCallback) noexcept
         return true;
     }
     return false;
-}
-
-void PDNumber::setSend(bool isSend)
-{
-    this->isSend = isSend;
 }
 
 void PDNumber::numberValueChanged(SubWidget* widget, float value)

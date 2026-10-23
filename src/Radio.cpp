@@ -77,14 +77,14 @@ void PDRadio::onNanoDisplay()
 
 bool PDRadio::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
     return PDRadioEventHandler::mouseEvent(ev);
 }
 
 bool PDRadio::onMotion(const MotionEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
     return PDRadioEventHandler::motionEvent(ev);
 }
@@ -105,11 +105,6 @@ void PDRadio::setLabel(std::string text, NVGcolor textColor, int x, int y, int s
     this->label->setColors(textColor);
     this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
-}
-
-void PDRadio::setSend(bool isSend)
-{
-    this->isSend = isSend;
 }
 
 END_NAMESPACE_DISTRHO

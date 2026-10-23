@@ -63,14 +63,14 @@ void PDSlider::onNanoDisplay()
 
 bool PDSlider::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
     return PDSliderEventHandler::mouseEvent(ev);
 }
 
 bool PDSlider::onMotion(const MotionEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
     return PDSliderEventHandler::motionEvent(ev);
 }
@@ -91,11 +91,6 @@ void PDSlider::setLabel(std::string text, NVGcolor textColor, int x, int y, int 
     this->label->setColors(textColor);
     this->label->setAbsolutePos(x, (y - size / 2));
     this->label->setSize(size * text.length(), size);
-}
-
-void PDSlider::setSend(bool isSend)
-{
-    this->isSend = isSend;
 }
 
 END_NAMESPACE_DISTRHO

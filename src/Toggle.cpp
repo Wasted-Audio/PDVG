@@ -51,7 +51,7 @@ void PDToggle::onNanoDisplay()
 
 bool PDToggle::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
     return PDToggleEventHandler::mouseEvent(ev);
 }
@@ -60,11 +60,6 @@ void PDToggle::setColors(NVGcolor bgColor, NVGcolor toggledColor)
 {
     this->bgColor = bgColor;
     this->toggledColor = toggledColor;
-}
-
-void PDToggle::setSend(bool isSend)
-{
-    this->isSend = isSend;
 }
 
 void PDToggle::setLabel(std::string text, NVGcolor textColor, int x, int y, int size)

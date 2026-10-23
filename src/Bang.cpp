@@ -62,7 +62,7 @@ void PDBang::onNanoDisplay()
 
 bool PDBang::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend)
+    if (this->isSend())
         return true;
 
     const bool fired = PDBangEventHandler::mouseEvent(ev);
@@ -100,11 +100,6 @@ void PDBang::trigger()
 {
     this->setDown(true);
     this->lastTick = d_gettime_ms();
-}
-
-void PDBang::setSend(bool isSend)
-{
-    this->isSend = isSend;
 }
 
 void PDBang::idleCallback()
