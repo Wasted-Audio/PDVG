@@ -51,7 +51,7 @@ void PDToggle::onNanoDisplay()
 
 bool PDToggle::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend())
+    if (this->isReadOnly())
         return true;
     return PDToggleEventHandler::mouseEvent(ev);
 }

@@ -62,7 +62,7 @@ void PDBang::onNanoDisplay()
 
 bool PDBang::onMouse(const MouseEvent& ev)
 {
-    if (this->isSend())
+    if (this->isReadOnly())
         return true;
 
     const bool fired = PDBangEventHandler::mouseEvent(ev);
