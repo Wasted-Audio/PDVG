@@ -77,14 +77,14 @@ void PDRadio::onNanoDisplay()
 
 bool PDRadio::onMouse(const MouseEvent& ev)
 {
-    if (this->isReadOnly())
+    if (isReadOnly())
         return true;
     return PDRadioEventHandler::mouseEvent(ev);
 }
 
 bool PDRadio::onMotion(const MotionEvent& ev)
 {
-    if (this->isReadOnly())
+    if (isReadOnly())
         return true;
     return PDRadioEventHandler::motionEvent(ev);
 }
