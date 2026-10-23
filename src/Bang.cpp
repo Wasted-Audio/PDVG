@@ -68,7 +68,7 @@ bool PDBang::onMouse(const MouseEvent& ev)
     const bool fired = PDBangEventHandler::mouseEvent(ev);
 
     if (fired)
-        lastTick = d_gettime_ms();
+        downStart = d_gettime_ms();
 
     return fired;
 }
@@ -99,21 +99,20 @@ void PDBang::setInterval(uint32_t intervalMs)
 void PDBang::trigger()
 {
     this->setDown(true);
-    this->lastTick = d_gettime_ms();
+    this->downStart = d_gettime_ms();
 }
 
 void PDBang::idleCallback()
 {
-    const uint32_t now = d_gettime_ms();
-
-    if (now - lastTick < intervalMs)
+    if (!isDown())
         return;
 
-    if (isDown())
-    {
-        setDown(false);
-        repaint();
-    }
+    const uint32_t elapsed = d_gettime_ms() - downStart;
+
+    if (elapsed < intervalMs)
+        return;
+
+    setDown(false);
 }
 
 END_NAMESPACE_DISTRHO

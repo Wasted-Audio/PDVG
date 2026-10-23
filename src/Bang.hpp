@@ -37,7 +37,7 @@ private:
     NVGcolor fgColor;
     ScopedPointer<PDLabel> label;
 
-    uint32_t lastTick = 0;
+    uint32_t downStart = 0;
     uint32_t intervalMs = 250;
 
     bool hasIdleCallback = false;
