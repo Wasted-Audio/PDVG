@@ -25,6 +25,7 @@ public:
 
     void setColors(NVGcolor outlineColor, NVGcolor textColor);
     void setBorder(Border border);
+    void setNumChars(int numChars);
 
     bool onMouse(const MouseEvent& ev) override;
     bool onMotion(const MotionEvent& ev) override;
@@ -39,6 +40,7 @@ private:
     Border border{ 1, 5, 1, 5 };
     NVGcolor outlineColor;
     NVGcolor textColor;
+    int numChars = 4;
     NanoVG::FontId fFontId;
     std::vector<NVGglyphPosition> glyphs;
     size_t decimalPointIndex = 0;
