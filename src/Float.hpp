@@ -26,6 +26,7 @@ public:
     void setRange(float min, float max);
     void setDefault(float def);
     bool setValue(float value, bool sendCallback = false) noexcept override;
+    void setNumChars(int numChars);
 
     void numberValueChanged(SubWidget* widget, float value) override;
 
@@ -34,11 +35,12 @@ protected:
     bool onMotion(const MotionEvent& ev) override;
     bool onKeyboard(const KeyboardEvent& ev) override;
 
-    void drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<float> sb, NVGcolor cornerColor);
+    void drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, float radius, float flag, NVGcolor cornerColor);
     void onNanoDisplay() override;
 
 private:
     bool isActive = false;
+    int widthChars = 4;
     NVGcolor outEdgeColor;
     NVGcolor inEdgeColor;
     NVGcolor cornerColor;

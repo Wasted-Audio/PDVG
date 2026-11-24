@@ -20,57 +20,72 @@ PDFloat::PDFloat(NanoSubWidget* parent, PDNumberEventHandler::Callback* const cb
     dragNum->setColors(Colors::outColor, Colors::cnvTextColor);
 }
 
-void PDFloat::drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, DGL::Rectangle<float> sb, NVGcolor cornerColor)
+void PDFloat::drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, float radius, float flag, NVGcolor cornerColor)
 {
-    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const float width = sb.getHeight() * 0.4f;
-    const float radius = std::min(Corners::objectCornerRadius * scaleFactor, width);
+    const float r   = radius;
     const float top = b.getY();
     const float right = b.getX() + b.getWidth();
 
-    // straight top edge, arc matching the object's rounded corner, straight right edge
     nvgBeginPath(nvg);
-    nvgMoveTo(nvg, right - width, top);
-    nvgLineTo(nvg, right - radius, top);
-    nvgArcTo(nvg, right, top, right, top + radius, radius);
-    nvgLineTo(nvg, right, top + width);
+    nvgMoveTo(nvg, right - flag, top);
+    nvgLineTo(nvg, right - r, top);
+    nvgArcTo(nvg, right, top, right, top + r, r);   // follow the rounded corner
+    nvgLineTo(nvg, right, top + flag);
     nvgClosePath(nvg);
     nvgFillColor(nvg, cornerColor);
     nvgFill(nvg);
 }
 
+
 void PDFloat::onNanoDisplay()
 {
     const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
-    const DGL::Rectangle<float> sb = reduceRectangle(b, 0.5f * scaleFactor);
-
     NVGcontext* nvg = getContext();
+
+    nvgSave(nvg);
+
+    const DGL::Rectangle<float> b(0.0f, 0.0f, getWidth(), getHeight());
+    const float radius = Corners::objectCornerRadius * scaleFactor;
+    const float stroke = 1.0f * scaleFactor;
+
+    // Constant-size corner flag
+    const float flag = std::min(Corners::objectFlagSize * scaleFactor,
+                                std::min(getWidth(), getHeight()) * 0.5f);
 
     if (dragNum != nullptr)
     {
+        // Text area: inside the border
         dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
-        dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
-        dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (2.0f * scaleFactor), (int) (1.0f * scaleFactor), (int) (2.0f * scaleFactor) });
+        dragNum->setSize(getWidth(), getHeight() - 3.5f * scaleFactor);
+        dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (1.0f * scaleFactor),
+                             (int) (1.0f * scaleFactor), 0 });
+        dragNum->setNumChars(widthChars);
     }
 
-    if (isActive)
-    {
-        outEdgeColor = Colors::selColor;
-        inEdgeColor = Colors::selColor;
-        cornerColor = Colors::selColor;
-    }
-    else
-    {
-        outEdgeColor = Colors::outColor;
-        inEdgeColor = Colors::bgColor;
-        cornerColor = Colors::ioColor;
-    }
+    outEdgeColor = isActive ? Colors::selColor : Colors::outColor;
+    cornerColor  = isActive ? Colors::selColor : Colors::ioColor;
 
-    drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), outEdgeColor, outEdgeColor, Corners::objectCornerRadius * scaleFactor);
-    drawRoundedRect(nvg, sb.getX(), sb.getY(), sb.getWidth(), sb.getHeight(), Colors::bgColor, inEdgeColor, Corners::objectCornerRadius * scaleFactor);
+    // Body, filled only
+    nvgBeginPath(nvg);
+    nvgRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), radius);
+    nvgFillColor(nvg, Colors::bgColor);
+    nvgFill(nvg);
 
-    drawFlag(nvg, b, sb, cornerColor);
+    // Filled flag, against the rounded corner
+    if (flag > 0.5f)
+        drawFlag(nvg, b, radius, flag, cornerColor);
+
+    // Border on top, so it runs unbroken around the corner
+    const float half = 0.5f * stroke;
+    nvgBeginPath(nvg);
+    nvgRoundedRect(nvg, b.getX(), b.getY(),
+                   b.getWidth(), b.getHeight(),
+                   radius);
+    nvgStrokeColor(nvg, outEdgeColor);
+    nvgStrokeWidth(nvg, stroke);
+    nvgStroke(nvg);
+
+    nvgRestore(nvg);
 }
 
 bool PDFloat::onMouse(const MouseEvent& ev)
@@ -175,6 +190,11 @@ bool PDFloat::setValue(float value, bool sendCallback) noexcept
         return true;
     }
     return false;
+}
+
+void PDFloat::setNumChars(int numChars)
+{
+    this->widthChars = numChars;
 }
 
 void PDFloat::numberValueChanged(SubWidget* widget, float value)

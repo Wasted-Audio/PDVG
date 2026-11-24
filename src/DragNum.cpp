@@ -55,7 +55,8 @@ void PDDragNum::onNanoDisplay()
 
     NVGcontext* nvg = getContext();
 
-    nvgIntersectScissor(nvg, 0.5f, 0.5f, getWidth() - 1 * scaleFactor, getHeight() - 1 * scaleFactor);
+    nvgSave(nvg);
+    nvgIntersectScissor(nvg, 0.0f, 0.0f, getWidth(), getHeight());
 
     nvgFontFaceId(nvg, fFontId);
     nvgFontSize(nvg, getHeight() * 0.862f);
@@ -68,11 +69,35 @@ void PDDragNum::onNanoDisplay()
 
     const bool usingLog = isUsingLogScale();
     std::string text = formatNumber(getValue(), isDragging() ? std::min(getDragDecimal(), maxPrecision) : -1);
+
+    const float maxWidth = textArea.getWidth() - 1.0f * scaleFactor;
+
+    const auto fits = [&](const std::string& s)
+    {
+        float bounds[4];
+        nvgTextBounds(nvg, 0.0f, 0.0f, s.c_str(), nullptr, bounds);
+        return bounds[2] - bounds[0] <= maxWidth;
+    };
+
+    // Drop decimals
+    while (!fits(text) && text.size() > 1 && text.find('.') != std::string::npos)
+        text.pop_back();
+
+    // A '.' left dangling by dropping every decimal
+    if (text.size() > 1 && text.back() == '.')
+        text.pop_back();
+
+    // Still too long: truncate and mark it
+    while (!fits(text) && text.size() > 1)
+        text = text.substr(0, text.size() - 1) + ">";
+
+    const bool truncated = !text.empty() && text.back() == '>';
+
     const size_t valueLength = text.size();
     int numDecimals = 0;
 
     // Regular mode drags individual decimals, so lay out the number padded to full precision
-    if (!usingLog)
+    if (!usingLog && !truncated)
     {
         decimalPointIndex = text.find('.');
         if (decimalPointIndex == std::string::npos)
@@ -83,6 +108,11 @@ void PDDragNum::onNanoDisplay()
 
         numDecimals = (int) (text.size() - decimalPointIndex - 1);
         text.append(maxPrecision - numDecimals, '0');
+    }
+    else if (!usingLog)
+    {
+        decimalPointIndex = text.size();
+        numDecimals = 0;
     }
 
     glyphs.resize(text.size());
@@ -105,13 +135,13 @@ void PDDragNum::onNanoDisplay()
         const float right = last < glyphs.size() ? glyphs[last].x : glyphs.back().maxx;
 
         NVGcolor highlightColor = outlineColor;
-        highlightColor.a = isDragging() ? 0.5f : 0.3f;
+        highlightColor.a = isDragging() ? 1.0f : 0.8f;
 
-        drawRoundedRect(nvg, left, 0, right - left, getHeight(), highlightColor, highlightColor, 2.5f);
+        drawRoundedRect(nvg, left, 2.0f * scaleFactor, right - left, getHeight() - 2.0f * scaleFactor, highlightColor, highlightColor, 2.5f);
     }
 
     // Hovered decimals beyond the value's precision are shown as faded zeros
-    const bool showGhostZeros = !usingLog && hoveredDecimal > numDecimals;
+    const bool showGhostZeros = !usingLog && !truncated && hoveredDecimal > numDecimals;
     const size_t solidLength = showGhostZeros ? decimalPointIndex + 1 + numDecimals : valueLength;
 
     nvgFillColor(nvg, textColor);
@@ -125,6 +155,7 @@ void PDDragNum::onNanoDisplay()
         nvgFillColor(nvg, ghostColor);
         nvgText(nvg, ghostX, textY, text.c_str() + solidLength, text.c_str() + decimalPointIndex + 1 + hoveredDecimal);
     }
+    nvgRestore(nvg);
 }
 
 int PDDragNum::getDecimalAtScreenPos(const Point<double>& pos) const
@@ -205,6 +236,11 @@ void PDDragNum::setColors(NVGcolor outlineColor, NVGcolor textColor)
 void PDDragNum::setBorder(Border border)
 {
     this->border = border;
+}
+
+void PDDragNum::setNumChars(int numChars)
+{
+    this->numChars = numChars;
 }
 
 END_NAMESPACE_DISTRHO

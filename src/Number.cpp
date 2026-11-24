@@ -28,9 +28,12 @@ void PDNumber::onNanoDisplay()
 
     if (dragNum != nullptr)
     {
+        // Text area: inside the border
         dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
-        dragNum->setSize(getWidth() - 2.0f * scaleFactor, getHeight() - 2.0f * scaleFactor);
-        dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (10.0f * scaleFactor), (int) (3.0f * scaleFactor), (int) (2.0f * scaleFactor) });
+        dragNum->setSize(getWidth() - 3.0f * scaleFactor, getHeight() - 3.0f * scaleFactor);
+        dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (10.0f * scaleFactor),
+                             (int) (1.0f * scaleFactor), (int) (0.0f * scaleFactor) });
+        dragNum->setNumChars(widthChars);
     }
 
     drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
@@ -158,6 +161,11 @@ bool PDNumber::setValue(float value, bool sendCallback) noexcept
         return true;
     }
     return false;
+}
+
+void PDNumber::setNumChars(int numChars)
+{
+    this->widthChars = numChars;
 }
 
 void PDNumber::numberValueChanged(SubWidget* widget, float value)

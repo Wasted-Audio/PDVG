@@ -27,6 +27,7 @@ inline NanoVG::FontId loadFont(NanoVG& nvg, const char* const name, const uchar*
 struct Corners
 {
     static inline float objectCornerRadius = 2.75f;
+    static constexpr float objectFlagSize = 7.0f;
 };
 
 struct Colors
