@@ -57,13 +57,14 @@ enum LabelPos
     Bottom
 };
 
-inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius)
+inline void drawRoundedRect(NVGcontext* nvg, float x, float y, float w, float h, NVGcolor icol, NVGcolor ocol, float radius, bool transparent = false)
 {
     nvgFillColor(nvg, icol);
     nvgStrokeColor(nvg, ocol);
     nvgBeginPath(nvg);
     nvgRoundedRect(nvg, x, y, w, h, radius);
-    nvgFill(nvg);
+    if (!transparent)
+        nvgFill(nvg);
     nvgStroke(nvg);
 }
 

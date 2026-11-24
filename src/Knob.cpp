@@ -81,13 +81,10 @@ void PDKnob::drawKnob(NVGcontext* nvg, DGL::Rectangle<float> pBounds)
 
         nvgBeginPath(nvg);
         if (center < angle)
-        {
             nvgArc(nvg, boundsCenterX, boundsCenterY, arcRadius, center, angle, NVG_HOLE);
-        }
         else
-        {
             nvgArc(nvg, boundsCenterX, boundsCenterY, arcRadius, angle, center, NVG_HOLE);
-        }
+
         nvgStrokeColor(nvg, fgColor);
         nvgStrokeWidth(nvg, arcWidth * lineThickness);
         nvgStroke(nvg);
@@ -120,7 +117,8 @@ void PDKnob::onNanoDisplay()
     {
         auto const lineThickness = std::max(b.getWidth() * 0.03f, 1.0f);
 
-        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor);
+        drawRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(),
+                        bgColor, Colors::outColor, Corners::objectCornerRadius * scaleFactor, isTransparent);
 
         if (!showArc)
         {
@@ -154,7 +152,9 @@ void PDKnob::onNanoDisplay()
         nvgFillColor(nvg, bgColor);
         nvgBeginPath(nvg);
         nvgCircle(nvg, circleCenterX, circleCenterY, circleBounds.getWidth() / 2.0f);
-        nvgFill(nvg);
+
+        if (!isTransparent)
+            nvgFill(nvg);
 
         nvgStrokeColor(nvg, Colors::outColor);
         nvgStrokeWidth(nvg, 1.0f);
@@ -263,6 +263,11 @@ void PDKnob::setShowTicks(bool showTicks)
 void PDKnob::setShowArc(bool showArc)
 {
     this->showArc = showArc;
+}
+
+void PDKnob::setTransparent(bool isTransparent)
+{
+    this->isTransparent = isTransparent;
 }
 
 END_NAMESPACE_DISTRHO
