@@ -37,6 +37,7 @@ public:
     void setDrawSquare(bool drawSquare);
     void setShowTicks(bool showTicks);
     void setShowArc(bool showArc);
+    void setTransparent(bool isTransparent);
 
 protected:
     bool onMouse(const MouseEvent& ev) override;
@@ -57,6 +58,7 @@ private:
     bool showArc = true;
     LabelShow showLabel = NEVER;
     bool isActive = false;
+    bool isTransparent = false;
 
     ScopedPointer<PDLabel> label;
 

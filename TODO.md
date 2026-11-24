@@ -29,6 +29,7 @@
   * ~~square~~
   * ~~arc_start~~
   * ~~arc_show~~
+  * ~~transparency~~
 * ~~number~~ - MVP
   * ~~flag~~
   * ~~float editor~~
