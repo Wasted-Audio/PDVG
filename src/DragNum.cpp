@@ -79,20 +79,19 @@ void PDDragNum::onNanoDisplay()
         return bounds[2] - bounds[0] <= maxWidth;
     };
 
-    // 1. drop decimals
+    // Drop decimals
     while (!fits(text) && text.size() > 1 && text.find('.') != std::string::npos)
         text.pop_back();
 
-    // a '.' left dangling by dropping every decimal
+    // A '.' left dangling by dropping every decimal
     if (text.size() > 1 && text.back() == '.')
         text.pop_back();
 
-    // 2. still too long: truncate and mark it
+    // Still too long: truncate and mark it
     while (!fits(text) && text.size() > 1)
         text = text.substr(0, text.size() - 1) + ">";
 
     const bool truncated = !text.empty() && text.back() == '>';
-
 
     const size_t valueLength = text.size();
     int numDecimals = 0;

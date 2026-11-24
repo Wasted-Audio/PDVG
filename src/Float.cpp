@@ -22,10 +22,9 @@ PDFloat::PDFloat(NanoSubWidget* parent, PDNumberEventHandler::Callback* const cb
 
 void PDFloat::drawFlag(NVGcontext* nvg, DGL::Rectangle<float> b, float radius, float flag, NVGcolor cornerColor)
 {
-    const float scaleFactor = getTopLevelWidget()->getScaleFactor();
-    const float r   = std::min(radius, flag);
-    const float top = b.getY() + 0.5f * scaleFactor;
-    const float right = b.getX() + b.getWidth() - 0.5f * scaleFactor;
+    const float r   = radius;
+    const float top = b.getY();
+    const float right = b.getX() + b.getWidth();
 
     nvgBeginPath(nvg);
     nvgMoveTo(nvg, right - flag, top);
@@ -49,13 +48,13 @@ void PDFloat::onNanoDisplay()
     const float radius = Corners::objectCornerRadius * scaleFactor;
     const float stroke = 1.0f * scaleFactor;
 
-    // constant-size corner flag
+    // Constant-size corner flag
     const float flag = std::min(Corners::objectFlagSize * scaleFactor,
                                 std::min(getWidth(), getHeight()) * 0.5f);
 
     if (dragNum != nullptr)
     {
-        // text area: inside the border
+        // Text area: inside the border
         dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
         dragNum->setSize(getWidth(), getHeight() - 3.5f * scaleFactor);
         dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (1.0f * scaleFactor),
@@ -66,22 +65,22 @@ void PDFloat::onNanoDisplay()
     outEdgeColor = isActive ? Colors::selColor : Colors::outColor;
     cornerColor  = isActive ? Colors::selColor : Colors::ioColor;
 
-    // 1. body, filled only
+    // Body, filled only
     nvgBeginPath(nvg);
     nvgRoundedRect(nvg, b.getX(), b.getY(), b.getWidth(), b.getHeight(), radius);
     nvgFillColor(nvg, Colors::bgColor);
     nvgFill(nvg);
 
-    // 2. filled flag, against the rounded corner
+    // Filled flag, against the rounded corner
     if (flag > 0.5f)
         drawFlag(nvg, b, radius, flag, cornerColor);
 
-    // 3. border on top, so it runs unbroken around the corner
+    // Border on top, so it runs unbroken around the corner
     const float half = 0.5f * stroke;
     nvgBeginPath(nvg);
-    nvgRoundedRect(nvg, b.getX() + half, b.getY() + half,
-                   b.getWidth() - stroke, b.getHeight() - stroke,
-                   std::max(0.0f, radius - half));
+    nvgRoundedRect(nvg, b.getX(), b.getY(),
+                   b.getWidth(), b.getHeight(),
+                   radius);
     nvgStrokeColor(nvg, outEdgeColor);
     nvgStrokeWidth(nvg, stroke);
     nvgStroke(nvg);

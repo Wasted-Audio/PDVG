@@ -28,7 +28,7 @@ void PDNumber::onNanoDisplay()
 
     if (dragNum != nullptr)
     {
-        // text area: inside the border
+        // Text area: inside the border
         dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
         dragNum->setSize(getWidth() - 3.0f * scaleFactor, getHeight() - 3.0f * scaleFactor);
         dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (10.0f * scaleFactor),
