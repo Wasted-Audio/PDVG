@@ -136,9 +136,9 @@ void PDDragNum::onNanoDisplay()
         const float right = last < glyphs.size() ? glyphs[last].x : glyphs.back().maxx;
 
         NVGcolor highlightColor = outlineColor;
-        highlightColor.a = isDragging() ? 0.5f : 0.3f;
+        highlightColor.a = isDragging() ? 1.0f : 0.8f;
 
-        drawRoundedRect(nvg, left, 0, right - left, getHeight(), highlightColor, highlightColor, 2.5f);
+        drawRoundedRect(nvg, left, 2.0f * scaleFactor, right - left, getHeight() - 2.0f * scaleFactor, highlightColor, highlightColor, 2.5f);
     }
 
     // Hovered decimals beyond the value's precision are shown as faded zeros

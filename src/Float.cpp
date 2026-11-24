@@ -55,11 +55,11 @@ void PDFloat::onNanoDisplay()
 
     if (dragNum != nullptr)
     {
-        // text area: inside the border, and clear of the flag
-        dragNum->setAbsolutePos(0.0f, 1.0f * scaleFactor);
-        dragNum->setSize(getWidth(), getHeight() - 3.0f * scaleFactor);
-        dragNum->setBorder({(int) (1.0f * scaleFactor), (int) (2.0f * scaleFactor),
-                            (int) (1.0f * scaleFactor), 0 });
+        // text area: inside the border
+        dragNum->setAbsolutePos(1.0f * scaleFactor, 1.0f * scaleFactor);
+        dragNum->setSize(getWidth(), getHeight() - 3.5f * scaleFactor);
+        dragNum->setBorder({ (int) (1.0f * scaleFactor), (int) (1.0f * scaleFactor),
+                             (int) (1.0f * scaleFactor), 0 });
         dragNum->setNumChars(widthChars);
     }
 
@@ -72,7 +72,7 @@ void PDFloat::onNanoDisplay()
     nvgFillColor(nvg, Colors::bgColor);
     nvgFill(nvg);
 
-    // 2. filled flag, hugging the rounded corner
+    // 2. filled flag, against the rounded corner
     if (flag > 0.5f)
         drawFlag(nvg, b, radius, flag, cornerColor);
 

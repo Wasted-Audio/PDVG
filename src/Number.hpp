@@ -29,6 +29,7 @@ public:
     void setUsingLogScale(bool yesNo);
     void setLogarithmicHeight(double logHeight);
     bool setValue(float value, bool sendCallback = false) noexcept override;
+    void setNumChars(int numChars);
 
     void numberValueChanged(SubWidget* widget, float value) override;
 
@@ -43,6 +44,7 @@ private:
     NVGcolor bgColor;
     NVGcolor fgColor;
     bool isActive = false;
+    int widthChars = 4;
 
     ScopedPointer<PDDragNum> dragNum;
     ScopedPointer<PDLabel> label;
